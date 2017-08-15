@@ -12,4 +12,5 @@ snk_production_test_mode
 .settings
 .bak
 test.sh
+requirements
 
