@@ -6,6 +6,7 @@
 + unix-like OS
 + python-dev  
 
+
 ### Install
 + Get repo.  
 ```git clone git@dev.fabibao.com:PeiwoServices/peiwo-admin.git peiwo-admin```
