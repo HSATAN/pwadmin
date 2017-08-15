@@ -4,7 +4,8 @@
 
 ### Prerequisites
 + unix-like OS
-+ python-dev
++ python-dev  
+
 ### Install
 + Get repo.  
 ```git clone git@dev.fabibao.com:PeiwoServices/peiwo-admin.git peiwo-admin```
@@ -12,6 +13,11 @@
  ```cd peiwo-admin && pip install -r requirements/base```
 
 ## Running the tests
++ Test version
+```peiwo-admin
+cd src &&  python manage.py test --settings=peiwoadmin.settings.dev 
+
+```
 
 ## Make it run
 + Dev version  
