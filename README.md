@@ -14,15 +14,14 @@
  ```cd peiwo-admin && pip install -r requirements/base```
 
 ## Running the tests
-+ Test version
-```peiwo-admin
++ Test version  
+```
 cd src &&  python manage.py test --settings=peiwoadmin.settings.dev 
-
 ```
 
-## Make it run
+## Make it run  
 + Dev version  
-```peiwo-admin
+```
 cd src && python manage.py runserver --settings=peiwoadmin.settings.dev 
 ```
 + Test version
