@@ -1,0 +1,15 @@
+.DS_Store
+.idea
+*.pyc
+*.log
+*.pid
+*.swp
+temp
+snk_production_mode
+snk_production_test_mode
+.project
+.pydevproject
+.settings
+.bak
+test.sh
+
