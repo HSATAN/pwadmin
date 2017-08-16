@@ -204,23 +204,7 @@ class PwImageFilter(models.Model):
         db_table = 'pw_image_filter'
 
 
-class PwManager(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    uid = models.IntegerField()
-    name = models.CharField(max_length=255)
-    role = models.IntegerField(blank=True, null=True)
-    state = models.IntegerField()
-    create_time = models.DateTimeField()
 
-    def __str__(self):
-        return "{}".format(self.name)
-
-    def __unicode__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        managed = False
-        db_table = 'pw_manager'
 
 
 class PwMenu(models.Model):

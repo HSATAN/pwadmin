@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 class PeiwoRouter(object):
     def db_for_read(self, model, **hints):
-        if model._meta.app_label == 'peiwo':
+        if model._meta.app_label == 'pwadmin':
             return 'test'
         return None
 
@@ -12,7 +12,7 @@ class PeiwoRouter(object):
         """
         Attempts to write auth models go to auth_db.
         """
-        if model._meta.app_label == 'peiwo':
+        if model._meta.app_label == 'pwadmin':
             return 'test'
         return None
 
@@ -20,8 +20,8 @@ class PeiwoRouter(object):
         """
         Allow relations if a model in the auth app is involved.
         """
-        if obj1._meta.app_label == 'peiwo' or \
-                        obj2._meta.app_label == 'peiwo':
+        if obj1._meta.app_label == 'pwadmin' or \
+                        obj2._meta.app_label == 'pwadmin':
             return True
         return None
 
@@ -30,6 +30,6 @@ class PeiwoRouter(object):
         Make sure the auth app only appears in the 'auth_db'
         database.
         """
-        if app_label == 'peiwo':
+        if app_label == 'pwadmin':
             return db == 'test'
         return None
