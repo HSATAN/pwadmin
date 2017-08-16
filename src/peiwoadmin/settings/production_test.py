@@ -10,7 +10,14 @@ DATABASES = {
         "HOST": '172.16.10.133',
 
     },
+    'test': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'peiwo',
+        'USER': 'peiwo',
+        "PASSWORD": '123456',
+        "HOST": '172.16.10.134',
 
+    },
     #
     'SQLDB_DSN_SHARDS_1': {
         'ENGINE': 'django.db.backends.postgresql',
