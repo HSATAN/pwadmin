@@ -12,15 +12,49 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'pwadmin:logout' %}">退出</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">任务 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">用户</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
+                    <a class="nav-link" href="#">认证</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">内容</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">群组</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">提现</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">充值</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">日志</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">客服</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">统计</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">实时数据</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">配置</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">权限</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">渠道统计</a>
+                </li>
+
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
@@ -28,6 +62,11 @@
             </form>
         </div>
     </nav>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-9"></div>
+
+    </div>
     {% block _content %}
     {% endblock %}
 {% endblock %}
