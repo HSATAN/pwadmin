@@ -14,4 +14,4 @@ class Account(object):
     def verifyuser(self, uid, password):
         url = self.generate_url(self.VERIFYUSER)
         resp = requests.post(url, data={"uid": uid, 'password': password})
-        return json.loads(resp.content)
+        return resp.json()
