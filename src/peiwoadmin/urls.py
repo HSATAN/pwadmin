@@ -21,6 +21,11 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pwadmin/', include('pwadmin.urls', namespace='peiwo')),
 ]
+
+# api
+urlpatterns += [
+    url(r'^api/v1\.0/pwadmin/', include('pwadmin.urls', namespace='peiwoAPI'))
+]
 # if settings.DEBUG:
 #     import debug_toolbar
 #

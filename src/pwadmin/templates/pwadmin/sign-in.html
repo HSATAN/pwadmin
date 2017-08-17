@@ -1,5 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     登陆
+{% endblock %}
+
+{% block content %}
+    <div id="signin"></div>
+{% endblock %}
+
+{% block extends_script %}
+    <script src="{% static 'pwadmin/sign-in.min.js' %}"></script>
+    <script type="application/javascript">
+        const React = signin.React;
+        const ReactDOM = signin.ReactDOM;
+        const SignIn = signin.SignIn;
+        ReactDOM.render(
+            React.createElement(
+                SignIn,
+                {
+                    csrf_token: `{{ csrf_token }}`,
+                    sign_in_url: `{% url 'peiwoAPI:sign-in' %}`
+                },
+                null
+            ),
+            document.getElementById('signin')
+        )
+    </script>
 {% endblock %}
