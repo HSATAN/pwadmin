@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -121,3 +122,7 @@ AUTHENTICATION_BACKENDS = [
     'contrib.auth.backends.SneakyBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+
+LOGIN_URL = reverse_lazy('pwadmin:sign-in')
+LOGIN_REDIRECT_URL = reverse_lazy('pwadmin:home')
