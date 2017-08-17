@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.conf import settings
 from pwadmin.models.pwmanager import PwManager
-
+from admin_interface.account import Account
 
 class SneakyBackend(object):
     def authenticate(self, request, **credentials):
         if not 'uid' in credentials:
             return None
-        pwmanager = PwManager.objects.filter(uid=credentials['uid'])
+        uid = credentials['uid']
+        password = credentials['password']
+        pwmanager = PwManager.objects.filter(uid=uid)
         if not pwmanager.exists():
             return None
-        return pwmanager.first()
+        acc = Account(settings.API_HOST)
+        r = acc.verifyuser(uid, password)
+        if r['code'] == 0:
+            return pwmanager.first()
 
     def get_user(self, user_id):
         try:
