@@ -18,12 +18,30 @@ class PwManager(models.Model):
     role = models.IntegerField(blank=True, null=True)
     state = models.IntegerField()
     create_time = models.DateTimeField()
+    last_login = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def __str__(self):
         return "{}".format(self.name)
 
     def __unicode__(self):
         return "{}".format(self.name)
+
+    @property
+    def is_staff(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    def has_module_perms(self, package_name):
+        return True
+
+    def has_perms(perm_list, obj=None):
+        return True
+
+    def has_perm(perm, obj=None):
+        return True
 
     class Meta:
         managed = False
