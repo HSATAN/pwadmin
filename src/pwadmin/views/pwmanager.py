@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
+from django.conf import settings
 from django.views.generic import View
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import views as auth_view
 from django.http import JsonResponse
 from pwadmin.forms.pwmanager import SignInForm
 
@@ -10,7 +12,10 @@ class SignIn(View):
     template = 'pwadmin/sign-in.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template, {})
+        next = request.GET.get('next', '')
+        if not next:
+            next = settings.LOGIN_REDIRECT_URL
+        return render(request, self.template, {'next': next})
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -35,3 +40,8 @@ class SignIn(View):
                 })
         else:
             pass
+
+
+
+class LogoutView(auth_view.LogoutView):
+    template_name = 'pwadmin/logged_out.html'

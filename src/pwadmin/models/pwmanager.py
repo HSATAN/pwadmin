@@ -43,6 +43,14 @@ class PwManager(models.Model):
     def has_perm(perm, obj=None):
         return True
 
+    @property
+    def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
+        return True
+
     class Meta:
         managed = False
         db_table = 'pw_manager'

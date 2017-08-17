@@ -19,12 +19,12 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^pwadmin/', include('pwadmin.urls', namespace='peiwo')),
+    url(r'^pwadmin/', include('pwadmin.urls', namespace='pwadmin')),
 ]
 
 # api
 urlpatterns += [
-    url(r'^api/v1\.0/pwadmin/', include('pwadmin.urls', namespace='peiwoAPI'))
+    url(r'^api/v1\.0/pwadmin/', include('pwadmin.urls', namespace='pwadminAPI'))
 ]
 # if settings.DEBUG:
 #     import debug_toolbar

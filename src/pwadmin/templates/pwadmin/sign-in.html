@@ -6,7 +6,10 @@
 {% endblock %}
 
 {% block content %}
-    <div id="signin"></div>
+    <div class="container">
+        <div id="signin"></div>
+    </div>
+
 {% endblock %}
 
 {% block extends_script %}
@@ -20,7 +23,8 @@
                 SignIn,
                 {
                     csrf_token: `{{ csrf_token }}`,
-                    sign_in_url: `{% url 'peiwoAPI:sign-in' %}`
+                    sign_in_url: `{% url 'pwadminAPI:sign-in' %}`,
+                    next: `{{ next }}`
                 },
                 null
             ),

@@ -41,11 +41,10 @@ class SignIn extends React.Component {
             },
             success: function (data, status, xhr) {
                 if (data.code == 0){
-                    window.location.href = window.location.href
+                    window.location.href = this.props.next
                 }else{
                     alert(data.msg);
                 }
-
             }.bind(this),
             error: function (xhr, status, thrown) {
                 console.log("Error", thrown);
