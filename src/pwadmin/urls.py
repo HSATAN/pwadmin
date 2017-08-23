@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.conf.urls import url
-from .views import pwmanager, index, task, accounts
+from .views import (
+    pwmanager, index, task, accounts, statistic
+)
 
 urlpatterns = [
     url(r'^$', index.Index.as_view(), name='home'),
@@ -9,5 +11,6 @@ urlpatterns = [
     url(r'^logout/$', pwmanager.LogoutView.as_view(), name='logout'),
     url(r'^task/$', task.Task.as_view(), name='task'),
     url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
+    url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
 
 ]
