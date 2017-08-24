@@ -40,15 +40,16 @@ class PwMenu(models.Model):
 
     @property
     def tree_self_key(self):
-        return 'text'
+        return 'node'
 
     @property
     def tree_self_content(self):
-        return self.name
+        return {'id': self.no,
+                'name': self.name}
 
     @property
     def tree_children_key(self):
-        return 'nodes'
+        return 'children'
 
     def __str__(self):
         return "{}".format(self.no)
