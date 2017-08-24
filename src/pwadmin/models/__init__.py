@@ -205,24 +205,6 @@ class PwImageFilter(models.Model):
 
 
 
-
-
-class PwMenu(models.Model):
-    no = models.CharField(unique=True, max_length=255)
-    name = models.CharField(max_length=255, blank=True, null=True)
-    url = models.CharField(max_length=255, blank=True, null=True)
-    title = models.CharField(max_length=255, blank=True, null=True)
-    state = models.SmallIntegerField()
-    type = models.SmallIntegerField()
-    is_leaf = models.SmallIntegerField()
-    index = models.IntegerField()
-    create_time = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'pw_menu'
-
-
 class PwMessage(models.Model):
     message = models.CharField(max_length=255, blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)

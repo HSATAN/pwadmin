@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^task/$', task.Task.as_view(), name='task'),
     url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
-    url(r'^permissions/$', permissions.PWPermissions.as_view(), name='permissions'),
+    url(r'^permissions/$', permissions.Menu.as_view(), name='perm_menu'),
 ]

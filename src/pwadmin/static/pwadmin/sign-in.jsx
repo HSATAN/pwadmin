@@ -1,3 +1,7 @@
+/*
+browserify src/pwadmin/static/pwadmin/sign-in.jsx -t babelify --standalone signin > src/pwadmin/static/pwadmin/sign-in.min.js
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 

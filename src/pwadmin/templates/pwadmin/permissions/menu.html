@@ -1,0 +1,70 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% block title %}
+    权限-陪我管理系统
+{% endblock %}
+{% block left_content %}
+    <ul class="list-group">
+        <li class="list-group-item active">菜单</li>
+        <li class="list-group-item">用户</li>
+        <li class="list-group-item">Group</li>
+        <li class="list-group-item">APP</li>
+        <li class="list-group-item">用户Group</li>
+        <li class="list-group-item">用户APP</li>
+    </ul>
+{% endblock %}
+
+{% block right_content %}
+    <div class="row">
+        <div class="col-10">
+            <form class="form"><input class="form-group" type="search"/></form>
+        </div>
+        <div class="col-2"><a href="javascript:void(0);" class="button">新增</a></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>url</th>
+                    <th>描述</th>
+                    <th>叶子</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in object_list %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ obj.no }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.url }}</td>
+                        <td>{{ obj.title }}</td>
+                        <td>{{ obj.is_leaf }}</td>
+                        <td>{{ obj.create_time }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if object_list.has_previous %}
+                        <a href="?page={{ object_list.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+                    </span>
+
+                    {% if object_list.has_next %}
+                        <a href="?page={{ object_list.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
