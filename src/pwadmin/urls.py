@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.conf.urls import url
 from .views import (
-    pwmanager, index, task, accounts, statistic
+    pwmanager, index, task, accounts, statistic, permissions
 )
 
 urlpatterns = [
@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^task/$', task.Task.as_view(), name='task'),
     url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
-
+    url(r'^permissions/$', permissions.PWPermissions.as_view(), name='permissions'),
 ]
