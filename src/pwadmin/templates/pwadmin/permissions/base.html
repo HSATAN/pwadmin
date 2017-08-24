@@ -3,14 +3,14 @@
     权限-陪我管理系统
 {% endblock %}
 {% block left_content %}
-    <ul class="list-group">
-        <li class="list-group-item">菜单</li>
-        <li class="list-group-item">用户</li>
-        <li class="list-group-item">Group</li>
-        <li class="list-group-item">APP</li>
-        <li class="list-group-item">用户Group</li>
-        <li class="list-group-item">用户APP</li>
-    </ul>
+    <div class="list-group">
+        <a href="{% url 'pwadmin:perm_menu' %}" class="list-group-item {% if nav_name == 'perm_menu' %}active{% endif %}">菜单</a>
+        <a href="{% url 'pwadmin:perm_manager' %}" class="list-group-item {% if nav_name == 'perm_manager' %}active{% endif %}">用户</a>
+        <a href="{% url 'pwadmin:perm_group' %}" class="list-group-item {% if nav_name == 'perm_group' %}active{% endif %}">Group</a>
+        <a href="" class="list-group-item {% if nav_name == 'perm_app' %}active{% endif %}">APP</a>
+        <a href="" class="list-group-item {% if nav_name == 'perm_user_group' %}active{% endif %}">用户Group</a>
+        <a href="" class="list-group-item {% if nav_name == 'perm_user_app' %}active{% endif %}">用户APP</a>
+    </div>
 {% endblock %}
 
 {% block right_content %}

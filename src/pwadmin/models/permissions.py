@@ -17,3 +17,13 @@ class PwMenu(models.Model):
     class Meta:
         managed = False
         db_table = 'pw_menu'
+
+
+class PwRole(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    state = models.SmallIntegerField()
+    create_time = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'pw_role'

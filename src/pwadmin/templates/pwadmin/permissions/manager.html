@@ -16,11 +16,8 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>编号</th>
+                    <th>陪我号</th>
                     <th>名称</th>
-                    <th>url</th>
-                    <th>描述</th>
-                    <th>叶子</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
@@ -29,11 +26,8 @@
                 {% for obj in page_obj %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ obj.no }}</td>
+                        <td>{{ obj.uid }}</td>
                         <td>{{ obj.name }}</td>
-                        <td>{{ obj.url }}</td>
-                        <td>{{ obj.title }}</td>
-                        <td>{{ obj.is_leaf }}</td>
                         <td>{{ obj.create_time }}</td>
                         <td></td>
                     </tr>
@@ -54,8 +48,7 @@
                         <a href="?page={{ page_obj.next_page_number }}">next</a>
                     {% endif %}
                 </span>
-                <span class="float-right">total {{ page_obj.count }}</span>
-
+            <span class="float-right">total {{ page_obj.count }}</span>
             </div>
         </div>
     </div>

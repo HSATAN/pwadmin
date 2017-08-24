@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from pwadmin.models.permissions import PwMenu
+from pwadmin.models.permissions import PwMenu, PwRole
+from pwadmin.models.pwmanager import PwManager
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -15,26 +16,34 @@ class PWPermissions(View):
         return render(request, self.template)
 
 
-class Menu(View):
-    template = 'pwadmin/permissions/menu.html'
+class MenuList(ListView):
+    template_name = 'pwadmin/permissions/menu.html'
     model = PwMenu
+    paginate_by = 50
 
-    @staticmethod
-    def format_to_int(astr, default=10):
-        try:
-            return int(astr)
-        except ValueError as e:
-            return default
+    def get_context_data(self, **kwargs):
+        context = super(MenuList, self).get_context_data(**kwargs)
+        context['nav_name'] = 'perm_menu'
+        return context
 
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        items = self.format_to_int(request.GET.get('items', '25'), 25)
-        page = self.format_to_int(request.GET.get('page', '50'), 50)
-        menu_list = self.model.objects.all()
-        paginator = Paginator(menu_list, items)
-        try:
-            menu_list = paginator.page(page)
-        except EmptyPage:
-            menu_list = paginator.page(paginator.num_pages)
 
-        return render(request, self.template, {"object_list": menu_list})
+class ManagerList(ListView):
+    paginate_by = 50
+    template_name = 'pwadmin/permissions/manager.html'
+    model = PwManager
+
+    def get_context_data(self, **kwargs):
+        context = super(ManagerList, self).get_context_data(**kwargs)
+        context['nav_name'] = 'perm_manager'
+        return context
+
+
+class GroupList(ListView):
+    paginate_by = 50
+    template_name = 'pwadmin/permissions/group_list.html'
+    model = PwRole
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupList, self).get_context_data(**kwargs)
+        context['nav_name'] = 'perm_group'
+        return context

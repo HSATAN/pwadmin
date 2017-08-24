@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^task/$', task.Task.as_view(), name='task'),
     url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
-    url(r'^permissions/$', permissions.Menu.as_view(), name='perm_menu'),
+    url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
+    url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
+    url(r'^permissions/groups/$', permissions.GroupList.as_view(), name='perm_group'),
 ]
