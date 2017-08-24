@@ -232,9 +232,6 @@ class PwReport(models.Model):
         db_table = 'pw_report'
 
 
-
-
-
 class PwRoleItem(models.Model):
     role_id = models.IntegerField()
     menu_id = models.IntegerField()
