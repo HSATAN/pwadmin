@@ -7,7 +7,7 @@
         <a href="{% url 'pwadmin:perm_menu' %}" class="list-group-item {% if nav_name == 'perm_menu' %}active{% endif %}">菜单</a>
         <a href="{% url 'pwadmin:perm_manager' %}" class="list-group-item {% if nav_name == 'perm_manager' %}active{% endif %}">用户</a>
         <a href="{% url 'pwadmin:perm_group' %}" class="list-group-item {% if nav_name == 'perm_group' %}active{% endif %}">Group</a>
-        <a href="" class="list-group-item {% if nav_name == 'perm_app' %}active{% endif %}">菜单树</a>
+        <a href="{% url 'pwadmin:perm_menu_tree' %}" class="list-group-item {% if nav_name == 'perm_menu_tree' %}active{% endif %}">菜单树</a>
         <a href="" class="list-group-item {% if nav_name == 'perm_user_group' %}active{% endif %}">用户Group</a>
         <a href="" class="list-group-item {% if nav_name == 'perm_user_app' %}active{% endif %}">用户APP</a>
     </div>

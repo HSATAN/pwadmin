@@ -14,5 +14,4 @@ class PwMenuManager(Manager):
         first_level_menu = self.first_level_menu(order_by)
         for i in first_level_menu:
             children.append(i.tree(order_by))
-        return {'node': '',
-                'children': children}
+        return children

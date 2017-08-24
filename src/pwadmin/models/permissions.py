@@ -28,15 +28,27 @@ class PwMenu(models.Model):
 
     def tree(self, order_by='no'):
         if not self.all_level_children().exists():
-            return {'node': self,
-                    'children': []}
+            return {self.tree_self_key: self.tree_self_content,
+                    self.tree_children_key: []}
         children = []
         for child in self.all_level_children(order_by):
             children.append(child.tree(order_by))
         return {
-            'node': self,
-            'children': children
+            self.tree_self_key: self.tree_self_content,
+            self.tree_children_key: children
         }
+
+    @property
+    def tree_self_key(self):
+        return 'text'
+
+    @property
+    def tree_self_content(self):
+        return self.name
+
+    @property
+    def tree_children_key(self):
+        return 'nodes'
 
     def __str__(self):
         return "{}".format(self.no)

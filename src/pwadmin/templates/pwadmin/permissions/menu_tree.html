@@ -1,0 +1,18 @@
+{% extends 'pwadmin/permissions/base.html' %}
+{% block title %}
+    权限-陪我管理系统
+{% endblock %}
+
+{% block right_content %}
+    <div id="tree"></div>
+{% endblock %}
+{% block extends_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+    <script>
+        $('#tree').treeview({
+            data: JSON.parse(`{{ tree|safe }}`),
+            levels: 3,
+            showCheckbox: true
+        });
+    </script>
+{% endblock %}
