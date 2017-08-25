@@ -34,30 +34,28 @@ class PwMenu(models.Model):
 
         Returns(dict):
           - menu_tree: -
-            {tree_id_key: {
+            {
                     tree_self_key: tree_self_content,
                     tree_children_key: {
                     }
             }
         """
         if not self.all_level_children().exists():
-            return {self.tree_id_key: {self.tree_self_key: self.tree_self_content,
-                                       self.tree_children_key: {}}}
+            return {self.tree_self_key(): self.tree_self_content,
+                    self.tree_children_key(): {}}
         children = {}
         for child in self.all_level_children(order_by):
-            children.update(child.tree(order_by))
-        return {
-            self.tree_id_key: {
-                self.tree_self_key: self.tree_self_content,
-                self.tree_children_key: children}
-        }
+            children.update({child.tree_id_key: child.tree(order_by)})
+        return {self.tree_self_key(): self.tree_self_content,
+                self.tree_children_key(): children}
+
 
     @property
     def tree_id_key(self):
         return str(self.no)
 
-    @property
-    def tree_self_key(self):
+    @staticmethod
+    def tree_self_key():
         return 'node'
 
     @property
@@ -66,8 +64,8 @@ class PwMenu(models.Model):
                 'name': self.name,
                 'checked': False}
 
-    @property
-    def tree_children_key(self):
+    @staticmethod
+    def tree_children_key():
         return 'children'
 
     def __str__(self):
