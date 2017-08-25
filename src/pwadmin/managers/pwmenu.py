@@ -10,8 +10,8 @@ class PwMenuManager(Manager):
         return self.annotate(no_len=Length('no')).filter(no_len=2).order_by(order_by)
 
     def tree(self, order_by='no'):
-        children = []
+        children = {}
         first_level_menu = self.first_level_menu(order_by)
         for i in first_level_menu:
-            children.append(i.tree(order_by))
+            children.update(i.tree(order_by))
         return children
