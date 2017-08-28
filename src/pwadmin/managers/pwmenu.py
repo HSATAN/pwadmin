@@ -26,8 +26,9 @@ class PwMenuManager(Manager):
         for i in first_level_menu:
             children.update({i.tree_id_key: i.tree(order_by)})
         return {
-            self.model.tree_self_key(): {'id': 'menu',
-                                         'name': '菜单',
-                                         'checked': False},
-            self.model.tree_children_key(): children
+            'menu': {
+                self.model.tree_self_key(): {'id': 'menu',
+                                             'name': '菜单',
+                                             'checked': False},
+                self.model.tree_children_key(): children}
         }
