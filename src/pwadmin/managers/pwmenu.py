@@ -24,7 +24,7 @@ class PwMenuManager(Manager):
         children = {}
         first_level_menu = self.first_level_menu(order_by)
         for i in first_level_menu:
-            children.update({i.tree_id_key: i.tree(order_by)})
+            children.update(i.tree(order_by))
         return {
             'menu': {
                 self.model.tree_self_key(): {'id': 'menu',
