@@ -11,7 +11,7 @@ class Account(object):
     def generate_url(self, url):
         return "{}{}".format(self.host, url)
 
-    def verifyuser(self, uid, password):
+    def verify_user(self, uid, password):
         url = self.generate_url(self.VERIFYUSER)
         resp = requests.post(url, data={"uid": uid, 'password': password})
         return resp.json()

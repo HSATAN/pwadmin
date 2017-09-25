@@ -14,7 +14,7 @@ class SneakyBackend(object):
         if not pwmanager.exists():
             return None
         acc = Account(settings.API_HOST)
-        r = acc.verifyuser(uid, password)
+        r = acc.verify_user(uid, password)
         if r['code'] == 0:
             return pwmanager.first()
 
