@@ -9,10 +9,9 @@ class Contents(View):
     label_manage = sneakSDK.label_manage
 
     def get(self, request, *args, **kwargs):
-        path = request.path
-        if path.startswith('/'):
-            path = path[1:]
-        data = self.label_manage.get_feed_topic(1, 1, 10, path)
+        data = self.label_manage.get_feed_topic(1, 0, 10)
+        print "======"
+        print data
         return render(request, self.template)
 
 
