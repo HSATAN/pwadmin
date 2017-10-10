@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from admin_interface.common import DataFromSneak
+from admin_interface.common import BaseHandler
 from strings import METHOD_GET
 from django.conf import settings
 
 
-class LabelManageInterface(object):
-    sneak = DataFromSneak(host=settings.API_HOST)
-    API_REQUEST = '/admin/feed/topic'
+class LabelManageInterface(BaseHandler):
 
+    API_REQUEST = '/admin/feed/topic'
     """
     host    请求的ip
     API_REQUEST     请求的接口名
@@ -20,7 +19,8 @@ class LabelManageInterface(object):
                   'page_size': page_size,
                   'begin_index': begin_index,
                   "session_data": "81ded44dbc365b7f8e05be22c7ceee32"}
-        data = self.sneak.query_method_get(METHOD_GET, self.API_REQUEST, params)
+        url = self.generate_url(self.API_REQUEST)
+        data = self.query_method(True, METHOD_GET, url, **params)
         return data
 
 

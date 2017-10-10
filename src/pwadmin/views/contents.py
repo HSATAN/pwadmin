@@ -6,10 +6,9 @@ from utils.sdk import sneakSDK
 
 class Contents(View):
     template = 'pwadmin/contents/label_manage.html'
-    label_manage = sneakSDK.label_manage
 
     def get(self, request, *args, **kwargs):
-        data = self.label_manage.get_feed_topic(1, 0, 10)
+        data = sneakSDK.label_manage.get_feed_topic(1, 0, 10)
         print "======"
         print data
         return render(request, self.template)
