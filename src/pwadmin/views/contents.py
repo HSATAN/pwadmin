@@ -9,8 +9,6 @@ class Contents(View):
 
     def get(self, request, *args, **kwargs):
         data = sneakSDK.label_manage.get_feed_topic(1, 0, 10)
-        print "======"
-        print data
         return render(request, self.template)
 
 

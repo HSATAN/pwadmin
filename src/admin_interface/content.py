@@ -7,13 +7,40 @@ from django.conf import settings
 class LabelManageInterface(BaseHandler):
 
     API_REQUEST = '/admin/feed/topic'
-    """
-    host    请求的ip
-    API_REQUEST     请求的接口名
-    begin_index     起始页
-    page_size       每页显示多少条数据
-    """
+
     def get_feed_topic(self, uid, begin_index, page_size):
+        """
+        标签管理
+        Args:
+            uid:唯一标识
+            begin_index:起始页
+            page_size:每页显示多少条数据
+
+        Returns:
+            A dict
+            {
+                "total": 19,
+                "have_release": 0,
+                "code": 0,
+                "data": [
+                    {
+                        "count": 6,
+                        "view_count": 4303,
+                        "subtitle": "此标签用语auto_test",
+                        "state": 0,
+                        "content": "auto_test",
+                        "creator_id": 1,
+                        "create_time": "2017-04-05 16:00:48",
+                        "real_count": 2,
+                        "id": 594
+                    },
+                ],
+                "current_time": 1507629185
+            }
+
+        Raises:
+            pass
+        """
         params = {'version': 9999,
                   'uid': uid,
                   'page_size': page_size,
@@ -24,29 +51,21 @@ class LabelManageInterface(BaseHandler):
         return data
 
 
-class LabelDynamicInterface(object):
+class LabelDynamicInterface(BaseHandler):
     API_REQUEST = '/admin/feed/topicpub'
-
-    def __init__(self, host='http://172.16.10.134:9090'):
-        self.host = host
+    pass
 
 
-class ReportDynamicInterface(object):
+class ReportDynamicInterface(BaseHandler):
     API_REQUEST = '/admin/feed/userpub'
-
-    def __init__(self, host='http://172.16.10.134:9090'):
-        self.host = host
+    pass
 
 
-class WhiteListInterface(object):
+class WhiteListInterface(BaseHandler):
     API_REQUEST = '/admin/feed/pub/whitelist'
-
-    def __init__(self, host='http://172.16.10.134:9090'):
-        self.host = host
+    pass
 
 
-class FeedInterface(object):
+class FeedInterface(BaseHandler):
     API_REQUEST = '/admin/feed/pub/query'
-
-    def __init__(self, host='http://172.16.10.134:9090'):
-        self.host = host
+    pass
