@@ -1,0 +1,8 @@
+.list-group li:nth-child(1) { background-color: #02a1c9;}
+.list-group li:nth-child(1) a { color: #fff;}
+.space { width: 1000px; height:40px;}
+.right_content { width: 1000px;}
+.right_sign { word-break: break-all; border: 0; border-bottom: 1px dashed #aaa;
+    margin-left: 20px; font-size: 15px; width: 50%; display: inline-block; padding: 5px;}
+.span_add { padding: 5px; color: #02a1c9; font-size: 15px; cursor: pointer; margin: 5px;
+    border: 1px solid #02a1c9;}

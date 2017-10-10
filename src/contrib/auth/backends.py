@@ -4,6 +4,7 @@ from django.conf import settings
 from pwadmin.models.pwmanager import PwManager
 from admin_interface.account import Account
 
+
 class SneakyBackend(object):
     def authenticate(self, request, **credentials):
         if not 'uid' in credentials:
@@ -23,3 +24,5 @@ class SneakyBackend(object):
             return PwManager.objects.get(pk=user_id)
         except PwManager.DoesNotExist:
             return None
+
+
