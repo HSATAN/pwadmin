@@ -6,6 +6,7 @@ from django.views.generic import View
 from pwadmin.forms.accounts import SignUpSearchForm
 from utils.sdk import sneakSDK
 
+
 class Accounts(View):
     """用户-基础信息-注册用户.
     """
