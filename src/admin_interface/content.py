@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import requests
 import json
+import requests
 import hashlib
 
 
-class LabelManage(object):
+class LabelManageInterface(object):
     API_REQUEST = '/admin/feed/topic'
 
     def __init__(self, host='http://172.16.10.134:9090'):
@@ -13,7 +13,8 @@ class LabelManage(object):
     def generate_url(self, url):
         return "{}{}".format(self.host, url)
 
-    def sign_request(self, method, api_path, params):
+    @staticmethod
+    def sign_request(method, api_path, params):
         keys = params.keys()
         keys.sort()
         params_str = ''.join([('%s=%s' % (key, params[key])) for key in keys])
@@ -31,3 +32,31 @@ class LabelManage(object):
         params["sign"] = sign
         resp = requests.post(url, data=params)
         return resp.json()
+
+
+class LabelDynamicInterface(object):
+    API_REQUEST = '/admin/feed/topicpub'
+
+    def __init__(self, host='http://172.16.10.134:9090'):
+        self.host = host
+
+
+class ReportDynamicInterface(object):
+    API_REQUEST = '/admin/feed/userpub'
+
+    def __init__(self, host='http://172.16.10.134:9090'):
+        self.host = host
+
+
+class WhiteListInterface(object):
+    API_REQUEST = '/admin/feed/pub/whitelist'
+
+    def __init__(self, host='http://172.16.10.134:9090'):
+        self.host = host
+
+
+class FeedInterface(object):
+    API_REQUEST = '/admin/feed/pub/query'
+
+    def __init__(self, host='http://172.16.10.134:9090'):
+        self.host = host
