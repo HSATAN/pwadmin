@@ -17,7 +17,6 @@ INTERNAL_IPS = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -97,5 +96,5 @@ DATABASES = {
 
 }
 
-
 API_HOST = 'http://172.16.10.134:9090'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
