@@ -5,7 +5,6 @@ from pwadmin.models.pwmanager import PwManager
 from utils.sdk import sneakSDK
 
 
-
 class SneakyBackend(object):
     def authenticate(self, request, **credentials):
         if not 'uid' in credentials:
