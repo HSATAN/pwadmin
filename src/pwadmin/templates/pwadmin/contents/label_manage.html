@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block extends_head %}
-<link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/label_manage.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'css/label_manage.css' %}" type="text/css"/>
 {% endblock %}
 
 {% block left_content %}
     <div class="left_menu">
         <ul class="list-group">
-            <li><a href="{% url 'pwadmin:contents' %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_manage' 1 %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
             <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
@@ -23,15 +23,86 @@
 {% endblock %}
 
 {% block right_content %}
+
     <div class="space"></div>
+    <div class="amend">
+        <div class="modify_data">
+            <div class="space_front size">
+                <span class="space_title">标签修改</span>
+                <span class="space_out">×</span>
+            </div>
+            <hr/>
+            <div class="space_mid size">
+                <div class="space_content">
+                    <span class="label_content">内容</span>
+                    <textarea rows="4" cols="60" placeholder="请输入标签" class="sign_content to_left"></textarea>
+                </div>
+                <div class="space_content">
+                    <span class="label_content">说明</span>
+                    <textarea rows="4" cols="60" placeholder="请输入标签" class="sign_title to_left"></textarea>
+                </div>
+            </div>
+            <hr/>
+            <div class="space_sure">
+                {% csrf_token %}
+                <button type="button" class="operate sure">确定</button>
+                <button type="button" class="operate_cancel space_out cancel">关闭</button>
+            </div>
+        </div>
+    </div>
     <div class="right_content">
         <h3>
             标题
-            <input type="text" class="right_sign" placeholder="标签不限字数，尽量控制在14字" >
-            <span class="span_add">添加</span>
-            <span class="span_add">清空</span>
+            <input type="text" class="right_sign" placeholder="标签不限字数，尽量控制在14字">
+            <span class="span_add extend">添加</span>
+            <span class="span_clear extend">清空</span>
         </h3>
     </div>
-    <textarea class="form-control" id="msgcontent"	name = "msgcontent" style="padding:30px; margin-bottom: 10px;" rows="3" placeholder="输入说明 例子：此标签由XXX创建"></textarea>
-    <div class="data_main">12e</div>
+    <textarea class="form-control" id="msgcontent" name="msgcontent" style="padding:30px; margin-bottom: 10px;" rows="3"
+              placeholder="输入说明 例子：此标签由XXX创建"></textarea>
+    <div class="data_div">
+        <table class="data_table">
+            <tr>
+                <th class="td_sign head">标签</th>
+                <th class="td_str head">说明</th>
+                <th class="td_date head">更新时间</th>
+                <th class="td_opera head">操作</th>
+            </tr>
+            {% for i in data.data %}
+                <tr>
+                    <td class="td_sign" id="content_{{ i.id }}">{{ i.content }}</td>
+                    <td class="td_str" id="subtitle_{{ i.id }}">{{ i.subtitle }}</td>
+                    <td class="td_date">{{ i.create_time }}</td>
+                    <td class="td_opera">
+                        <button type="button" class="operate modify" data-id="{{ i.id }}">修改</button>
+                        {% if data.have_release == 1 %}
+                            {% if i.state == 2 %}
+                                <button type="button" class="operate back" data-id="{{ i.id }}">撤回</button>
+                            {% else %}
+                                <button type="button" disabled="disabled" data-id="{{ i.id }}">发布</button>
+                            {% endif %}
+                        {% else %}
+                            <button type="button" class="operate release" data-id="{{ i.id }}">发布</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="modalPage">
+        <a href="{% url 'pwadmin:label_manage' data.page_left %}" class="pageNum">上一页</a>
+        {% for val in data.total_list %}
+            <a href="{% url 'pwadmin:label_manage' val %}" class="pageNum">{{ val }}</a>
+        {% empty %}
+            ...
+        {% endfor %}
+        <a href="{% url 'pwadmin:label_manage' data.page_right %}" class="pageNum">下一页</a>
+    </div>
+{% endblock %}
+{% block extends_script %}
+    <script type="application/javascript">
+      var csrfmiddlewaretoken='{{ csrf_token }}'
+    </script>
+    <script src="{% static 'js/label_manage.js' %}"></script>
+
 {% endblock %}

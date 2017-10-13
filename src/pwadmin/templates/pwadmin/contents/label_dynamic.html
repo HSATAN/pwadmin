@@ -12,7 +12,7 @@
 {% block left_content %}
     <div class="left_menu">
         <ul class="list-group">
-            <li><a href="{% url 'pwadmin:contents' %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_manage' 1 %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
             <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
@@ -23,4 +23,30 @@
 {% endblock %}
 
 {% block right_content %}
+    <div class="space"></div>
+    <div class="right_content">
+        <div class="inline">
+            <input type="text" placeholder="请输入陪我号" class="search_top peiwo_id">
+            <input type="text" placeholder="开始时间" class="search_top start">
+            <input type="text" placeholder="结束时间" class="search_top end">
+        </div>
+        <div class="inline search_right">
+            <div class="search_day">
+                <button type="button" class="operate">查询</button>
+                <button type="button" class="operate_white">今天</button>
+                <button type="button" class="operate_white">7天</button>
+                <button type="button" class="operate_white">30天</button>
+                <button type="button" class="operate_white">清空</button>
+            </div>
+        </div>
+        <div class="search_status">
+            <button type="button" class="status_select">未处理</button>
+            <button type="button" class="status_none">已忽略</button>
+            <button type="button" class="status_none">已通过</button>
+            <button type="button" class="status_none">已举报</button>
+        </div>
+        <div class="control_switch">
+            <input type="checkbox" class="checkall">
+        </div>
+    </div>
 {% endblock %}

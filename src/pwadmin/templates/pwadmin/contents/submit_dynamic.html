@@ -12,7 +12,7 @@
 {% block left_content %}
     <div class="left_menu">
         <ul class="list-group">
-            <li><a href="{% url 'pwadmin:contents' %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_manage' 1 %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
             <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
