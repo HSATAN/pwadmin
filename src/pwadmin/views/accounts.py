@@ -4,6 +4,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from utils.sdk import sneakSDK
 
 
@@ -14,7 +15,7 @@ class Accounts(View):
     account = sneakSDK.account
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
+        if request.path_info == reverse_lazy('pwadminAPI:accounts'):
             return self.get_api(request, *args, **kwargs)
         return self.get_template(request, *args, **kwargs)
 

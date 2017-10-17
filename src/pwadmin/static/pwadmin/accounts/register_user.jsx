@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
+import fetch from 'isomorphic-fetch';
 
 const filter_s = {
     padding: 0,
@@ -16,12 +17,11 @@ class QueryStore {
     @observable object_list = [];
 
     constructor() {
-        autorun(() => console.log(this.object_list, "object_list"));
-        reaction(() => this.data(), data => {this.fetObjects(data)})
+        reaction(() => this.reactionData(), data => {this.fetObjects(data)})
     }
 
 
-    data() {
+    reactionData() {
         const data = {};
         this.query_set.map(function (obj, index) {
             if (obj.selected) {
@@ -29,6 +29,7 @@ class QueryStore {
             }
         });
         return data;
+
     }
 
     @action
@@ -50,7 +51,6 @@ class QueryStore {
         alert(textStatus);
         console.log(errorThrown);
     }
-
 
     loadQuerySet(querys) {
         this.query_set = querys || [
@@ -133,12 +133,12 @@ class QueryView extends React.Component {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
+
     handleClick(event) {
         const queryItem = this.props.queryItem;
         const $target = $(event.target);
         queryItem.selected = $target.data('value');
     }
-
 
     render() {
         const queryItem = this.props.queryItem;
@@ -160,11 +160,10 @@ class QueryView extends React.Component {
 }
 
 @observer
-class ListView extends React.Component {
+class TableView extends React.Component {
     render() {
         const data = this.props.object_list;
-
-        if (!$.isEmptyObject(data)) {
+        if (data) {
             return <div>
                 <div>
                     <div className="actions">
@@ -229,6 +228,7 @@ class ListView extends React.Component {
     }
 }
 
+
 @observer
 class RegisterUser extends React.Component {
     constructor(props) {
@@ -239,7 +239,6 @@ class RegisterUser extends React.Component {
         const store = this.props.store;
         store.loadQuerySet();
     }
-
 
     render() {
         const store = this.props.store;
@@ -265,7 +264,7 @@ class RegisterUser extends React.Component {
                             </div>
                         </form>
                     </div>
-                    {<ListView object_list={store.object_list}/>}
+                    {<TableView object_list={store.object_list}/>}
                 </div>
                 <div className="col-3">
                     <div className="card">
@@ -274,12 +273,10 @@ class RegisterUser extends React.Component {
                         </div>
                         <div className="card-body">
                             {store.query_set.map(function (obj, index) {
-                                return <QueryView key={index} queryItem={obj} />
+                                return <QueryView key={index} queryItem={obj}/>
                             })}
-
                         </div>
                     </div>
-
                 </div>
             </div>
 
