@@ -3,6 +3,7 @@ import requests
 from django.conf import settings
 from django.shortcuts import render
 from django.views.generic import View
+from django.http import JsonResponse
 from utils.sdk import sneakSDK
 
 
@@ -13,7 +14,25 @@ class Accounts(View):
     account = sneakSDK.account
 
     def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return self.get_api(request, *args, **kwargs)
+        return self.get_template(request, *args, **kwargs)
+
+    def get_api(self, request, *args, **kwargs):
+        """
+
+        Args:
+            request:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
         data = self.account.query()
+        return JsonResponse(data=data)
+
+    def get_template(self, request, *args, **kwargs):
         return render(request, self.template)
 
     def post(self, request, *args, **kwargs):
