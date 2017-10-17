@@ -16,13 +16,12 @@ class QueryStore {
     @observable object_list = [];
 
     constructor() {
-        autorun(() => console.log(this.data, "data"));
         autorun(() => console.log(this.object_list, "object_list"));
-        reaction(()=>this.data, data=>{this.fetObjects(data)})
+        reaction(() => this.data(), data => {this.fetObjects(data)})
     }
 
 
-    @computed get data() {
+    data() {
         const data = {};
         this.query_set.map(function (obj, index) {
             if (obj.selected) {
@@ -253,7 +252,6 @@ class RegisterUser extends React.Component {
             <div className="row">
                 <div className="col-9">
                     <div>
-
                         <form>
                             <div className="form-group row">
                                 <div className="col-sm-10">
