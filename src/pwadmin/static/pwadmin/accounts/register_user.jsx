@@ -5,7 +5,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
-import fetch from 'isomorphic-fetch';
 
 const filter_s = {
     padding: 0,
@@ -132,12 +131,35 @@ class QueryView extends React.Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
+        this.renderSpecified = this.renderSpecified.bind(this);
     }
 
     handleClick(event) {
         const queryItem = this.props.queryItem;
         const $target = $(event.target);
+        const value = $target.data('value');
         queryItem.selected = $target.data('value');
+    }
+
+    renderSpecified() {
+        return <form className="form-inline">
+            <input type="text"
+                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                   id="inlineFormInputName2"
+                   placeholder="下限"
+                   style={{width: "35%"}}
+            />
+            <input type="text"
+                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                   id="inlineFormInputGroupUsername2"
+                   placeholder="上限"
+                   style={{width: "35%"}}
+            />
+            <button type="submit"
+                    className="btn btn-primary"
+                    style={{width: "22%"}}
+            >确定</button>
+        </form>
     }
 
     render() {
@@ -154,6 +176,7 @@ class QueryView extends React.Component {
                               onClick={this.handleClick}
                     >{i.verbose_name}</a>
                 })}
+                {queryItem.selected == 'specified' ? this.renderSpecified() : null}
             </div>
         </div>
     }
