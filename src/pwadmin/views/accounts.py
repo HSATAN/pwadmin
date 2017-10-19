@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import requests
-from django.conf import settings
-from django.shortcuts import render
-from django.views.generic import View
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.generic import View
+
+from contrib.views import BaseView
 from utils.sdk import sneakSDK
 
 
@@ -38,3 +38,17 @@ class Accounts(View):
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template, context={})
+
+    def reported(self, request, *args, **kwargs):
+        pass
+
+
+
+class ReportedUser(BaseView):
+    template = 'pwadmin/accounts/reported.html'
+
+    def get_ajax(self, request, *args, **kwargs):
+        pass
+
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})
