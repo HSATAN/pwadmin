@@ -25,3 +25,4 @@ urlpatterns = [
     url(r'^white_list/$', contents.WhiteList.as_view(), name='white_list'),
     url(r'^feed/$', contents.Feed.as_view(), name='feed'),
 ]
+
