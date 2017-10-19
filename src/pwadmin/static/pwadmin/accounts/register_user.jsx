@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
-import {SearchStore} from './../list-tpl.jsx';
+import {BaseSearchStore} from './../store-tpl.jsx';
 
 const filter_s = {
     padding: 0,
@@ -31,9 +31,13 @@ class FilterBaseView extends React.Component {
 
     handleClick(event) {
         const store = this.props.store;
+        const queryItem = this.props.queryItem;
+
         const $target = $(event.target);
         const value = $target.data('value');
-        store.filter.push({[$target.data('field')]: value});
+        const name = $target.data('field');
+        queryItem.selected = value;
+        store.filter.push({name: name, value:value});
         if (value != 'specified') {
             store.search = true;
         } else {
@@ -88,16 +92,14 @@ class FilterBaseView extends React.Component {
 @observer
 class FilterView extends React.Component {
     render() {
-        const filters = this.props.filters;
+        const filter_store = this.props.filter_store;
         const store = this.props.store;
         return <div className="card">
             <div className="card-header">
                 Filter
             </div>
             <div className="card-body">
-                {filters.map(function (obj, index) {
-                    return <FilterBaseView key={index} queryItem={obj} store={store}/>
-                })}
+                {filter_store.filters.map((obj, index) => <FilterBaseView key={index} queryItem={obj} store={store}/>)}
             </div>
         </div>
     }
@@ -105,6 +107,10 @@ class FilterView extends React.Component {
 
 @observer
 class SearchView extends React.Component {
+    /**
+     *
+     * @param props: store
+     */
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
@@ -155,67 +161,68 @@ class SearchView extends React.Component {
 class TableView extends React.Component {
     render() {
         const object_list = this.props.object_list;
-        if(_.isEmpty(object_list)){
+        if (_.isEmpty(object_list)) {
             return <div></div>
         }
         const data = object_list.data.list;
         return <div>
-                <div>
-                    <div className="actions">
-                        <label>Action:
-                            <select name="action" required="" defaultValue="">
-                                <option value="">---------</option>
-                                <option value="delete_selected">Delete selected pw managers</option>
-                            </select></label><input type="hidden" name="select_across" value="0"
-                                                    className="select-across"/>
-                        <button type="submit" className="button" title="Run the selected action" name="index"
-                                value="0">
-                            Go
-                        </button>
+            <div>
+                <div className="actions">
+                    <label>Action:
+                        <select name="action" required="" defaultValue="">
+                            <option value="">---------</option>
+                            <option value="delete_selected">Delete selected pw managers</option>
+                        </select></label><input type="hidden" name="select_across" value="0"
+                                                className="select-across"/>
+                    <button type="submit" className="button" title="Run the selected action" name="index"
+                            value="0">
+                        Go
+                    </button>
 
-                        <span className="action-counter" data-actions-icnt="45" style={{display: "inline"}}>0 of 45 selected</span>
-                    </div>
+                    <span className="action-counter" data-actions-icnt="45"
+                          style={{display: "inline"}}>0 of 45 selected</span>
                 </div>
-                <table className="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>头像</th>
-                        <th>陪我号</th>
-                        <th>昵称</th>
-                        <th>登录类型</th>
-                        <th>口粮</th>
-                        <th>粮票</th>
-                        <th>喜欢</th>
-                        <th>被喜欢</th>
-                        <th>投喂</th>
-                        <th>收获</th>
-                        <th>注册时间</th>
-                        <th>登录时间</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {data.map(
-                        (item, index) => {
-                            return <tr key={index}>
-                                <th><img src={"https://o6dq1o4az.qnssl.com/" + item.raw_images + "/thumbnail"}
-                                         style={{width: 60 + 'px'}}/></th>
-                                <th>{item.uid}</th>
-                                <th>{item.name}</th>
-                                <th>{item.social_type}</th>
-                                <th>{item.change}</th>
-                                <th>{item.money}</th>
-                                <th>{item.contact_like}</th>
-                                <th>{item.contact_liked}</th>
-                                <th>{item.money_paid}</th>
-                                <th>{item.money_income}</th>
-                                <th>{item.signup_time}</th>
-                                <th>{item.signin_time}</th>
-                            </tr>
-                        })
-                    }
-                    </tbody>
-                </table>
             </div>
+            <table className="table table-striped">
+                <thead>
+                <tr>
+                    <th>头像</th>
+                    <th>陪我号</th>
+                    <th>昵称</th>
+                    <th>登录类型</th>
+                    <th>口粮</th>
+                    <th>粮票</th>
+                    <th>喜欢</th>
+                    <th>被喜欢</th>
+                    <th>投喂</th>
+                    <th>收获</th>
+                    <th>注册时间</th>
+                    <th>登录时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {data.map(
+                    (item, index) => {
+                        return <tr key={index}>
+                            <th><img src={"https://o6dq1o4az.qnssl.com/" + item.raw_images + "/thumbnail"}
+                                     style={{width: 60 + 'px'}}/></th>
+                            <th>{item.uid}</th>
+                            <th>{item.name}</th>
+                            <th>{item.social_type}</th>
+                            <th>{item.change}</th>
+                            <th>{item.money}</th>
+                            <th>{item.contact_like}</th>
+                            <th>{item.contact_liked}</th>
+                            <th>{item.money_paid}</th>
+                            <th>{item.money_income}</th>
+                            <th>{item.signup_time}</th>
+                            <th>{item.signin_time}</th>
+                        </tr>
+                    })
+                }
+                </tbody>
+            </table>
+        </div>
     }
 }
 
@@ -226,8 +233,32 @@ class RegisterUser extends React.Component {
         super(props);
     }
 
-    static get filters() {
-        return [
+    render() {
+        return <div>
+            <ol className="breadcrumb">
+                <li className="breadcrumb-item"><a href="#">Home</a></li>
+                <li className="breadcrumb-item"><a href="#">用户</a></li>
+                <li className="breadcrumb-item active">注册用户</li>
+            </ol>
+            <div className="row">
+                <div className="col-9">
+                    {this.props.search}
+                    {this.props.table}
+                </div>
+                <div className="col-3">
+                    {this.props.filter}
+                </div>
+            </div>
+
+        </div>
+    }
+}
+
+/**
+ * 暂时先写成静态的, 之后再考虑服务器传来的
+ */
+class FilterStore {
+    @observable filters = [
             {
                 verbose_name: '性别',
                 field_name: 'gender',
@@ -287,33 +318,16 @@ class RegisterUser extends React.Component {
                 ]
             },
         ]
-    }
-
-    render() {
-        const searchStore = this.props.searchStore;
-        return <div>
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="#">Home</a></li>
-                <li className="breadcrumb-item"><a href="#">用户</a></li>
-                <li className="breadcrumb-item active">注册用户</li>
-            </ol>
-            <div className="row">
-                <div className="col-9">
-                    {<SearchView store={searchStore}/>}
-                    {<TableView object_list={searchStore.result}/>}
-                </div>
-                <div className="col-3">
-                    <FilterView store={searchStore} filters={RegisterUser.filters}/>
-                </div>
-            </div>
-
-        </div>
-    }
 }
 
 
 // ========================================
+const store = new BaseSearchStore();
+const filter_store = new FilterStore();
 ReactDOM.render(
-    <RegisterUser searchStore={new SearchStore()}/>,
+    <RegisterUser search={<SearchView store={store}/>}
+                  table={<TableView/>}
+                  filter={<FilterView store={store} filter_store={filter_store}/>}
+    />,
     document.getElementById('root')
 );
