@@ -1,0 +1,19 @@
+<ul class="list-group">
+    <li href="javascript:void(0);" class="list-group-item">基础信息
+        <div class="list-group">
+            <a href="{% url 'pwadmin:accounts' %}" class="list-group-item {% if item == 'register' %}active{% else %}list-group-item-action{% endif %}">注册用户</a>
+            <a href="#" class="list-group-item list-group-item-action">用户动态</a>
+        </div>
+    </li>
+    <a href="{% url 'pwadmin:account-reported' %}" class="list-group-item list-group-item-action">被举报用户</a>
+    <li href="javascript:void(0);" class="list-group-item">账号管理
+        <div class="list-group">
+            <a href="{% url 'pwadmin:account-password' %}" class="list-group-item {% if item == 'reset_password' %}active{% else %}list-group-item-action{% endif %}">重置密码</a>
+            <a href="#" class="list-group-item {% if item == 'generate_account' %}active{% else %}list-group-item-action{% endif %}">生成账号</a>
+            <a href="#" class="list-group-item {% if item == 'change_kl' %}active{% else %}list-group-item-action{% endif %}">修改口粮</a>
+            <a href="#" class="list-group-item {% if item == 'change_lp' %}active{% else %}list-group-item-action{% endif %}">修改粮票</a>
+            <a href="#" class="list-group-item {% if item == 'reset_account' %}active{% else %}list-group-item-action{% endif %}">账号回收</a>
+        </div>
+    </li>
+
+</ul>

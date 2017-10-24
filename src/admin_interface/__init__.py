@@ -6,10 +6,11 @@ from .content import LabelManageInterface, LabelDynamicInterface, ReportDynamicI
 
 
 class SneakSDK(object):
-    def __init__(self, host):
+    def __init__(self, host, user=None):
         self.host = host
-        self.account = Account(host)
+        self.account = Account(host, user=user)
         self.label_manage = LabelManageInterface(host)
         self.label_dynamic = LabelDynamicInterface(host)
         self.report_dynamic = ReportDynamicInterface(host)
         self.feed = FeedInterface(host)
+

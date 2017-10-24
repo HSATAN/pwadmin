@@ -9,6 +9,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.cache import cache
+from django.conf import settings
 
 
 class PwManager(models.Model):
@@ -42,6 +44,16 @@ class PwManager(models.Model):
 
     def has_perm(perm, obj=None):
         return True
+
+    @property
+    def token(self):
+        return cache.get('user_token_{}'.format(self.uid))
+
+    def set_token(self, token):
+        cache.set('user_token_{}'.format(self.uid), token, settings.SESSION_COOKIE_AGE)
+
+    def delete_token(self):
+        cache.delete('user_token_{}'.format(self.uid))
 
     @property
     def is_authenticated(self):
