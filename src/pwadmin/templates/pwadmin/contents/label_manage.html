@@ -3,21 +3,19 @@
 {% block title %}
     陪我管理系统-内容
 {% endblock %}
-
+{% url 'pwadmin:label_manage' as base_url %}
 {% block extends_head %}
     <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/label_manage.css' %}" type="text/css"/>
 {% endblock %}
-
 {% block left_content %}
     <div class="left_menu">
         <ul class="list-group">
-            <li><a href="{% url 'pwadmin:label_manage' 1 %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
             <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
             <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
-            <li><a href="{% url 'pwadmin:feed' %}" class="list-group-item">发现页信息流</a></li>
         </ul>
     </div>
 {% endblock %}
@@ -69,34 +67,39 @@
                 <th class="td_opera head">操作</th>
             </tr>
             {% for i in data.data %}
-                <tr>
-                    <td class="td_sign" id="content_{{ i.id }}">{{ i.content }}</td>
-                    <td class="td_str" id="subtitle_{{ i.id }}">{{ i.subtitle }}</td>
-                    <td class="td_date">{{ i.create_time }}</td>
-                    <td class="td_opera">
-                        <button type="button" class="operate modify" data-id="{{ i.id }}">修改</button>
-                        {% if data.have_release == 1 %}
-                            {% if i.state == 2 %}
-                                <button type="button" class="operate back" data-id="{{ i.id }}">撤回</button>
-                            {% else %}
-                                <button type="button" disabled="disabled" data-id="{{ i.id }}">发布</button>
-                            {% endif %}
+            <tr>
+                <td class="td_sign" id="content_{{ i.id }}">{{ i.content }}</td>
+                <td class="td_str" id="subtitle_{{ i.id }}">{{ i.subtitle }}</td>
+                <td class="td_date">{{ i.create_time }}</td>
+                <td class="td_opera">
+                    <button type="button" class="operate modify" data-id="{{ i.id }}">修改</button>
+                    {% if data.have_release == 1 %}
+                        {% if i.state == 2 %}
+                            <button type="button" class="operate back" data-id="{{ i.id }}">撤回</button>
                         {% else %}
-                            <button type="button" class="operate release" data-id="{{ i.id }}">发布</button>
+                            <button type="button" disabled="disabled" data-id="{{ i.id }}">发布</button>
                         {% endif %}
-                    </td>
-                </tr>
+                    {% else %}
+                        <button type="button" class="operate release" data-id="{{ i.id }}">发布</button>
+                    {% endif %}
+                </td>
+            </tr>
             {% endfor %}
         </table>
     </div>
-    <div class="modalPage">
-        <a href="{% url 'pwadmin:label_manage' data.page_left %}" class="pageNum">上一页</a>
+    <div class="modalPage" id="modalPage">
+        <a href="{{ base_url }}?page={{ data.page_left }}" class="pageNum">上一页</a>
         {% for val in data.total_list %}
-            <a href="{% url 'pwadmin:label_manage' val %}" class="pageNum">{{ val }}</a>
+            {% if data.page == val %}
+            <a href="{{ base_url }}?page={{ val }}" class="pageUnique">{{ val }}</a>
+            {% else %}
+            <a href="{{ base_url }}?page={{ val }}" class="pageNum">{{ val }}</a>
+            {% endif %}
         {% empty %}
             ...
         {% endfor %}
-        <a href="{% url 'pwadmin:label_manage' data.page_right %}" class="pageNum">下一页</a>
+        <a href="{{ base_url }}?page={{ data.page_right }}" class="pageNum">下一页</a>
+        <span class="page_count">共{{ data.page_count }}页</span>
     </div>
 {% endblock %}
 {% block extends_script %}
@@ -104,5 +107,4 @@
       var csrfmiddlewaretoken='{{ csrf_token }}'
     </script>
     <script src="{% static 'js/label_manage.js' %}"></script>
-
 {% endblock %}

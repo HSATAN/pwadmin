@@ -5,22 +5,133 @@
 {% endblock %}
 
 {% block extends_head %}
-<link rel="stylesheet" href="{% static 'css/report_dynamic.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/report_dynamic.css' %}" type="text/css" />
 {% endblock %}
 
 {% block left_content %}
     <div class="left_menu">
         <ul class="list-group">
-            <li><a href="{% url 'pwadmin:label_manage' 1 %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
             <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
             <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
-            <li><a href="{% url 'pwadmin:feed' %}" class="list-group-item">发现页信息流</a></li>
         </ul>
     </div>
 {% endblock %}
 
 {% block right_content %}
+    <div class="space"></div>
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+    <div class="right_content">
+        <div class="inline">
+            <input type="text" placeholder="请输入陪我号" value="{{ data.tuid }}" class="search_top peiwo_id">
+            <input type="text" placeholder="开始时间" value="{{ data.begin_time }}" class="search_top start">
+            <input type="text" placeholder="结束时间" value="{{ data.end_time }}" class="search_top end">
+        </div>
+        <div class="inline search_right">
+            <div class="search_day">
+                <button type="button" class="operate" onclick="search_data()">查询</button>
+                <button type="button" class="operate_white" onclick="change_date(0)">今天</button>
+                <button type="button" class="operate_white" onclick="change_date(6)">7天</button>
+                <button type="button" class="operate_white" onclick="change_date(29)">30天</button>
+                <button type="button" class="operate_white" onclick="clear_info()">清空</button>
+            </div>
+        </div>
+        <div class="search_status">
+            {% if data.state == 0 %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=0" class="status_select front">未处理</a>
+            {% else %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=0" class="status_none front">未处理</a>
+            {% endif %}
+            {% if data.state == 1 %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=1" class="status_select">已忽略</a>
+            {% else %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=1" class="status_none">已忽略</a>
+            {% endif %}
+            {% if data.state == 5 %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=2" class="status_select">已警告</a>
+            {% else %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=2" class="status_none">已警告</a>
+            {% endif %}
+            {% if data.state == 4 %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=3" class="status_select">已封禁</a>
+            {% else %}
+                <a href="{{ base_url }}?page={{ data.page_left }}&state=3" class="status_none">已封禁</a>
+            {% endif %}
+        </div>
+        <div class="control_switch">
+            <input type="checkbox" class="checkall">
+        </div>
+        <hr />
+        <table class="data_table">
+            <tr>
+                <th class="data_id">陪我号</th>
+                <th class="data_nick">昵称</th>
+                <th class="data_pics">图片</th>
+                <th class="data_copywriting" id="data_copywriting">文案</th>
+                <th class="data_date">更新时间</th>
+                <th class="data_select">选中</th>
+            </tr>
+            {% for i in data.data %}
+            <tr>
+                <td class="data_id">{{ i.user.uid }}</td>
+                <td class="data_nick">{{ i.user.name }}</td>
+                <td class="data_pics">
+                    <div class="pics">
+                        {% for j in i.extra.images %}
+                            <img class="pic" src="{{ j.thumbnail_url }}" data-src="{{ j.image_url }}" alt="None" onclick="window.open('{{ j.image_url }}')">
+                        {% endfor %}
+                    </div>
+                </td>
+                <td class="data_copywriting" id="data_copywriting">{{ i.content }}</td>
+                <td class="data_date"> {{ i.update_time }} </td>
+                <td class="data_select">
+                    <input id="{{ i.id }}" name="id" class="{{ i.user.uid }}" type="checkbox">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="deal">
+            <button type="button" class="operate alert" onclick="deal(3)">警告</button>
+            <button type="button" class="operate ban" onclick="deal(2)">封禁</button>
+            <button type="button" class="operate ignore" onclick="deal(1)">忽略</button>
+        </div>
+        <div class="comment">
+            <button type="button" class="msg" onclick="send_message(5)">广告</button>
+            <button type="button" class="msg" onclick="send_message(7)">欺诈</button>
+            <button type="button" class="msg" onclick="send_message(6)">侵权</button>
+            <button type="button" class="msg" onclick="send_message(4)">色情</button>
+            <button type="button" class="msg" onclick="send_message(1)">导流</button>
+            <button type="button" class="msg" onclick="send_message(3)">恶意刷屏</button>
+            <button type="button" class="msg" onclick="send_message(2)">诋毁辱骂</button>
+        </div>
+    </div>
+    <div class="modalPage">
+        {% if data.page_left != data.page %}
+            <a href="{{ base_url }}?page={{ data.page_left }}&state={{ data.state }}" class="pageNum">上一页</a>
+        {% endif %}
+        {% for val in data.total_list %}
+            {% if data.page == val %}
+            <a href="{{ base_url }}?page={{ val }}&state={{ data.state }}" class="pageUnique">{{ val }}</a>
+            {% else %}
+            <a href="{{ base_url }}?page={{ val }}&state={{ data.state }}" class="pageNum">{{ val }}</a>
+            {% endif %}
+        {% empty %}
+            ...
+        {% endfor %}
+        {% if data.page_right != data.page_count %}
+            <a href="{{ base_url }}?page={{ data.page_right }}&state={{ data.state }}" class="pageNum">下一页</a>
+        {% endif %}
+        <span class="page_count">共{{ data.page_count }}页</span>
+    </div>
+{% endblock %}
+{% block extends_script %}
+    <script type="application/javascript">
+      var csrfmiddlewaretoken='{{ csrf_token }}'
+    </script>
+    <script src="{% static 'js/label_dynamic.js' %}"></script>
 {% endblock %}

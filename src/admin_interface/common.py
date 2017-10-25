@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import math
+import time
 import hashlib
 from requests import request
 from .strings import METHOD_GET
@@ -21,10 +22,12 @@ class BaseHandler(object):
         for key in keys:
             detail = params[key]
             if type(detail) is unicode:
-                detail = detail.decode().encode('utf-8')
-            params_list.append('%s=%s' % (key, detail))
+                detail = detail.encode('utf-8')
+            params_list.append('{}={}'.format(key, detail))
         params_str = ''.join(params_list)
-        sign_src = ''.join((method, path, params_str))
+        if type(params_str) is unicode:
+            params_str = params_str.encode('utf-8')
+        sign_src = '{}{}{}'.format(method, path, params_str)
         sign = hashlib.md5(sign_src).hexdigest().lower()
         return sign
 
@@ -52,18 +55,20 @@ class BaseHandler(object):
         Returns:
 
         """
+        pages_show = 5
         page_count = int(math.ceil(float(total) / page_size))
-        mid = int(math.ceil(float(page_size) / 2))
-        if begin_index in range(mid):
+        mid = int(math.ceil(float(pages_show) / 2))
+        if begin_index + 1 <= mid:
             page_from = 1
+        elif begin_index + 1 >= page_count - pages_show + 1:
+            page_from = page_count - pages_show + 1
         else:
-            if page_count - begin_index >= 2:
-                page_from = begin_index - 1
-            else:
-                page_from = page_count - 4
+            page_from = begin_index - mid + 2
         pages = []
         for count in range(page_from, page_from + 5):
             if count > page_count:
+                continue
+            if count <= 0:
                 continue
             pages.append(count)
         return pages, page_count

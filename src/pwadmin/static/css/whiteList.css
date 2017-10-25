@@ -1,2 +1,11 @@
 .list-group li:nth-child(5) { background-color: #02a1c9;}
 .list-group li:nth-child(5) a { color: #fff;}
+.search { width: 1000px; margin-top: 20px;}
+.peiwo_id { width: 400px; font-size: 14px;}
+.td_uid { width: 100px;}
+.td_name { width: 800px;}
+.td_del { width: 100px;}
+.button_add { padding: 6px 18px; color: black; font-size: 14px; display: inline-block;
+    border-radius: 15px; background-color: #fff; font-weight: 400; cursor: pointer;
+    border-bottom-left-radius: 0; border-top-left-radius: 0; border: 1px solid #ccc;
+    margin-left: -6px;}

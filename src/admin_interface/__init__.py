@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, absolute_import
 from .account import Account
 from .content import LabelManageInterface, LabelDynamicInterface, ReportDynamicInterface, \
-    WhiteListInterface, FeedInterface
+    WhiteListInterface, SubmitDynamicInterface, CommonInterface
 
 
 class SneakSDK(object):
@@ -11,5 +11,7 @@ class SneakSDK(object):
         self.account = Account(host)
         self.label_manage = LabelManageInterface(host)
         self.label_dynamic = LabelDynamicInterface(host)
+        self.submit_dynamic = SubmitDynamicInterface(host)
         self.report_dynamic = ReportDynamicInterface(host)
-        self.feed = FeedInterface(host)
+        self.white_list = WhiteListInterface(host)
+        self.common = CommonInterface(host)

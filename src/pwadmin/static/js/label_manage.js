@@ -46,7 +46,7 @@ $('.sure').on('click', function () {
             {
                 alert("error");
             }
-        },
+        }
     });
 });
 
@@ -65,7 +65,7 @@ $('.span_add').on('click', function () {
         "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'content': $('.right_sign').val(),  //标题
         'subtitle': $('#msgcontent').val(),     //内容
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
     $.ajax({
         type: 'POST',
@@ -82,7 +82,7 @@ $('.span_add').on('click', function () {
             {
                 alert("error");
             }
-        },
+        }
     });
 });
 
@@ -96,13 +96,13 @@ $('.release').on('click', function () {
         'uid': 1,
         "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'tid': id,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
     $.ajax({
         type: 'POST',
         url: '',
         data: data,
-        dataType: 'application/json',
+        dataType: 'json',
         success: function (data) {
             if (data.code==0)
             {
@@ -113,7 +113,7 @@ $('.release').on('click', function () {
             {
                 alert("error");
             }
-        },
+        }
     });
 });
 
@@ -127,13 +127,13 @@ $('.back').on('click', function () {
         'uid': 1,
         "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'tid': id,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
     $.ajax({
         type: 'POST',
         url: '',
         data: data,
-        dataType: 'application/json',
+        dataType: 'json',
         success: function (data) {
             if (data.code==0)
             {
@@ -144,6 +144,6 @@ $('.back').on('click', function () {
             {
                 alert("error");
             }
-        },
+        }
     });
 });
