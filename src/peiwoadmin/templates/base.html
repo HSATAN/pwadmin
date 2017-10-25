@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{%  static 'ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{%  static 'ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' %}" />
+    {% block extends_head %}
+    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="container-fluid">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="{% static 'ajax/libs/jquery/3.2.1/jquery.min.js' %}"></script>
+<script src="{% static 'ajax/libs/popper.js/1.11.0/umd/popper.min.js' %}"></script>
+<script src="{% static 'ajax/libs/lodash.js/4.17.4/lodash.min.js' %}"></script>
+<script src="{% static 'ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js' %}"></script>
+{% block extends_script %}
+{% endblock %}
+</body>
+</html>

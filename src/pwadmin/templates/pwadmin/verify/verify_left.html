@@ -1,0 +1,12 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% block title %}
+    任务-陪我管理系统
+{% endblock %}
+{% block verify_left %}
+    <ul class="list-group">
+        <li class="verify_pending"><a href="#">待验证</a></li>
+        <li class="in_verify"><a href="#">验证中</a></li>
+        <li class="verified"><a href="#">验证通过</a></li>
+        <li class="verify_query"><a href="#">验证通过</a></li>
+    </ul>
+{% endblock %}

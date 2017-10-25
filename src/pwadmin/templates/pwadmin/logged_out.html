@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>{% trans "感谢您今天在网站上花了一些宝贵的时间" %}</p>
+
+<p><a href="{% url 'pwadmin:sign-in' %}">{% trans '再次登陆' %}</a></p>
+
+{% endblock %}

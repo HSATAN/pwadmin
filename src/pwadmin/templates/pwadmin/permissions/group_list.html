@@ -1,0 +1,53 @@
+{% extends 'pwadmin/permissions/base.html' %}
+{% block title %}
+    权限-陪我管理系统
+{% endblock %}
+
+{% block right_content %}
+    <div class="row">
+        <div class="col-10">
+            <form class="form"><input class="form-group" type="search"/></form>
+        </div>
+        <div class="col-2"><a href="javascript:void(0);" class="button">新增</a></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in page_obj %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.create_time }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            <span class="float-right">total {{ page_obj.count }}</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

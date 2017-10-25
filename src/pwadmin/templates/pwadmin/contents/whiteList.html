@@ -1,0 +1,26 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% load static %}
+{% block title %}
+    陪我管理系统-内容
+{% endblock %}
+
+{% block extends_head %}
+<link rel="stylesheet" href="{% static 'css/whiteList.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
+{% endblock %}
+
+{% block left_content %}
+    <div class="left_menu">
+        <ul class="list-group">
+            <li><a href="{% url 'pwadmin:contents' %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
+            <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
+            <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
+            <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
+            <li><a href="{% url 'pwadmin:feed' %}" class="list-group-item">发现页信息流</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block right_content %}
+{% endblock %}
