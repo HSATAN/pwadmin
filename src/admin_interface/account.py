@@ -9,6 +9,7 @@ class Account(object):
     QUERY_USER = '/admin/userinfo/user_query'
     LOGIN = '/admin/account/login'
     ACCOUNT_LIST = '/admin/account/list'
+    RESET_PASSWORDD_URL = '/admin/account/resetpassword2'
 
     def __init__(self, host='http://172.16.10.134:9090', user=None):
         self.user = None
@@ -37,6 +38,29 @@ class Account(object):
                   'size': size,
                   'page': page,
                   'order_by': order_by}
+        )
+        return resp.json()
+
+    def reset_password(self, password, tuid, note=''):
+        """重置密码.
+
+        Args:
+            password(str):
+            tuid(str):
+            note(str):
+
+        Returns:
+
+        """
+        url = self.generate_url(self.RESET_PASSWORDD_URL)
+        resp = self.session.request(
+            method='post',
+            url=url,
+            data={
+                'password': password,
+                'tuid': tuid,
+                'note': note
+            }
         )
         return resp.json()
 

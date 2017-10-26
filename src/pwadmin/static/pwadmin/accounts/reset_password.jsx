@@ -4,43 +4,100 @@ import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
 import {BaseSearchStore} from './../store-tpl.jsx';
 
+class ResetPasswordStore {
+    @observable password = '';
+    @observable note = '';
+}
 
 @observer
-class TableView extends React.Component {
+class ResetPasswordFormView extends React.Component {
     constructor(props) {
         super(props);
-        this.renderResetPassword = this.renderResetPassword.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeNote = this.handleChangeNote.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    renderResetPassword() {
+    handleChange(e) {
+        const store = this.props.store;
+        store.password = e.target.value;
+    }
+
+    handleChangeNote(e) {
+        const store = this.props.store;
+        store.note = e.target.value;
+    }
+
+    handleClick(e) {
+        e.preventDefault();
+        const tuid = this.props.tuid;
+        const store = this.props.store;
+        $.ajax({
+            url: password_reset_url,
+            method: "POST",
+            data: {
+                password: store.password,
+                note: store.note,
+                tuid: tuid,
+                csrfmiddlewaretoken: csrfmiddlewaretoken
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                if(data.code == '0'){
+                    alert("重置密码成功!")
+                }else{
+                    alert(data.msg);
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                alert(errorThrown);
+            })
+    }
+
+
+    render() {
+        const store = this.props.store;
         return <form className="form-inline">
             <input type="text"
                    className="form-control mb-2 mr-sm-2 mb-sm-0"
                    id="inlineFormInputName2"
                    placeholder="新密码"
+                   onChange={this.handleChange}
                    style={{width: "35%"}}
             />
             <input type="text"
                    className="form-control mb-2 mr-sm-2 mb-sm-0"
                    id="inlineFormInputGroupUsername2"
                    placeholder="备注"
+                   onChange={this.handleChangeNote}
                    style={{width: "35%"}}
             />
             <button type="submit"
                     className="btn btn-primary"
+                    onClick={this.handleClick}
+                    disabled={store.password ? null : 'disabled'}
                     style={{width: "22%"}}
             >重置
             </button>
         </form>
     }
+}
+
+@observer
+class TableView extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
 
     render() {
+        const store = this.props.store;
         const data = this.props.data;
         if (_.isEmpty(data)) {
             return <div></div>
         }
         const code = data.code;
-        if(code != '0'){
+        if (code != '0') {
             alert(data.msg);
             return <div></div>
         }
@@ -66,7 +123,9 @@ class TableView extends React.Component {
                             <th>{item.uid}</th>
                             <th>{item.name}</th>
                             <th>{item.phone}</th>
-                            <th>{this.renderResetPassword()}</th>
+                            <th>{<ResetPasswordFormView store={new ResetPasswordStore()}
+                                                        tuid={item.uid}
+                            />}</th>
 
                         </tr>
                     })
