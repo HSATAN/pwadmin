@@ -20,7 +20,6 @@ $('.modify').on('click', function () {
     $('.sign_title').val(sign_title);
 });
 
-
 $('.space_out').on('click', function () {
     $('.amend').css('display', 'none');
 });
@@ -34,13 +33,9 @@ $('.sure').on('click', function () {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic',
         'creator_id': 1,
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'tid': id,
         'content': $('.sign_content').val(),
-        'subtitle': $('.sign_title').val(),
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'subtitle': $('.sign_title').val()
     };
     query_func(data, 'POST');
 });
@@ -55,12 +50,8 @@ $('.span_add').on('click', function () {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic',
         'creator_id': 1,
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'content': $('.right_sign').val(),  //标题
-        'subtitle': $('#msgcontent').val(),     //内容
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'subtitle': $('#msgcontent').val()     //内容
     };
     query_func(data, 'POST');
     window.location.reload();
@@ -72,11 +63,7 @@ $('.release').on('click', function () {
     var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic/release',
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
-        'tid': id,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'tid': id
     };
     query_func(data, 'POST');
     window.location.reload();
@@ -88,11 +75,7 @@ $('.back').on('click', function () {
     var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic/withdraw',
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
-        'tid': id,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'tid': id
     };
     query_func(data, 'POST');
     window.location.reload();

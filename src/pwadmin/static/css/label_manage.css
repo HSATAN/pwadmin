@@ -16,6 +16,12 @@
 .modify_data { width: 600px; height: 340px; background-color: #fff; position: fixed;
     top: 40px; left: 50%; margin-left: -300px; z-index: 9999; border-radius: 5px;}
 .space_front { font-size: 18px; font-weight: 500; color: inherit;}
+.amend { position:fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 9999; background:rgba(0,0,0,0.5); display: none;}
+.modify_data { width: 600px; height: 340px; background-color: #fff; position: fixed;
+    top: 40px; left: 50%; margin-left: -300px; z-index: 9999; border-radius: 5px;}
+.space_front { font-size: 18px; font-weight: 500; color: inherit;}
+.space_title { }
 .space_out { float: right; cursor: pointer; color: #808080;}
 .size { width: 560px; margin: 15px auto;}
 .space_content { display:table; font-size: 14px; font-weight: 700;}
