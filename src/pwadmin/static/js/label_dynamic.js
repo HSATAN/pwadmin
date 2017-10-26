@@ -1,58 +1,84 @@
 var BaseUrl = window.location.href;
+BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
 BaseUrl = decodeURI(BaseUrl);
-$(".pic").mousemove(function () {
-    var path = $(this).attr("data-src");
-    $(".pic_big").attr('src', path);
-    $('.amend_pic').css('display', 'block');
-});
-$(".pic").mouseout(function () {
-    $('.amend_pic').css('display', 'none');
-});
+function servlet_page(page) {
+    var data = {
+        'page': page
+    };
+    if (begin_time_param.length > 0) {
+        data['begin_time'] = begin_time_param;
+    }
+    if (end_time_param.length > 0) {
+        data['end_time'] = end_time_param;
+    }
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    if (tuid_param.length > 0) {
+        data['tuid'] = tuid_param;
+    }
+    patchwork_url(data);
+}
 
-var param = BaseUrl.substring(BaseUrl.lastIndexOf('/') + 1);
+function servlet_time(day) {
+    var times = get_times(day);
+    var data = {
+        'begin_time': times[0],
+        'end_time': times[1]
+    };
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    if (tuid_param.length > 0) {
+        data['tuid'] = tuid_param;
+    }
+    patchwork_url(data);
+}
+
+function servlet_state(state) {
+    var begin_time = $('.start').val();
+    var end_time = $('.end').val();
+    var tuid = $('.peiwo_id').val();
+    var data = {
+        'state': state
+    };
+    if (begin_time.length > 0) {
+        data['begin_time'] = begin_time;
+    }
+    if (end_time.length > 0) {
+        data['end_time'] = end_time;
+    }
+    if (tuid.length > 0) {
+        data['tuid'] = tuid;
+    }
+    patchwork_url(data);
+}
+
+function search_data() {
+    var begin_time = $('.start').val();
+    var end_time = $('.end').val();
+    var tuid = $('.peiwo_id').val();
+    var data = {};
+    if (begin_time.length > 0) {
+        data['begin_time'] = begin_time;
+    }
+    if (end_time.length > 0) {
+        data['end_time'] = end_time;
+    }
+    if (tuid.length > 0) {
+        data['tuid'] = tuid;
+    }
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    patchwork_url(data);
+}
 
 function clear_info() {
     $('.start').val('');
     $('.end').val('');
     $('.peiwo_id').val('');
-}
-
-function search_data() {
-    var url = BaseUrl;
-    var begin_origin = getUrlParam('begin_time');
-    var begin_time = $('.start').val();
-    url = change_url('begin_time', begin_origin, begin_time, url);
-    var end_origin = getUrlParam('end_time');
-    var end_time = $('.end').val();
-    url = change_url('end_time', end_origin, end_time, url);
-    var tuid_origin = getUrlParam('tuid');
-    var tuid = $('.peiwo_id').val();
-    url = change_url('tuid', tuid_origin, tuid, url);
-    window.location = url;
-}
-
-Date.prototype.Format = function (fmt) { //author: meizz
-    var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "H+": '00', //小时
-        "m+": '00', //分
-        "s+": '00', //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds() //毫秒
-    };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-}
-
-function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null)
-        return unescape(r[2]);
-    return null; //返回参数值
+    window.location = BaseUrl;
 }
 
 function deal(action) {
@@ -73,15 +99,11 @@ function deal(action) {
             return;
         }
         else {
-            data = {
+            var data = {
                 'query_method': 'POST',
                 'api_request': '/admin/feed/topicpub/reset',
-                'version': 9999,
-                'uid': 1,
-                "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                 'pub_ids': pub_ids,
-                'state': state,
-                'csrfmiddlewaretoken': csrfmiddlewaretoken
+                'state': state
             };
             query_func(data, 'POST');
             if (state == 2) {
@@ -90,12 +112,8 @@ function deal(action) {
                         var data_extends = {
                             'query_method': 'POST',
                             'api_request': '/admin/userinfo/updateinfo',
-                            'version': 9999,
-                            'uid': 1,
-                            "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                             'tuid': tuids[i],
-                            'state': state,
-                            'csrfmiddlewaretoken': csrfmiddlewaretoken
+                            'state': state
                         };
                         query_func(data_extends, 'POST');
                     }
@@ -106,6 +124,8 @@ function deal(action) {
     }
 }
 
+
+//sticky
 function to_top(action) {
     var pub_ids = get_ids()[0].split(',');
     if (action == 0) {
@@ -113,15 +133,11 @@ function to_top(action) {
     }
     else {
         if (pub_ids.length == 1) {
-            data = {
+            var data = {
                 'query_method': 'POST',
                 'api_request': '/admin/feed/topicpub/top',
-                'version': 9999,
-                'uid': 1,
-                "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                 'pub_id': pub_ids[0],
-                'cancel': 0,
-                'csrfmiddlewaretoken': csrfmiddlewaretoken
+                'cancel': 0
             };
             query_func(data, 'POST');
             window.location.reload();
@@ -132,6 +148,8 @@ function to_top(action) {
     }
 }
 
+
+//send message to warn users
 function send_message(type) {
     var comment = get_message(type);
     var tuids = get_ids()[1];
@@ -139,12 +157,8 @@ function send_message(type) {
     var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topicpub/reset',
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
         'pub_ids': pub_ids,
-        'state': 2,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'state': 2
     };
     query_func(data, 'POST');
     if (tuids.length > 0) {
@@ -152,13 +166,9 @@ function send_message(type) {
             var data_extends = {
                 'query_method': 'POST',
                 'api_request': '/message/send',
-                'version': 9999,
-                'uid': 1,
-                "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                 'tuid': tuids[i],
                 'content': comment,
-                'normal': 0,
-                'csrfmiddlewaretoken': csrfmiddlewaretoken
+                'normal': 0
             };
             query_func(data_extends, 'POST');
         }
@@ -166,6 +176,8 @@ function send_message(type) {
     window.location.reload();
 }
 
+
+//to get the user_id and _id for tag which is checked to edit
 function get_ids() {
     var ids = '';
     var tuids = '';
@@ -188,6 +200,8 @@ function get_ids() {
     return [ids, tuids];
 }
 
+
+//checkbox to select all or none
 var times = 0;
 $(".checkall").click(function () {
     if (times % 2 == 0) {
@@ -199,8 +213,9 @@ $(".checkall").click(function () {
     times = times + 1;
 });
 
-var comment = '';
 
+//get the detail to warn user
+var comment = '';
 function get_message(type) {
     if (type == 1) {
         comment = "经管理后台核实，你在信息流文字/图片中涉及其他三方的账号/二维码/链接等导流信息；已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。"

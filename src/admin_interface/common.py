@@ -72,3 +72,13 @@ class BaseHandler(object):
                 continue
             pages.append(count)
         return pages, page_count
+
+    @staticmethod
+    def get_left_right(page_now, page_count):
+        page_left = page_now - 1
+        if page_now == 1:
+            page_left = 1
+        page_right = page_now + 1
+        if page_now == page_count:
+            page_right = page_count
+        return page_left, page_right

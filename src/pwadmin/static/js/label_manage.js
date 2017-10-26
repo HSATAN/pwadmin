@@ -1,3 +1,13 @@
+var BaseUrl = window.location.href;
+BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
+BaseUrl = decodeURI(BaseUrl);
+function servlet_page(page) {
+    var data = {
+        'page': page
+    };
+    patchwork_url(data);
+}
+
 var id;
 var sign_title;
 var sign_content;
@@ -10,6 +20,7 @@ $('.modify').on('click', function () {
     $('.sign_title').val(sign_title);
 });
 
+
 $('.space_out').on('click', function () {
     $('.amend').css('display', 'none');
 });
@@ -19,7 +30,7 @@ $('.cancel').on('click', function () {
 });
 
 $('.sure').on('click', function () {
-    data = {
+    var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic',
         'creator_id': 1,
@@ -29,25 +40,9 @@ $('.sure').on('click', function () {
         'tid': id,
         'content': $('.sign_content').val(),
         'subtitle': $('.sign_title').val(),
-        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            if (data.code==0)
-            {
-                alert("success");
-                window.location.reload();
-            }
-            else
-            {
-                alert("error");
-            }
-        }
-    });
+    query_func(data, 'POST');
 });
 
 $('.span_clear').on('click', function () {
@@ -56,7 +51,7 @@ $('.span_clear').on('click', function () {
 });
 
 $('.span_add').on('click', function () {
-    data = {
+    var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic',
         'creator_id': 1,
@@ -67,29 +62,14 @@ $('.span_add').on('click', function () {
         'subtitle': $('#msgcontent').val(),     //内容
         'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            if (data.code==0)
-            {
-                alert("success");
-                window.location.reload();
-            }
-            else
-            {
-                alert("error");
-            }
-        }
-    });
+    query_func(data, 'POST');
+    window.location.reload();
 });
 
 
 $('.release').on('click', function () {
     var id = $(this).attr('data-id');
-    data = {
+    var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic/release',
         'version': 9999,
@@ -98,29 +78,14 @@ $('.release').on('click', function () {
         'tid': id,
         'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            if (data.code==0)
-            {
-                alert("success");
-                window.location.reload();
-            }
-            else
-            {
-                alert("error");
-            }
-        }
-    });
+    query_func(data, 'POST');
+    window.location.reload();
 });
 
 
 $('.back').on('click', function () {
     var id = $(this).attr('data-id');
-    data = {
+    var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/topic/withdraw',
         'version': 9999,
@@ -129,21 +94,6 @@ $('.back').on('click', function () {
         'tid': id,
         'csrfmiddlewaretoken': csrfmiddlewaretoken
     };
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            if (data.code==0)
-            {
-                alert("success");
-                window.location.reload();
-            }
-            else
-            {
-                alert("error");
-            }
-        }
-    });
+    query_func(data, 'POST');
+    window.location.reload();
 });

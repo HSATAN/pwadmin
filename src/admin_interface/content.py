@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 from admin_interface.common import BaseHandler
 from strings import METHOD_GET, METHOD_POST
+from admin_interface.strings import PAGE_SIZE
 
 
 class CommonInterface(BaseHandler):
@@ -17,107 +19,20 @@ class CommonInterface(BaseHandler):
         data = self.query_method(True, query_method, url, **params)
         return data
 
-
-class LabelManageInterface(BaseHandler):
-    def get_feed_topic(self, api_request, begin_index, page_size):
-        params = {'version': 9999,
-                  'uid': 1,
-                  'page_size': page_size,
-                  'begin_index': begin_index,
-                  "session_data": "81ded44dbc365b7f8e05be22c7ceee32"}
-        url = self.generate_url(api_request)
-        data = self.query_method(True, METHOD_GET, url, **params)
-        return data
-
-    def feed_topic_post(self, **kwargs):
-        api_request = kwargs.pop('api_request')
-        query_method = kwargs.pop('query_method')
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **kwargs)
-        return data
-
-
-class LabelDynamicInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/topicpub'
-
-    def get_topic_pub(self, api_request, **kwargs):
-        if kwargs.get('state') == 4:
-            kwargs['state'] = '2,3'
-        params_base = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
+    def data_get(self, queries):
+        backups = deepcopy(queries)
+        page_size = int(queries.get('page_size', PAGE_SIZE))
+        page_now = int(queries.get('page', 1))
+        page_index = page_now - 1
+        data = self.query_sneaky(**queries)
+        page_list, page_count = self.get_page_list(page_index, page_size, data.get('total', 0))
+        page_left, page_right = self.get_left_right(page_now, page_count)
+        extends = {
+            'page_count': page_count,
+            'total_list': page_list,
+            'page': page_now,
+            'page_left': page_left,
+            'page_right': page_right
         }
-        params = dict(params_base.items() + kwargs.items())
-        url = self.generate_url(api_request)
-        data = self.query_method(True, METHOD_POST, url, **params)
-        return data
-
-    def topic_pub_post(self, **kwargs):
-        api_request = kwargs.pop('api_request')
-        query_method = kwargs.pop('query_method')
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **kwargs)
-        return data
-
-
-class SubmitDynamicInterface(BaseHandler):
-
-    def get_user_pub(self, api_request, **kwargs):
-        params_base = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
-        }
-        params = dict(params_base.items() + kwargs.items())
-        url = self.generate_url(api_request)
-        data = self.query_method(True, METHOD_POST, url, **params)
-        return data
-
-    def submit_dynamic_post(self, **kwargs):
-        api_request = kwargs.pop('api_request')
-        query_method = kwargs.pop('query_method')
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **kwargs)
-        return data
-
-
-class ReportDynamicInterface(BaseHandler):
-    def get_feed_report(self, api_request, **kwargs):
-        params_base = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
-        }
-        params = dict(params_base.items() + kwargs.items())
-        url = self.generate_url(api_request)
-        data = self.query_method(True, METHOD_POST, url, **params)
-        return data
-
-    def report_dynamic_post(self, **kwargs):
-        api_request = kwargs.pop('api_request')
-        query_method = kwargs.pop('query_method')
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **kwargs)
-        return data
-
-
-class WhiteListInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/pub/whitelist'
-
-    def get_white_list(self, api_request):
-        params = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"}
-        url = self.generate_url(api_request)
-        data = self.query_method(True, METHOD_GET, url, **params)
-        return data
-
-    def feed_pub_post(self, **kwargs):
-        api_request = kwargs.pop('api_request')
-        query_method = kwargs.pop('query_method')
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **kwargs)
-        return data
-
+        extends = dict(backups.items() + extends.items())
+        return data, extends

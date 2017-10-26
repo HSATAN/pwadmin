@@ -1,104 +1,93 @@
 var BaseUrl = window.location.href;
+BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
 BaseUrl = decodeURI(BaseUrl);
-$(".pic").mousemove(function () {
-    clearTimeout
-    var path = $(this).attr("data-src");
-    $(".pic_big").attr('src', path);
-    $('.amend_pic').css('display', 'block');
-});
-$(".pic").mouseout(function () {
-    $('.amend_pic').css('display', 'none');
-});
 
-function change_date(day) {
-    var start_date = new Date();
-    start_date.setDate(start_date.getDate() - day);
-    var end_date = new Date();
-    end_date.setDate(end_date.getDate() + 1);
-    var start = start_date.Format("yyyy-MM-dd HH:mm:ss");
-    var end = end_date.Format("yyyy-MM-dd HH:mm:ss");
-    $('.start').val(start);
-    $('.end').val(end);
+//click pages to get data
+function servlet_page(page) {
+    var data = {
+        'page': page
+    };
+    if (begin_time_param.length > 0
+    ) {
+        data['begin_time'] = begin_time_param;
+    }
+    if (end_time_param.length > 0) {
+        data['end_time'] = end_time_param;
+    }
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    if (tuid_param.length > 0) {
+        data['tuid'] = tuid_param;
+    }
+    patchwork_url(data);
 }
 
-var param = BaseUrl.substring(BaseUrl.lastIndexOf('/') + 1);
+//write time to get data
+function servlet_time(day) {
+    var times = get_times(day);
+    var data = {
+        'begin_time': times[0],
+        'end_time': times[1]
+    };
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    if (tuid_param.length > 0) {
+        data['tuid'] = tuid_param;
+    }
+    patchwork_url(data);
+}
 
+//select state to get data
+function servlet_state(state) {
+    var begin_time = $('.start').val();
+    var end_time = $('.end').val();
+    var tuid = $('.peiwo_id').val();
+    var data = {
+        'state': state
+    };
+    if (begin_time.length > 0) {
+        data['begin_time'] = begin_time;
+    }
+    if (end_time.length > 0) {
+        data['end_time'] = end_time;
+    }
+    if (tuid.length > 0) {
+        data['tuid'] = tuid;
+    }
+    patchwork_url(data);
+}
+
+//write info to get data
+function search_data() {
+    var begin_time = $('.start').val();
+    var end_time = $('.end').val();
+    var tuid = $('.peiwo_id').val();
+    var data = {};
+    if (begin_time.length > 0) {
+        data['begin_time'] = begin_time;
+    }
+    if (end_time.length > 0) {
+        data['end_time'] = end_time;
+    }
+    if (tuid.length > 0) {
+        data['tuid'] = tuid;
+    }
+    if (state_param.length > 0) {
+        data['state'] = state_param;
+    }
+    patchwork_url(data);
+}
+
+//clear infos
 function clear_info() {
     $('.start').val('');
     $('.end').val('');
     $('.peiwo_id').val('');
 }
 
-function search_data() {
-    var url = BaseUrl;
-    var begin_origin = getUrlParam('begin_time');
-    var begin_time = $('.start').val();
-    url = change_url('begin_time', begin_origin, begin_time, url);
-    var end_origin = getUrlParam('end_time');
-    var end_time = $('.end').val();
-    url = change_url('end_time', end_origin, end_time, url);
-    var tuid_origin = getUrlParam('tuid');
-    var tuid = $('.peiwo_id').val();
-    url = change_url('tuid', tuid_origin, tuid, url);
-    window.location = url;
-}
-
-Date.prototype.Format = function (fmt) { //author: meizz
-    var o = {
-        "M+": this.getMonth() + 1, //月份
-        "d+": this.getDate(), //日
-        "H+": '00', //小时
-        "m+": '00', //分
-        "s+": '00', //秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        "S": this.getMilliseconds() //毫秒
-    };
-    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-}
-
-function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-    var r = window.location.search.substr(1).match(reg); //匹配目标参数
-    if (r != null)
-        return unescape(r[2]);
-    return null; //返回参数值
-}
-
-function change_url(param, from, to, url) {
-    var replace_from = param + '=' + from;
-    var replace_to = param + '=' + to;
-    if (from == null) {
-        if (to != '') {
-            var url_last = url.substr(url.length - 1, 1);
-            if (url_last == '/') {
-                url = url + '?' + replace_to;
-            }
-            else {
-                url = url + '&' + replace_to;
-            }
-        }
-    }
-    else {
-        if (to == '') {
-            var index_from = url.indexOf(replace_from);
-            var index_to = index_from + replace_from.length - 1;
-            if (index_to < url.length - 1) {
-                replace_from = replace_from + url.substr(index_to + 1, 1);
-                replace_to = '';
-            }
-            else {
-                replace_from = url.substr(index_from - 1, 1) + replace_from;
-                replace_to = '';
-            }
-        }
-        url = url.replace(replace_from, replace_to);
-    }
-    return url;
-}
-
+//deal with the data
 function deal(action) {
     var state = action;
     var pub_ids = get_ids()[0];
@@ -112,16 +101,12 @@ function deal(action) {
         }
         else {
             if (state == 1) {
-                data = {
+                var data = {
                     'query_method': 'POST',
                     'api_request': '/admin/feed/report/ignore',
-                    'version': 9999,
-                    'uid': 1,
-                    "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
-                    'pub_ids': pub_ids,
-                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                    'pub_ids': pub_ids
                 };
-                query_modify(data);
+                query_func(data, 'POST');
             }
             if (state == 2) {
                 if (tuids.length > 0) {
@@ -129,14 +114,10 @@ function deal(action) {
                         var data_extends = {
                             'query_method': 'POST',
                             'api_request': '/admin/userinfo/updateinfo',
-                            'version': 9999,
-                            'uid': 1,
-                            "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                             'tuid': tuids[i],
-                            'state': state,
-                            'csrfmiddlewaretoken': csrfmiddlewaretoken
+                            'state': state
                         };
-                        query_modify(data_extends);
+                        query_func(data_extends, 'POST');
                     }
                 }
             }
@@ -145,7 +126,7 @@ function deal(action) {
     }
 }
 
-
+//send message to warn users
 function send_message(type) {
     var comment = get_message(type);
     var tuids = get_ids()[1];
@@ -153,44 +134,25 @@ function send_message(type) {
     var data = {
         'query_method': 'POST',
         'api_request': '/admin/feed/report/warn',
-        'version': 9999,
-        'uid': 1,
-        "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
-        'pub_ids': pub_ids,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'pub_ids': pub_ids
     };
-    query_modify(data);
+    query_func(data, 'POST');
     if (tuids.length > 0) {
         for (var i = 0; i < tuids.length; i++) {
             var data_extends = {
                 'query_method': 'POST',
                 'api_request': '/message/send',
-                'version': 9999,
-                'uid': 1,
-                "session_data": "81ded44dbc365b7f8e05be22c7ceee32",
                 'tuid': tuids[i],
                 'content': comment,
-                'normal': 0,
-                'csrfmiddlewaretoken': csrfmiddlewaretoken
+                'normal': 0
             };
-            query_modify(data_extends);
+            query_func(data_extends, 'POST');
         }
     }
     window.location.reload();
 }
 
-function query_modify(data) {
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-        }
-    });
-}
-
-
+//get the infos which is checked
 function get_ids() {
     var ids = '';
     var tuids = '';
@@ -213,6 +175,7 @@ function get_ids() {
     return [ids, tuids];
 }
 
+//to check all or check none
 var times = 0;
 $(".checkall").click(function () {
     if (times % 2 == 0) {
@@ -224,39 +187,32 @@ $(".checkall").click(function () {
     times = times + 1;
 });
 
+//get the message which is suitable to warn users
 var comment = '';
-
 function get_message(type) {
     if (type == 1) {
-        // comment = "经管理后台核实，你在信息流文字/图片中涉及其他三方的账号/二维码/链接等导流信息；已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。"
-        comment = "1";
+        comment = "经管理后台核实，你在信息流文字/图片中涉及其他三方的账号/二维码/链接等导流信息；已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。"
     }
     else if (type == 2) {
-        // comment = "经管理后台核实，你在信息流文字/图片中涉及语言暴力诋毁他人，已删除且警告一次，累计警告3次，立即封号处理。更好的环境需要大家共同营造，请保持良好的社交习惯。"
-        comment = "2";
+        comment = "经管理后台核实，你在信息流文字/图片中涉及语言暴力诋毁他人，已删除且警告一次，累计警告3次，立即封号处理。更好的环境需要大家共同营造，请保持良好的社交习惯。"
     }
     else if (type == 3) {
-        comment = "3";
-        // comment = "经管理后台核实，你在信息流中图片/文字中涉及转发、举报、刷屏等，已删除且警告一次，累计警告3次，立即封号处理。如有节目需要推荐， 可以在[侧边栏--设置--意见反馈--向我反馈--节目报名]里报名，会有工作人员根据内容时间安排的，多谢配合。"
+        comment = "经管理后台核实，你在信息流中图片/文字中涉及转发、举报、刷屏等，已删除且警告一次，累计警告3次，立即封号处理。如有节目需要推荐， 可以在[侧边栏--设置--意见反馈--向我反馈--节目报名]里报名，会有工作人员根据内容时间安排的，多谢配合。"
     }
     else if (type == 4) {
-        comment = "4";
-        // comment = "经管理后台核实，你在信息流文字/图片中涉及色情信息等； 已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。"
+        comment = "经管理后台核实，你在信息流文字/图片中涉及色情信息等； 已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。"
     }
     else if (type == 5) {
-        comment = "5";
-        // comment = "经管理后台核实，你在信息流文字/图片中涉及广告信息等；已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。";
+        comment = "经管理后台核实，你在信息流文字/图片中涉及广告信息等；已删除且警告一次；累计警告3次，立即封号处理。 更好的环境需要大家共同营造，请保持良好的社交习惯。";
     }
     else if (type == 6) {
         comment = "经管理后台核实，你在信息流中涉及侵权/泄露隐私等，已删除且警告一次，累计警告3次，立即封号处理。更好的环境需要大家共同营造，请保持良好的社交习惯。";
     }
     else if (type == 7) {
-        comment = "6";
-        // comment = "经管理后台核实，你在信息流中涉及网骗/欺诈等，已删除且警告一次，累计警告3次，立即封号处理。更好的环境需要大家共同营造，请保持良好的社交习惯。";
+        comment = "经管理后台核实，你在信息流中涉及网骗/欺诈等，已删除且警告一次，累计警告3次，立即封号处理。更好的环境需要大家共同营造，请保持良好的社交习惯。";
     }
     else {
-        comment = "7";
-        // comment = '未知'
+        comment = '未知'
     }
     return comment;
 }

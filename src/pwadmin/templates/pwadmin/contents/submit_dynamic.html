@@ -1,4 +1,4 @@
-{% extends 'pwadmin/pwbase.html' %}
+{% extends 'pwadmin/contents/content_base.html' %}
 {% load static %}
 {% block title %}
     陪我管理系统-内容
@@ -9,53 +9,41 @@
 <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
 {% endblock %}
 
-{% block left_content %}
-    <div class="left_menu">
-        <ul class="list-group">
-            <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
-            <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
-            <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
-            <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
-            <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
-        </ul>
-    </div>
-{% endblock %}
-
-{% block right_content %}
+{% block right_content_new %}
     <div class="space"></div>
     <div class="amend_pic">
         <img src="#" alt="" class="pic_big">
     </div>
     <div class="right_content">
         <div class="inline">
-            <input type="text" placeholder="请输入陪我号" value="{{ data.tuid }}" class="search_top peiwo_id">
-            <input type="text" placeholder="开始时间" value="{{ data.begin_time }}" class="search_top start">
-            <input type="text" placeholder="结束时间" value="{{ data.end_time }}" class="search_top end">
+            <input type="text" placeholder="请输入陪我号" value="{{ extends.tuid }}" class="search_top peiwo_id">
+            <input type="text" placeholder="开始时间" value="{{ extends.begin_time }}" class="search_top start">
+            <input type="text" placeholder="结束时间" value="{{ extends.end_time }}" class="search_top end">
         </div>
         <div class="inline search_right">
             <div class="search_day">
                 <button type="button" class="operate" onclick="search_data()">查询</button>
-                <button type="button" class="operate_white" onclick="change_date(0)">今天</button>
-                <button type="button" class="operate_white" onclick="change_date(6)">7天</button>
-                <button type="button" class="operate_white" onclick="change_date(29)">30天</button>
+                <button type="button" class="operate_white" onclick="servlet_time(0)">今天</button>
+                <button type="button" class="operate_white" onclick="servlet_time(6)">7天</button>
+                <button type="button" class="operate_white" onclick="servlet_time(29)">30天</button>
                 <button type="button" class="operate_white" onclick="clear_info()">清空</button>
             </div>
         </div>
         <div class="search_status">
-            {% if data.state == 0 %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=0" class="status_select front">未处理</a>
+            {% if extends.state == 0 or extends.state == '0' %}
+                <button onclick="servlet_state(0)" class="status_select front">未处理</button>
             {% else %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=0" class="status_none front">未处理</a>
+                <button onclick="servlet_state(0)" class="status_none front">未处理</button>
             {% endif %}
-            {% if data.state == 1 %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=1" class="status_select">已忽略</a>
+            {% if extends.state == 1 or extends.state == '1' %}
+                <button onclick="servlet_state(1)" class="status_select">已忽略</button>
             {% else %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=1" class="status_none">已忽略</a>
+                <button onclick="servlet_state(1)" class="status_none">已忽略</button>
             {% endif %}
-            {% if data.state == 5 %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=5" class="status_select">已操作</a>
+            {% if extends.state == 5 or extends.state == '5' %}
+                <button onclick="servlet_state(5)" class="status_select">已操作</button>
             {% else %}
-                <a href="{{ base_url }}?page={{ data.page_left }}&state=5" class="status_none">已操作</a>
+                <button onclick="servlet_state(5)" class="status_none">已操作</button>
             {% endif %}
         </div>
         <div class="control_switch">
@@ -93,7 +81,7 @@
             {% endfor %}
         </table>
         <div class="deal">
-            {% if data.state == 0 %}
+            {% if extends.state == 0 or extends.state == '0' %}
             <button type="button" class="operate ignore" onclick="deal(1)">忽略</button>
             <button type="button" class="operate ban" onclick="deal(2)">封号</button>
             <button type="button" class="operate alert" onclick="deal(3)">警告</button>
@@ -112,28 +100,15 @@
             <button type="button" class="msg" onclick="send_message(2)">诋毁辱骂</button>
         </div>
     </div>
-    <div class="modalPage">
-        {% if data.page_left != data.page %}
-            <a href="{{ base_url }}?page={{ data.page_left }}&state={{ data.state }}" class="pageNum">上一页</a>
-        {% endif %}
-        {% for val in data.total_list %}
-            {% if data.page == val %}
-            <a href="{{ base_url }}?page={{ val }}&state={{ data.state }}" class="pageUnique">{{ val }}</a>
-            {% else %}
-            <a href="{{ base_url }}?page={{ val }}&state={{ data.state }}" class="pageNum">{{ val }}</a>
-            {% endif %}
-        {% empty %}
-            ...
-        {% endfor %}
-        {% if data.page_right != data.page_count %}
-            <a href="{{ base_url }}?page={{ data.page_right }}&state={{ data.state }}" class="pageNum">下一页</a>
-        {% endif %}
-        <span class="page_count">共{{ data.page_count }}页</span>
-    </div>
 {% endblock %}
 {% block extends_script %}
     <script type="application/javascript">
-      var csrfmiddlewaretoken='{{ csrf_token }}'
+      var csrfmiddlewaretoken='{{ csrf_token }}';
+      var begin_time_param = '{{ extends.begin_time }}';
+      var end_time_param = '{{ extends.end_time }}';
+      var state_param = '{{ extends.state }}';
+      var tuid_param = '{{ extends.tuid }}';
     </script>
+    <script src="{% static 'js/content_base.js' %}"></script>
     <script src="{% static 'js/submit_dynamic.js' %}"></script>
 {% endblock %}
