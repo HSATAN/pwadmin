@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
 import {BaseSearchStore} from './../store-tpl.jsx';
+import {PaginationView, PaginationStore} from "./../pagination.jsx"
+
 
 class ResetPasswordStore {
     @observable password = '';
     @observable note = '';
 }
+
 
 @observer
 class ResetPasswordFormView extends React.Component {
@@ -43,9 +46,9 @@ class ResetPasswordFormView extends React.Component {
             }
         })
             .done(function (data, textStatus, jqXHR) {
-                if(data.code == '0'){
+                if (data.code == '0') {
                     alert("重置密码成功!")
-                }else{
+                } else {
                     alert(data.msg);
                 }
             })
@@ -89,19 +92,21 @@ class TableView extends React.Component {
         super(props);
     }
 
-
     render() {
         const store = this.props.store;
-        const data = this.props.data;
+        const data = store.result;
+        const code = data.code;
+        const total = data.total;
+        const page = data.page;
+        const items = data.data;
         if (_.isEmpty(data)) {
             return <div></div>
         }
-        const code = data.code;
         if (code != '0') {
             alert(data.msg);
             return <div></div>
         }
-        const items = data.data;
+
         return <div>
             <table className="table table-striped">
                 <thead>
@@ -111,7 +116,6 @@ class TableView extends React.Component {
                     <th>昵称</th>
                     <th>电话</th>
                     <th>新密码</th>
-
                 </tr>
                 </thead>
                 <tbody>
@@ -126,12 +130,12 @@ class TableView extends React.Component {
                             <th>{<ResetPasswordFormView store={new ResetPasswordStore()}
                                                         tuid={item.uid}
                             />}</th>
-
                         </tr>
                     })
                 }
                 </tbody>
             </table>
+            <PaginationView store={new PaginationStore(total, 10, store, page)}/>
         </div>
     }
 }
@@ -200,14 +204,12 @@ class ResetPasswordView extends React.Component {
             <div className="row">
                 <div className="col-11">
                     <SearchView store={store}/>
-                    <TableView data={store.result}/>
+                    <TableView store={store}/>
                 </div>
             </div>
         </div>
     }
-
 }
-
 
 //
 // ========================================
