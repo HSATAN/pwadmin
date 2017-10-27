@@ -1,71 +1,38 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 from admin_interface.common import BaseHandler
-from strings import METHOD_GET
-from django.conf import settings
+from strings import METHOD_GET, METHOD_POST
+from admin_interface.strings import PAGE_SIZE
 
 
-class LabelManageInterface(BaseHandler):
-
-    API_REQUEST = '/admin/feed/topic'
-
-    def get_feed_topic(self, uid, begin_index, page_size):
-        """
-        标签管理
-        Args:
-            uid:唯一标识
-            begin_index:起始页
-            page_size:每页显示多少条数据
-
-        Returns:
-            A dict
-            {
-                "total": 19,
-                "have_release": 0,
-                "code": 0,
-                "data": [
-                    {
-                        "count": 6,
-                        "view_count": 4303,
-                        "subtitle": "此标签用语auto_test",
-                        "state": 0,
-                        "content": "auto_test",
-                        "creator_id": 1,
-                        "create_time": "2017-04-05 16:00:48",
-                        "real_count": 2,
-                        "id": 594
-                    },
-                ],
-                "current_time": 1507629185
-            }
-
-        Raises:
-            pass
-        """
-        params = {'version': 9999,
-                  'uid': uid,
-                  'page_size': page_size,
-                  'begin_index': begin_index,
-                  "session_data": "81ded44dbc365b7f8e05be22c7ceee32"}
-        url = self.generate_url(self.API_REQUEST)
-        data = self.query_method(True, METHOD_GET, url, **params)
+class CommonInterface(BaseHandler):
+    def query_sneaky(self, **kwargs):
+        api_request = kwargs.pop('api_request')
+        query_method = kwargs.pop('query_method')
+        params_base = {
+            'version': 9999,
+            'uid': 1,
+            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
+        }
+        params = dict(params_base.items() + kwargs.items())
+        url = self.generate_url(api_request)
+        data = self.query_method(True, query_method, url, **params)
         return data
 
-
-class LabelDynamicInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/topicpub'
-    pass
-
-
-class ReportDynamicInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/userpub'
-    pass
-
-
-class WhiteListInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/pub/whitelist'
-    pass
-
-
-class FeedInterface(BaseHandler):
-    API_REQUEST = '/admin/feed/pub/query'
-    pass
+    def data_get(self, queries):
+        backups = deepcopy(queries)
+        page_size = int(queries.get('page_size', PAGE_SIZE))
+        page_now = int(queries.get('page', 1))
+        page_index = page_now - 1
+        data = self.query_sneaky(**queries)
+        page_list, page_count = self.get_page_list(page_index, page_size, data.get('total', 0))
+        page_left, page_right = self.get_left_right(page_now, page_count)
+        extends = {
+            'page_count': page_count,
+            'total_list': page_list,
+            'page': page_now,
+            'page_left': page_left,
+            'page_right': page_right
+        }
+        extends = dict(backups.items() + extends.items())
+        return data, extends
