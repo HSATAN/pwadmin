@@ -5,6 +5,7 @@ class BaseSearchStore {
     @observable query = '';
     @observable filter = [];  // array of {name: filed_name, value: ''}
     @observable search = false; // 是否向服务器发送请求.
+    @observable page = null; // 当前页数.
     @observable result = {};  // 服务器返回的data.
 
     constructor() {
@@ -22,7 +23,13 @@ class BaseSearchStore {
                 kwargs[obj.name] = obj.value;
             }
         });
+        kwargs['page'] = this.page;
         return JSON.stringify([this.search, kwargs]);
+    }
+
+    updatePage(value){
+        this.page = value;
+        this.search = true;
     }
 
     @action

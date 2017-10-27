@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from .views import (
     pwmanager, index, task, accounts, statistic, permissions, contents
 )
@@ -12,7 +11,10 @@ urlpatterns = [
     url(r'^sign-in/$', pwmanager.SignIn.as_view(), name='sign-in'),
     url(r'^logout/$', pwmanager.LogoutView.as_view(), name='logout'),
     url(r'^task/$', task.Task.as_view(), name='task'),
-    url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
+    url(r'^accounts/$', login_required(accounts.Accounts.as_view()), name='accounts'),
+    url(r'^account/list/$', accounts.AccountList.as_view(), name='account-list'),
+    url(r'^account/reported/$', accounts.ReportedUser.as_view(), name='account-reported'),
+    url(r'^account/password/$', accounts.ResetPassword.as_view(), name='account-password'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
