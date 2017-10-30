@@ -1,0 +1,49 @@
+- name: Get latest code
+  hosts: webservers
+  vars:
+      repo_url: git@dev.fabibao.com:PeiwoServices/peiwo-admin.git
+      proj_dir: /sites
+      proj_name: peiwoadmin-test
+      proj_path: "{{ proj_dir }}/{{ proj_name }}"
+      venv_path: "{{proj_path}}/venv"
+  tasks:
+      - stat:
+          path: "{{proj_path}}"
+        register: repo
+
+      - name: clone repo
+        command: git clone {{repo_url}} {{proj_path}}
+        when:
+          - repo.stat.exists == False
+
+      - name: git pull latest code.
+        command: chdir={{proj_path}} git pull
+        when:
+          - repo.stat.exists == True
+      - stat:
+          path: "{{proj_path}}/venv"
+        register: venv
+
+      - name: create virtualenv
+        command: virtualenv {{venv_path}}
+        when:
+          - venv.stat.exists == False
+
+      - name: Install or update requirements if necessary
+        command: "{{venv_path}}/bin/pip install -r {{proj_path}}/requirements.txt"
+
+      - name: collect static files
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py collectstatic --noinput --settings=peiwoadmin.settings.production_test
+
+      - name: Database migrations.
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py makemigrations --noinput --settings=peiwoadmin.settings.production_test
+
+      - name: Database migrate.
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py migrate --noinput --settings=peiwoadmin.settings.production_test
+
+      - replace:
+        path: "{{proj_path}}/deploy"
+        regexp: 'directory=PATH'
+        replace: "{{proj_path}}"
+
+
