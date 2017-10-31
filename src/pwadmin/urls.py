@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^account/list/$', accounts.AccountList.as_view(), name='account-list'),
     url(r'^account/reported/$', accounts.ReportedUser.as_view(), name='account-reported'),
     url(r'^account/password/$', accounts.ResetPassword.as_view(), name='account-password'),
+    url(r'^account/messages/$', accounts.MessageManagement.as_view(), name='account-messages'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),

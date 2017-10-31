@@ -15,5 +15,5 @@
             <a href="#" class="list-group-item {% if item == 'reset_account' %}active{% else %}list-group-item-action{% endif %}">账号回收</a>
         </div>
     </li>
-
+    <a href="{% url 'pwadmin:account-messages' %}" class="list-group-item {% if item == 'messages' %}active{% else %}list-group-item-action{% endif %}">系统消息管理</a>
 </ul>

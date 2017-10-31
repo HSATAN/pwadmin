@@ -8,7 +8,8 @@ class BaseSearchStore {
     @observable page = null; // 当前页数.
     @observable result = {};  // 服务器返回的data.
 
-    constructor() {
+    constructor(url='') {
+        this.url = url;
         reaction(() => this.data(), data => {
             this.fetchResult(data)
         });
@@ -16,14 +17,14 @@ class BaseSearchStore {
 
     data() {
         const kwargs = {
-            query: this.query
+            query: this.query,
+            page: this.page
         };
         this.filter.map((obj, index) => {
             if (obj.value) {
                 kwargs[obj.name] = obj.value;
             }
         });
-        kwargs['page'] = this.page;
         return JSON.stringify([this.search, kwargs]);
     }
 
@@ -37,6 +38,7 @@ class BaseSearchStore {
         data = JSON.parse(data);
         const search = data[0];
         const params = data[1];
+        const url = this.url;
         if (search) {
             $.ajax({
                 url: url,
