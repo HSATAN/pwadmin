@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import math
+import logging
+from datetime import timedelta, date
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -12,6 +14,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from pwadmin import models as pwa_models
 from contrib.views import BaseView
 from utils.sdk import SneakSDK
+
+logger = logging.getLogger(__file__)
 
 
 class Accounts(View):
@@ -27,7 +31,6 @@ class Accounts(View):
 
     def get_api(self, request, *args, **kwargs):
         """
-
         Args:
             request:
             *args:
@@ -36,7 +39,7 @@ class Accounts(View):
         Returns:
 
         """
-        data = self.account.query()
+        data = self.account.query_user()
         return JsonResponse(data=data)
 
     def get_template(self, request, *args, **kwargs):
@@ -323,11 +326,49 @@ class PaymentList(BaseView):
     """用户数据查询-雁阵吗查询.
 
     """
+    TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
     template = 'pwadmin/accounts/payment-list.html'
 
     @method_decorator(login_required)
     def get_template(self, request, *args, **kwargs):
         return render(request, self.template, {})
+
+    @method_decorator(login_required)
+    def get_ajax(self, request, *args, **kwargs):
+        """
+        openapi: "3.0.0"
+
+        """
+        tuid = request.GET.get('query')
+        type = request.GET.get('type', '')
+        date = request.GET.get('date', '')
+        begin_time, end_time = self.process_date(date)
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.payment(
+            tuid, type=type, begin_time=begin_time, end_time=end_time)
+        return JsonResponse(data)
+
+    def process_date(self, _date):
+        """
+
+        Args:
+            _date:
+
+        Returns:
+
+        """
+        # 无时间约束.
+
+        if _date == '':
+            return '', ''
+        end_day = date.today() + timedelta(1)
+        try:
+            _date = int(_date)
+        except TypeError as e:
+            logger.warning(str(e))
+            return '', ''
+
+        begin_day = end_day + timedelta(-_date)
+        return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
 
 
 class ScoreList(BaseView):
@@ -339,3 +380,17 @@ class ScoreList(BaseView):
     @method_decorator(login_required)
     def get_template(self, request, *args, **kwargs):
         return render(request, self.template, {})
+
+    @method_decorator(login_required)
+    def get_ajax(self, request, *args, **kwargs):
+        """
+        openapi: "3.0.0"
+
+        """
+        tuid = request.GET.get('query')
+        type = request.GET.get('type', '')
+        date = request.GET.get('date', '')
+        begin_time, end_time = self.process_date(date)
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.query(
+            tuid, type=type, begin_time=begin_time, end_time=end_time)
+        return JsonResponse(data)

@@ -19,6 +19,7 @@ class FilterBaseStore {
 
     set Selected(value) {
         this.selected = value;
+        this.store.search = true;
         this.store.filter.push({name: this.field_name, value: value});
     }
 }

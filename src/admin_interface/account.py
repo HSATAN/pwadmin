@@ -11,6 +11,8 @@ class Account(object):
     ACCOUNT_LIST = '/admin/account/list'
     RESET_PASSWORDD_URL = '/admin/account/resetpassword2'
     CAPTCHA_QUERY = '/admin/captcha/query'
+    PAYMENT_QUERY = '/admin/finance/query_new'
+    SCORE_QUERY = '/admin/userinfo/score_ledger'
 
     def __init__(self, host='http://172.16.10.134:9090', user=None):
         self.user = None
@@ -70,7 +72,7 @@ class Account(object):
         resp = requests.post(url, data={'uid': uid, 'password': password})
         return resp.json()
 
-    def query(self, **kwargs):
+    def query_user(self, **kwargs):
         """
 
         Args:
@@ -155,3 +157,62 @@ class Account(object):
             }
         )
         return resp.json()
+
+    def payment(self, tuid, page_index=1, page_size=25, type='', begin_time=None, end_time=None):
+        """收支查询.
+
+        Args:
+            tuid:
+            page_index:
+            page_size:
+            type:
+            begin_time:
+            end_time:
+
+        Returns:
+
+        """
+        url = self.generate_url(self.PAYMENT_QUERY)
+        resp = self.session.request(
+            method='get',
+            url=url,
+            params={
+                'tuid': tuid,
+                'type': type,
+                'page_index': page_index,
+                'page_size': page_size,
+                'begin_time': begin_time,
+                'end_time': end_time
+            }
+        )
+        return resp.json()
+
+    def query(self, url, method, params=None, data=None):
+        """积分明细.
+
+        Returns:
+
+        """
+        url = self.generate_url(url)
+        resp = self.session.request(
+            method=method,
+            url=url,
+            params=params,
+            data=data)
+        return resp.json()
+
+    def score(self, tuid, page_index=1, page_size=25, type='', begin_time=None, end_time=None):
+        """积分明细.
+
+        Returns:
+
+        """
+        params = {
+            'tuid': tuid,
+            'page_index': page_index,
+            'page_size': page_size,
+            'type': type,
+            'begin_time': begin_time,
+            'end_time': end_time
+        }
+        return self.query(self.SCORE_QUERY, 'get', params=params)
