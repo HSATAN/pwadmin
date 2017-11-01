@@ -1,0 +1,19 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% load static %}
+{% block title %}
+    任务-陪我管理系统
+{% endblock %}
+{% block left_content %}
+    {% include 'pwadmin/accounts/left_tpl.html' with item='account-record' %}
+{% endblock %}
+
+{% block right_content %}
+    <div id="root">
+    </div>
+{% endblock %}
+{% block extends_script %}
+    <script type="application/javascript">
+        var url = '{% url 'pwadminAPI:account-captcha' %}';
+        var csrfmiddlewaretoken = '{{ csrf_token }}'
+    </script>
+{% endblock %}

@@ -10,6 +10,7 @@ class Account(object):
     LOGIN = '/admin/account/login'
     ACCOUNT_LIST = '/admin/account/list'
     RESET_PASSWORDD_URL = '/admin/account/resetpassword2'
+    CAPTCHA_QUERY = '/admin/captcha/query'
 
     def __init__(self, host='http://172.16.10.134:9090', user=None):
         self.user = None
@@ -35,9 +36,9 @@ class Account(object):
             method='get',
             url=url,
             params={'query': query,
-                  'size': size,
-                  'page': page,
-                  'order_by': order_by}
+                    'size': size,
+                    'page': page,
+                    'order_by': order_by}
         )
         return resp.json()
 
@@ -122,4 +123,35 @@ class Account(object):
                 params[k] = params.get(k)
         url = self.generate_url(self.QUERY_USER)
         resp = requests.get(url, params=params)
+        return resp.json()
+
+    def captcha(self, phone, page_index=1, page_size=25, state=None, captcha_type=None, begin_time=None, end_time=None):
+        """
+
+        Args:
+            phone:
+            page_index:
+            page_size:
+            state:
+            captcha_type:
+            begin_time:
+            end_time:
+
+        Returns:
+
+        """
+        url = self.generate_url(self.CAPTCHA_QUERY)
+        resp = self.session.request(
+            method='get',
+            url=url,
+            params={
+                'phone': phone,
+                'page_index': page_index,
+                'page_size': page_size,
+                'state': state,
+                'captcha_type': captcha_type,
+                'begin_time': begin_time,
+                'end_time': end_time
+            }
+        )
         return resp.json()

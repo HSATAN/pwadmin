@@ -224,3 +224,118 @@ class MessageManagement(BaseView):
         })
 
 
+class CaptchaList(BaseView):
+    """用户数据查询-验证码查询.
+
+    """
+    template = 'pwadmin/accounts/captcha-list.html'
+
+    @method_decorator(login_required)
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})
+
+    @method_decorator(login_required)
+    def get_ajax(self, request, *args, **kwargs):
+        """
+        openapi: "3.0.0"
+        info:
+          title: 验证码查询
+          version: v1
+        paths:
+          /api/v1/pwadmin/account/captcha/:
+            get:
+              parameters:
+                - name: query
+                  in: query
+                  required: true
+                  description: |
+                    the search field.
+                  schema:
+                    type: string
+                - name: size
+                  in: query
+                  default: 10
+                  description: page size
+                  schema:
+                    type: integer
+                - name: page
+                  in: query
+                  default: 1
+                  description: page
+                  schema:
+                    type: integer
+                - name: state
+                  in: query
+                  default: None
+                  description: 验证码审核状态.
+                  schema:
+                    type: integer
+                - name: captcha_type
+                  in: query
+                  default: None
+                  description: 验证码类型
+                  schema:
+                    type: integer
+                - name: begin_time
+                  in: query
+                  default: 1
+                  description: 修改时间的上限
+                  schema:
+                    type: string
+                - name: end_time
+                  in: query
+                  default: 1
+                  description: 修改时间的下限
+                  schema:
+                    type: string
+              responses:
+                '200':
+                  content:
+                    application/json:
+        """
+        query = request.GET.get('query')
+        size = request.GET.get('size', 25) or 25
+        page = request.GET.get('page', 1) or 1
+        state = request.GET.get('state', None)
+        captcha_type = request.GET.get('type', None)
+        begin_time = request.GET.get('begin_time', None)
+        end_time = request.GET.get('end_time', None)
+
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.captcha(
+            phone=query, page_index=page, page_size=size, state=state,
+            captcha_type=captcha_type, begin_time=begin_time, end_time=end_time
+        )
+        return JsonResponse(data)
+
+
+class RecordList(BaseView):
+    """用户数据查询-雁阵吗查询.
+
+    """
+    template = 'pwadmin/accounts/record-list.html'
+
+    @method_decorator(login_required)
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})
+
+
+class PaymentList(BaseView):
+    """用户数据查询-雁阵吗查询.
+
+    """
+    template = 'pwadmin/accounts/payment-list.html'
+
+    @method_decorator(login_required)
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})
+
+
+class ScoreList(BaseView):
+    """用户数据查询-雁阵吗查询.
+
+    """
+    template = 'pwadmin/accounts/score-list.html'
+
+    @method_decorator(login_required)
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})

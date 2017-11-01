@@ -3,7 +3,7 @@ import {observable, computed, reaction, autorun, action} from "mobx";
 
 class BaseSearchStore {
     @observable query = '';
-    @observable filter = [];  // array of {name: filed_name, value: ''}
+    @observable filter = [];  // array of {name: filed_name, value: ''} 以后考虑用map
     @observable search = false; // 是否向服务器发送请求.
     @observable page = null; // 当前页数.
     @observable result = {};  // 服务器返回的data.
@@ -21,9 +21,7 @@ class BaseSearchStore {
             page: this.page
         };
         this.filter.map((obj, index) => {
-            if (obj.value) {
                 kwargs[obj.name] = obj.value;
-            }
         });
         return JSON.stringify([this.search, kwargs]);
     }
