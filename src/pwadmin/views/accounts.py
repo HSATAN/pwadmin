@@ -371,7 +371,7 @@ class PaymentList(BaseView):
         return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
 
 
-class ScoreList(BaseView):
+class ScoreList(PaymentList):
     """用户数据查询-雁阵吗查询.
 
     """
@@ -390,7 +390,9 @@ class ScoreList(BaseView):
         tuid = request.GET.get('query')
         type = request.GET.get('type', '')
         date = request.GET.get('date', '')
+        page_index = request.GET.get('page_index', 1) or 1
+        page_size = request.GET.get('page_size', 25) or 25
         begin_time, end_time = self.process_date(date)
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.query(
-            tuid, type=type, begin_time=begin_time, end_time=end_time)
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.score(
+            tuid, page_index=page_index, page_size=page_size, type=type, begin_time=begin_time, end_time=end_time)
         return JsonResponse(data)

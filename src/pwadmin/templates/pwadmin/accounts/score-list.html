@@ -13,7 +13,8 @@
 {% endblock %}
 {% block extends_script %}
     <script type="application/javascript">
-        var url = '{% url 'pwadminAPI:account-captcha' %}';
+        var url = '{% url 'pwadminAPI:account-score' %}';
         var csrfmiddlewaretoken = '{{ csrf_token }}'
     </script>
+    <script src="{% static 'pwadmin/accounts/score-list.min.js' %}"></script>
 {% endblock %}
