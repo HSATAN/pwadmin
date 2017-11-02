@@ -1,0 +1,17 @@
+.list li { list-style: none;}
+
+.data_table th, td {
+    width: 10%;
+}
+
+.data_table th, td:first-child {
+    width: 10%;
+}
+
+.data_table th, td:nth-child(1) {
+    width: 10%;
+}
+
+.data_table th, td:last-child {
+    width: 20%;
+}

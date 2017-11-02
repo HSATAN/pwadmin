@@ -1,0 +1,35 @@
+{% extends 'pwadmin/groups/group_base.html' %}
+{% load static %}
+
+{% block extends_head %}
+    <link rel="stylesheet" href="{% static 'css/group_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cover_verify.css' %}">
+{% endblock %}
+
+{% block right_content %}
+    <div class="right_content">
+        <div class="data_search">
+            <input type="text" placeholder="请输入主播陪我号" class="in">
+            <input type="text" placeholder="开始时间" class="in">
+            <input type="text" placeholder="结束时间" class="in">
+            <div class="search_right in">
+                <button class="search in">搜索</button>
+                <button class="clear in">清空</button>
+            </div>
+        </div>
+        <table class="data_table">
+            <tr>
+                <th>主播陪我号</th>
+                <th>昵称</th>
+                <th>封面图</th>
+                <th>申请时间</th>
+                <th>操作</th>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block extends_script %}
+    <script src="{% static 'js/group_base.js' %}"></script>
+    <script src="{% static 'js/cover_verify.js' %}"></script>
+{% endblock %}
