@@ -13,6 +13,7 @@ class Account(object):
     CAPTCHA_QUERY = '/admin/captcha/query'
     PAYMENT_QUERY = '/admin/finance/query_new'
     SCORE_QUERY = '/admin/userinfo/score_ledger'
+    RECORD_QUERY = '/admin/callrecord/query'
 
     def __init__(self, host='http://172.16.10.134:9090', user=None):
         self.user = None
@@ -216,3 +217,25 @@ class Account(object):
             'end_time': end_time
         }
         return self.query(self.SCORE_QUERY, 'get', params=params)
+
+    def record(self, uid=None, uid2=None, call_id=None, state=None, end_state=-1, call_type=-1, channel=-1,
+               begin_time=None, end_time=None, page_index=1, page_size=25, ):
+        """通话记录查询.
+
+        Returns:
+
+        """
+        params = {
+            'uid1': uid,
+            'uid2': uid2,
+            'status': state,
+            'finish_state': end_state,
+            'begin_time': begin_time,
+            'end_time': end_time,
+            'page_index': page_index,
+            'page_size': page_size,
+            'call_type': call_type,
+            'channel': channel,
+            'call_id': call_id
+        }
+        return self.query(self.RECORD_QUERY, 'get', params=params)

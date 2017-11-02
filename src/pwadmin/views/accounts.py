@@ -311,41 +311,8 @@ class CaptchaList(BaseView):
         return JsonResponse(data)
 
 
-class RecordList(BaseView):
-    """用户数据查询-雁阵吗查询.
-
-    """
-    template = 'pwadmin/accounts/record-list.html'
-
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-
-class PaymentList(BaseView):
-    """用户数据查询-雁阵吗查询.
-
-    """
+class BaseQueryList(BaseView):
     TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-    template = 'pwadmin/accounts/payment-list.html'
-
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-    @method_decorator(login_required)
-    def get_ajax(self, request, *args, **kwargs):
-        """
-        openapi: "3.0.0"
-
-        """
-        tuid = request.GET.get('query')
-        type = request.GET.get('type', '')
-        date = request.GET.get('date', '')
-        begin_time, end_time = self.process_date(date)
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.payment(
-            tuid, type=type, begin_time=begin_time, end_time=end_time)
-        return JsonResponse(data)
 
     def process_date(self, _date):
         """
@@ -370,16 +337,38 @@ class PaymentList(BaseView):
         begin_day = end_day + timedelta(-_date)
         return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
 
+    @method_decorator(login_required)
+    def get_template(self, request, *args, **kwargs):
+        return render(request, self.template, {})
 
-class ScoreList(PaymentList):
+
+class PaymentList(BaseQueryList):
+    """用户数据查询-雁阵吗查询.
+
+    """
+
+    template = 'pwadmin/accounts/payment-list.html'
+
+    @method_decorator(login_required)
+    def get_ajax(self, request, *args, **kwargs):
+        """
+        openapi: "3.0.0"
+
+        """
+        tuid = request.GET.get('query')
+        type = request.GET.get('type', '')
+        date = request.GET.get('date', '')
+        begin_time, end_time = self.process_date(date)
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.payment(
+            tuid, type=type, begin_time=begin_time, end_time=end_time)
+        return JsonResponse(data)
+
+
+class ScoreList(BaseQueryList):
     """用户数据查询-雁阵吗查询.
 
     """
     template = 'pwadmin/accounts/score-list.html'
-
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
 
     @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
@@ -395,4 +384,34 @@ class ScoreList(PaymentList):
         begin_time, end_time = self.process_date(date)
         data = SneakSDK(host=settings.API_HOST, user=request.user).account.score(
             tuid, page_index=page_index, page_size=page_size, type=type, begin_time=begin_time, end_time=end_time)
+        return JsonResponse(data)
+
+
+class RecordList(BaseQueryList):
+    """用户数据查询-通话记录查询.
+
+    """
+    template = 'pwadmin/accounts/record-list.html'
+
+    @method_decorator(login_required)
+    def get_ajax(self, request, *args, **kwargs):
+        """
+        openapi: "3.0.0"
+
+        """
+        uid1 = request.GET.get('uid', None)
+        uid2 = request.GET.get('uid2', None)
+        state = request.GET.get('state', None)
+        end_state = request.GET.get('end_state', None) or -1
+        date = request.GET.get('date', '')
+        page_index = request.GET.get('page_index', 1) or 1
+        page_size = request.GET.get('page_size', 25) or 25
+        call_type = request.GET.get('call_type', None) or -1
+        channel = request.GET.get('channel', None) or -1
+        call_id = request.GET.get('call_id', None) or 0
+        begin_time, end_time = self.process_date(date)
+        data = SneakSDK(host=settings.API_HOST, user=request.user).account.record(
+            uid=uid1, uid2=uid2, state=state, page_index=page_index, page_size=page_size,
+            end_state=end_state, call_type=call_type, channel=channel, call_id=call_id,
+            begin_time=begin_time, end_time=end_time)
         return JsonResponse(data)
