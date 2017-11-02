@@ -1,14 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 import requests
+from requests import session
 
 
 class Account(object):
     VERIFY_USER = '/admin/account/verifyuser'
     QUERY_USER = '/admin/userinfo/user_query'
+    LOGIN = '/admin/account/login'
+    ACCOUNT_LIST = '/admin/account/list'
+    RESET_PASSWORDD_URL = '/admin/account/resetpassword2'
 
-    def __init__(self, host='http://172.16.10.134:9090'):
+    def __init__(self, host='http://172.16.10.134:9090', user=None):
+        self.user = None
         self.host = host
+        self.session = session()
+        if hasattr(user, 'token'):
+            self.session.headers.update({"Authorization": "JWT {}".format(user.token)})
+
+    def __del__(self):
+        self.session.close()
 
     def generate_url(self, url):
         return "{}{}".format(self.host, url)
@@ -16,6 +27,46 @@ class Account(object):
     def verify_user(self, uid, password):
         url = self.generate_url(self.VERIFY_USER)
         resp = requests.post(url, data={"uid": uid, 'password': password})
+        return resp.json()
+
+    def list(self, query, size=10, page=1, order_by='uid'):
+        url = self.generate_url(self.ACCOUNT_LIST)
+        resp = self.session.request(
+            method='get',
+            url=url,
+            params={'query': query,
+                  'size': size,
+                  'page': page,
+                  'order_by': order_by}
+        )
+        return resp.json()
+
+    def reset_password(self, password, tuid, note=''):
+        """重置密码.
+
+        Args:
+            password(str):
+            tuid(str):
+            note(str):
+
+        Returns:
+
+        """
+        url = self.generate_url(self.RESET_PASSWORDD_URL)
+        resp = self.session.request(
+            method='post',
+            url=url,
+            data={
+                'password': password,
+                'tuid': tuid,
+                'note': note
+            }
+        )
+        return resp.json()
+
+    def login(self, uid, password):
+        url = self.generate_url(self.LOGIN)
+        resp = requests.post(url, data={'uid': uid, 'password': password})
         return resp.json()
 
     def query(self, **kwargs):
@@ -70,5 +121,5 @@ class Account(object):
             if k in PARAMS and params.get(k, None) is not None:
                 params[k] = params.get(k)
         url = self.generate_url(self.QUERY_USER)
-        resp = requests.get(url,  params=params)
+        resp = requests.get(url, params=params)
         return resp.json()
