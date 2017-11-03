@@ -2,7 +2,7 @@
 from __future__ import unicode_literals, absolute_import
 from django.conf import settings
 from pwadmin.models.pwmanager import PwManager
-from utils.sdk import sneakSDK
+from admin_interface.account import Account
 
 
 class SneakyBackend(object):
@@ -14,7 +14,7 @@ class SneakyBackend(object):
         pwmanager = PwManager.objects.filter(uid=uid)
         if not pwmanager.exists():
             return None
-        r = sneakSDK.account.verify_user(uid, password)
+        r = Account.verify_user(uid, password, settings.API_HOST)
         if r['code'] == 0:
             return pwmanager.first()
 
