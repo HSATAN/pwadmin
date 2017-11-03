@@ -16,9 +16,13 @@ class PaginationStore {
 
     }
 
+    /**
+     * 有多少个item_size 取上限.
+     * @returns {number}
+     */
     @computed
     get maxIndex() {
-        return Math.floor(this.total / this.item_size)
+        return Math.ceil(this.total / this.item_size);
     }
 
     @computed
@@ -96,8 +100,8 @@ class PaginationView extends React.Component {
                         <a className="page-link" href="javascript:void(0)" value={obj} onClick={this.hdClick}>{obj}</a>
                     </li>
                 )}
-                <li className={store.item_index >= store.maxIndex ? "page-item disabled" : "page-item"}>
-                    <a className="page-link disabled"
+                <li className={(store.item_index >= store.maxIndex || store.maxIndex == 1) ? "page-item disabled" : "page-item"}>
+                    <a className="page-link"
                        href="javascript:void(0)"
                        onClick={this.hdNext}
                     >Next</a></li>

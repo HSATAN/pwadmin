@@ -15,5 +15,14 @@
             <a href="#" class="list-group-item {% if item == 'reset_account' %}active{% else %}list-group-item-action{% endif %}">账号回收</a>
         </div>
     </li>
+    <a href="{% url 'pwadmin:account-messages' %}" class="list-group-item {% if item == 'messages' %}active{% else %}list-group-item-action{% endif %}">系统消息管理</a>
+    <li href="javascript:void(0);" class="list-group-item">用户数据查询
+        <div class="list-group">
+            <a href="{% url 'pwadmin:account-record' %}" class="list-group-item {% if item == 'account-record' %}active{% else %}list-group-item-action{% endif %}">通话记录查询</a>
+            <a href="{% url 'pwadmin:account-captcha' %}" class="list-group-item {% if item == 'account-captcha' %}active{% else %}list-group-item-action{% endif %}">验证码查询</a>
+            <a href="{% url 'pwadmin:account-payment' %}" class="list-group-item {% if item == 'account-payment' %}active{% else %}list-group-item-action{% endif %}">收支查询</a>
+            <a href="{% url 'pwadmin:account-score' %}" class="list-group-item {% if item == 'account-score' %}active{% else %}list-group-item-action{% endif %}">积分明细</a>
 
+        </div>
+    </li>
 </ul>

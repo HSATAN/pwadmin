@@ -1,47 +1,54 @@
 # -*- coding: utf-8 -*-
 import math
-import time
-import hashlib
-from requests import request
-from .strings import METHOD_GET
-from urlparse import *
+from six.moves.urllib_parse import urljoin
+import requests
+from requests import session
+from functools import wraps
 
 
 class BaseHandler(object):
-    def __init__(self, host):
+    def __init__(self, host='http://172.16.10.134:9090', user=None, token=None):
+        self.user = None
         self.host = host
+        self.session = session()
+        self.session.headers.update({"Authorization": "JWT {}".format(token)})
 
-    def generate_url(self, params):
-        return "{}{}".format(self.host, params)
+    def __del__(self):
+        try:
+            self.session.close()
+        except TypeError:
+            pass
 
-    @staticmethod
-    def sign_request(method, path, params):
-        keys = params.keys()
-        keys.sort()
-        params_list = []
-        for key in keys:
-            detail = params[key]
-            if type(detail) is unicode:
-                detail = detail.encode('utf-8')
-            params_list.append('{}={}'.format(key, detail))
-        params_str = ''.join(params_list)
-        if type(params_str) is unicode:
-            params_str = params_str.encode('utf-8')
-        sign_src = '{}{}{}'.format(method, path, params_str)
-        sign = hashlib.md5(sign_src).hexdigest().lower()
-        return sign
+    def query(self, url, method, params=None, data=None, **kwargs):
+        """基础查询.
 
-    def query_method(self, auth, method, url, **kwargs):
-        path = urlparse(url).path[1:]
-        if auth:
-            sign = self.sign_request(method, path, kwargs)
-            kwargs.pop("session_data")
-            kwargs["sign"] = sign
-        if method == METHOD_GET:
-            resp = request(method, url, params=kwargs)
-        else:
-            resp = request(method, url, data=kwargs)
+        Returns:
+
+        """
+        url = urljoin(self.host, url)
+        resp = self.session.request(
+            method=method,
+            url=url,
+            params=params,
+            data=data,
+            **kwargs
+        )
         return resp.json()
+
+    def query_method(self, auth=None, method='get', url='', **kwargs):
+        url = urljoin(self.host, url)
+        return getattr(self, method, self.not_implemented)(url, **kwargs)
+
+    @wraps(requests.get)
+    def get(self, url, params=None, **kwargs):
+        return self.session.request('get', url, params=params, **kwargs)
+
+    @wraps(requests.post)
+    def post(self, url, data=None, json=None, **kwargs):
+        return self.session.request('post', url=url, data=data, json=json, **kwargs)
+
+    def not_implemented(self, **kwargs):
+        raise NotImplementedError("")
 
     @staticmethod
     def get_page_list(begin_index, page_size, total):

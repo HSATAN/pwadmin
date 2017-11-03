@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth import views as auth_view
 from django.http import JsonResponse, HttpResponseRedirect
 from pwadmin.forms.pwmanager import SignInForm
-from utils.sdk import sneakSDK
+from admin_interface.account import Account
 from django.conf import settings
 
 
@@ -28,8 +28,8 @@ class SignIn(View):
                 password = form.cleaned_data['password']
                 user = authenticate(request, uid=uid, password=password)
                 if user is not None:
-                    token = sneakSDK.account.login(uid, password)['token']
-                    user.set_token(token)
+                    token = Account.login(uid, password, host=settings.API_HOST)['token']
+                    user.set_sdk(token)
                     login(request, user)
                     return JsonResponse({
                         "code": 0
@@ -45,7 +45,6 @@ class SignIn(View):
                 })
         else:
             pass
-
 
 
 class LogoutView(auth_view.LogoutView):
