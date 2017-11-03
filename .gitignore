@@ -16,3 +16,4 @@ requirements
 
 src/static
 src/peiwoadmin/static_root
+src/tmp
