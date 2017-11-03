@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (
-    pwmanager, index, task, accounts, statistic, permissions, contents
+    pwmanager, index, task, accounts, statistic, permissions, contents, config
 )
 
 urlpatterns = [
@@ -20,6 +20,9 @@ urlpatterns = [
     url(r'^account/record/$', accounts.RecordList.as_view(), name='account-record'),
     url(r'^account/payment/$', accounts.PaymentList.as_view(), name='account-payment'),
     url(r'^account/score/$', accounts.ScoreList.as_view(), name='account-score'),
+    url(r'^config/$', config.Index.as_view(), name='config-list'),
+    url(r'^config/ad/$', config.AD.as_view(), name='config-ad'),
+    url(r'^config/Gift/$', config.Gift.as_view(), name='config-gift'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),

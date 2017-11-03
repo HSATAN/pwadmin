@@ -15,7 +15,11 @@ class PwManagerAdmin(admin.ModelAdmin):
 
 @admin.register(models.PwMessage)
 class PwMessageAdmin(admin.ModelAdmin):
-
     list_display = ['id', 'name', 'message', 'status', 'update_time']
     search_fields = ['id', 'name']
     list_filter = ['status']
+
+
+@admin.register(models.PwBatchSetting)
+class PwPwBatchSettingAdmin(admin.ModelAdmin):
+    pass

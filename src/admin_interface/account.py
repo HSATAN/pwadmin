@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 import requests
-from requests import session
+from .common import BaseHandler, urljoin
 
 
-class Account(object):
+class Account(BaseHandler):
     VERIFY_USER = '/admin/account/verifyuser'
     QUERY_USER = '/admin/userinfo/user_query'
     LOGIN = '/admin/account/login'
@@ -15,29 +15,16 @@ class Account(object):
     SCORE_QUERY = '/admin/userinfo/score_ledger'
     RECORD_QUERY = '/admin/callrecord/query'
 
-    def __init__(self, host='http://172.16.10.134:9090', user=None):
-        self.user = None
-        self.host = host
-        self.session = session()
-        if hasattr(user, 'token'):
-            self.session.headers.update({"Authorization": "JWT {}".format(user.token)})
-
-    def __del__(self):
-        self.session.close()
-
-    def generate_url(self, url):
-        return "{}{}".format(self.host, url)
-
-    def verify_user(self, uid, password):
-        url = self.generate_url(self.VERIFY_USER)
+    @classmethod
+    def verify_user(cls, uid, password, host=''):
+        url = urljoin(host, cls.VERIFY_USER)
         resp = requests.post(url, data={"uid": uid, 'password': password})
         return resp.json()
 
     def list(self, query, size=10, page=1, order_by='uid'):
-        url = self.generate_url(self.ACCOUNT_LIST)
-        resp = self.session.request(
+        resp = self.query(
+            self.ACCOUNT_LIST,
             method='get',
-            url=url,
             params={'query': query,
                     'size': size,
                     'page': page,
@@ -56,10 +43,9 @@ class Account(object):
         Returns:
 
         """
-        url = self.generate_url(self.RESET_PASSWORDD_URL)
-        resp = self.session.request(
-            method='post',
-            url=url,
+        resp = self.query(
+            self.RESET_PASSWORDD_URL,
+            'post',
             data={
                 'password': password,
                 'tuid': tuid,
@@ -68,8 +54,9 @@ class Account(object):
         )
         return resp.json()
 
-    def login(self, uid, password):
-        url = self.generate_url(self.LOGIN)
+    @classmethod
+    def login(cls, uid, password, host=''):
+        url = urljoin(host, cls.LOGIN)
         resp = requests.post(url, data={'uid': uid, 'password': password})
         return resp.json()
 
@@ -124,8 +111,9 @@ class Account(object):
         for k in kwargs:
             if k in PARAMS and params.get(k, None) is not None:
                 params[k] = params.get(k)
-        url = self.generate_url(self.QUERY_USER)
-        resp = requests.get(url, params=params)
+        resp = self.query(self.QUERY_USER,
+                          'get',
+                          params=params)
         return resp.json()
 
     def captcha(self, phone, page_index=1, page_size=25, state=None, captcha_type=None, begin_time=None, end_time=None):
@@ -143,20 +131,16 @@ class Account(object):
         Returns:
 
         """
-        url = self.generate_url(self.CAPTCHA_QUERY)
-        resp = self.session.request(
-            method='get',
-            url=url,
-            params={
-                'phone': phone,
-                'page_index': page_index,
-                'page_size': page_size,
-                'state': state,
-                'captcha_type': captcha_type,
-                'begin_time': begin_time,
-                'end_time': end_time
-            }
-        )
+        resp = self.query(self.CAPTCHA_QUERY,
+                          'get',
+                          params={
+                              'phone': phone,
+                              'page_index': page_index,
+                              'page_size': page_size,
+                              'state': state,
+                              'captcha_type': captcha_type,
+                              'begin_time': begin_time,
+                              'end_time': end_time})
         return resp.json()
 
     def payment(self, tuid, page_index=1, page_size=25, type='', begin_time=None, end_time=None):
@@ -173,33 +157,16 @@ class Account(object):
         Returns:
 
         """
-        url = self.generate_url(self.PAYMENT_QUERY)
-        resp = self.session.request(
-            method='get',
-            url=url,
-            params={
-                'tuid': tuid,
-                'type': type,
-                'page_index': page_index,
-                'page_size': page_size,
-                'begin_time': begin_time,
-                'end_time': end_time
-            }
-        )
-        return resp.json()
 
-    def query(self, url, method, params=None, data=None):
-        """积分明细.
-
-        Returns:
-
-        """
-        url = self.generate_url(url)
-        resp = self.session.request(
-            method=method,
-            url=url,
-            params=params,
-            data=data)
+        resp = self.query(url=self.PAYMENT_QUERY,
+                          method='get',
+                          params={
+                              'tuid': tuid,
+                              'type': type,
+                              'page_index': page_index,
+                              'page_size': page_size,
+                              'begin_time': begin_time,
+                              'end_time': end_time})
         return resp.json()
 
     def score(self, tuid, page_index=1, page_size=25, type='', begin_time=None, end_time=None):
