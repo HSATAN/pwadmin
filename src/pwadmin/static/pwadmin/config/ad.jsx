@@ -32,21 +32,39 @@ class TableView extends React.Component {
         return <div>
             <table className="table table-striped">
                 <thead>
-                <tr className="row">
-                    <th className="col-3 text-truncate">编号</th>
-                    <th className="col-3 text-truncate">配置名</th>
-                    <th className="col-3 text-truncate">配置值</th>
-                    <th className="col-3 text-truncate">操作</th>
+                <tr>
+                    <th>标题</th>
+                    <th>图片</th>
+                    <th>跳转类型</th>
+                    <th>链接地址</th>
+                    <th>三方链接</th>
+                    <th>用户</th>
+                    <th>类型</th>
+                    <th>序号</th>
+                    <th>扩展数据</th>
+                    <th>查看次数</th>
+                    <th>点击次数</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {items.map(
                     (item, index) => {
-                        return <tr key={index} className="row">
-                            <th className="col-3 text-truncate">{item.key}</th>
-                            <th className="col-3 text-truncate">{item.description}</th>
-                            <th className="col-3 text-truncate">{item.value}</th>
-                            <th className="col-3 text-truncate">修改</th>
+                        return <tr key={index}>
+                            <th>{item.title}</th>
+                            <th><img src={item.image_url + "/thumbnail"} style={{width: 64+"px", height: 64+"px"}}/></th>
+                            <th>{item.redirect_route}</th>
+                            <th>{item.link_url}</th>
+                            <th>{item.target_url}</th>
+                            <th>{item.uid}</th>
+                            <th>{item.type}</th>
+                            <th>{item.index}</th>
+                            <th>{item.extra}</th>
+                            <th>{item.view_times}</th>
+                            <th>{item.click_times}</th>
+                            <th>{item.create_time}</th>
+                            <th>修改</th>
                         </tr>
                     })
                 }
@@ -92,7 +110,7 @@ class SearchView extends React.Component {
                                id="like-min"
                                name="like-min"
                                onChange={this.handleChange}
-                               placeholder="请输入配置名"/>
+                               placeholder="请输入标题名"/>
                     </div>
                     <div className="col-sm-2">
                         <input type="submit"

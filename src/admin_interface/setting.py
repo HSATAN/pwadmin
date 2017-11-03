@@ -10,6 +10,7 @@ from .common import BaseHandler
 class Setting(BaseHandler):
     QUERY = '/admin/setting/query'
     AD_QUERY = '/admin/ads/query'
+    GIFT_QUERY = '/admin/gift/list2'
 
     def list(self, key, desc, page, size):
         """配置列表.
@@ -41,3 +42,19 @@ class Setting(BaseHandler):
             'page_size': size
         }
         return self.query(self.AD_QUERY, 'get', params=params)
+
+    def gift(self, query=None, page=1, size=25, style=0, state=-1, special=0):
+        """礼物.
+
+        Returns:
+
+        """
+        params = {
+            'page_index': page,
+            'page_size': size,
+            'style': style,
+            'state': state,
+            'is_special': special,
+            'query': query
+        }
+        return self.query(self.GIFT_QUERY, 'get', params=params)
