@@ -64,8 +64,14 @@ class CoverVerify(View, BaseHandler):
 
     def get(self, request, *args, **kwargs):
         queries = request.GET.dict()
-        backups = deepcopy(queries)
         return render(request, self.template)
+
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        params.pop('csrfmiddlewaretoken')
+        data = sneakSDK.common.query_sneaky(**params)
+        print data
+        return HttpResponse(json.dumps(data))
 
 
 class LiveProduct(View, BaseHandler):

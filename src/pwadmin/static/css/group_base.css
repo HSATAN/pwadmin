@@ -124,3 +124,7 @@ ul li {
     color: black;
     margin-left: -7px;
 }
+
+.data_table tr, td {
+    text-align: center;
+}

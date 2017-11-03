@@ -1,4 +1,7 @@
-#f {
-    background-color: #02a1c9;
-    color: white;
+.data_table th, td {
+    width: 16%;
+}
+.cover_pic {
+    width: 60px;
+    height: 60px;
 }

@@ -25,11 +25,15 @@
                 <th>申请时间</th>
                 <th>操作</th>
             </tr>
+            <tbody></tbody>
         </table>
     </div>
 {% endblock %}
 
 {% block extends_script %}
+    <script type="application/javascript">
+        var csrfmiddlewaretoken='{{ csrf_token }}';
+    </script>
     <script src="{% static 'js/group_base.js' %}"></script>
     <script src="{% static 'js/cover_verify.js' %}"></script>
 {% endblock %}
