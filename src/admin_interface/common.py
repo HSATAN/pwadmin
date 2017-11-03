@@ -37,7 +37,12 @@ class BaseHandler(object):
 
     def query_method(self, auth=None, method='get', url='', **kwargs):
         url = urljoin(self.host, url)
-        return getattr(self, method, self.not_implemented)(url, **kwargs)
+        method = method.lower()
+        if method == 'get':
+            return self.get(url, params=kwargs)
+        if method == 'post':
+            return self.query(url, method, data=kwargs)
+        return getattr(self, method.lower(), self.not_implemented)(url, **kwargs)
 
     @wraps(requests.get)
     def get(self, url, params=None, **kwargs):
@@ -47,7 +52,7 @@ class BaseHandler(object):
     def post(self, url, data=None, json=None, **kwargs):
         return self.session.request('post', url=url, data=data, json=json, **kwargs)
 
-    def not_implemented(self, **kwargs):
+    def not_implemented(self, *args, **kwargs):
         raise NotImplementedError("")
 
     @staticmethod

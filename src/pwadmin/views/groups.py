@@ -69,7 +69,8 @@ class CoverVerify(View, BaseHandler):
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         print data
         return HttpResponse(json.dumps(data))
 

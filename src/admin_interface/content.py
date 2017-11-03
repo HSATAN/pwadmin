@@ -9,14 +9,7 @@ class CommonInterface(BaseHandler):
     def query_sneaky(self, **kwargs):
         api_request = kwargs.pop('api_request')
         query_method = kwargs.pop('query_method')
-        params_base = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
-        }
-        params = dict(params_base.items() + kwargs.items())
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **params)
+        data = self.query_method(True, query_method, api_request, **kwargs)
         return data
 
     def data_get(self, queries):
