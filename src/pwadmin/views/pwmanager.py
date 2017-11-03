@@ -29,7 +29,7 @@ class SignIn(View):
                 user = authenticate(request, uid=uid, password=password)
                 if user is not None:
                     token = sneakSDK.account.login(uid, password)['token']
-                    user.set_token(token)
+                    user.set_sdk(token)
                     login(request, user)
                     return JsonResponse({
                         "code": 0
@@ -45,7 +45,6 @@ class SignIn(View):
                 })
         else:
             pass
-
 
 
 class LogoutView(auth_view.LogoutView):

@@ -215,6 +215,12 @@ class PwMessage(models.Model):
         managed = False
         db_table = 'pw_message'
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'message': self.message,
+        }
 
 class PwReport(models.Model):
     add_time = models.DateTimeField(blank=True, null=True)
