@@ -22,7 +22,7 @@ class Account(BaseHandler):
         return resp.json()
 
     def list(self, query, size=10, page=1, order_by='uid'):
-        resp = self.query(
+        resp = self.request(
             self.ACCOUNT_LIST,
             method='get',
             params={'query': query,
@@ -43,7 +43,7 @@ class Account(BaseHandler):
         Returns:
 
         """
-        resp = self.query(
+        resp = self.request(
             self.RESET_PASSWORDD_URL,
             'post',
             data={
@@ -111,9 +111,9 @@ class Account(BaseHandler):
         for k in kwargs:
             if k in PARAMS and params.get(k, None) is not None:
                 params[k] = params.get(k)
-        resp = self.query(self.QUERY_USER,
+        resp = self.request(self.QUERY_USER,
                           'get',
-                          params=params)
+                            params=params)
         return resp.json()
 
     def captcha(self, phone, page_index=1, page_size=25, state=None, captcha_type=None, begin_time=None, end_time=None):
@@ -131,9 +131,9 @@ class Account(BaseHandler):
         Returns:
 
         """
-        resp = self.query(self.CAPTCHA_QUERY,
+        resp = self.request(self.CAPTCHA_QUERY,
                           'get',
-                          params={
+                            params={
                               'phone': phone,
                               'page_index': page_index,
                               'page_size': page_size,
@@ -158,9 +158,9 @@ class Account(BaseHandler):
 
         """
 
-        resp = self.query(url=self.PAYMENT_QUERY,
-                          method='get',
-                          params={
+        resp = self.request(url=self.PAYMENT_QUERY,
+                            method='get',
+                            params={
                               'tuid': tuid,
                               'type': type,
                               'page_index': page_index,
@@ -183,7 +183,7 @@ class Account(BaseHandler):
             'begin_time': begin_time,
             'end_time': end_time
         }
-        return self.query(self.SCORE_QUERY, 'get', params=params)
+        return self.request(self.SCORE_QUERY, 'get', params=params)
 
     def record(self, uid=None, uid2=None, call_id=None, state=None, end_state=-1, call_type=-1, channel=-1,
                begin_time=None, end_time=None, page_index=1, page_size=25, ):
@@ -205,4 +205,4 @@ class Account(BaseHandler):
             'channel': channel,
             'call_id': call_id
         }
-        return self.query(self.RECORD_QUERY, 'get', params=params)
+        return self.request(self.RECORD_QUERY, 'get', params=params)

@@ -7,17 +7,86 @@ import {PaginationView, PaginationStore} from "./../pagination.jsx";
 import {PWSettingStore} from "./models.jsx";
 
 @observer
-class TableView extends React.Component {
+class PopupItemView extends React.Component {
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this)
+        this.hClick = this.hClick.bind(this);
+        this.hChange = this.hChange.bind(this);
+    }
+
+    hChange(field, e) {
+        const store = this.props.store;
+        store[field] = e.target.value;
+        store.save = false;
+
+    }
+
+    hClick(e) {
+        const store = this.props.store;
+        store.Save()
+    }
+
+    render() {
+        const store = this.props.store;
+        return <div className="modal fade" id="changeItem" tabIndex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">修改配置</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="form">
+                            <label className="sr-only" htmlFor="inlineFormInputName2">编号</label>
+                            <input type="text"
+                                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                   id="inlineFormInputName2"
+                                   readOnly
+                                   value={store.key}
+                                   placeholder="Jane Doe"/>
+                            <label className="sr-only"
+                                   htmlFor="inlineFormInputName2">配置名</label>
+                            <input type="text"
+                                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                   id="inlineFormInputName2"
+                                   value={store.description}
+                                   onChange={this.hChange.bind(this, 'description')}
+                                   placeholder="Jane Doe"/>
+                            <label className="sr-only" htmlFor="inlineFormInputName2">配置值</label>
+                            <textarea type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                      id="inlineFormInputName2" placeholder="Jane Doe"
+                                      onChange={this.hChange.bind(this, 'value')}
+                                      value={store.value}/>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">不保存退出</button>
+                        <button type="button" className="btn btn-primary" onClick={this.hClick}>保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+
+
+@observer
+class TableView extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(item, e) {
         const pws_store = this.props.pws_store;
-        pws_store.key = item.key;
-        pws_store.description = item.description;
         pws_store.value = item.value;
+        pws_store.description = item.description;
+        pws_store.key = item.key;
     }
 
     render() {
@@ -27,6 +96,7 @@ class TableView extends React.Component {
             return <div></div>
         }
         const pws_store = this.props.pws_store;
+
         const code = data.code;
         const page_info = data.page_info || {};
         const total = Math.ceil(page_info.row_count / page_info.page_size);
@@ -67,45 +137,7 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
-            <div className="modal fade" id="changeItem" tabIndex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">修改配置</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="form">
-                                <label className="sr-only" htmlFor="inlineFormInputName2">{pws_store.key}</label>
-                                <input type="text"
-                                       className="form-control mb-2 mr-sm-2 mb-sm-0"
-                                       id="inlineFormInputName2"
-                                       readOnly
-                                       value={pws_store.key}
-                                       placeholder="Jane Doe"/>
-                                <label className="sr-only"
-                                       htmlFor="inlineFormInputName2">{pws_store.description}</label>
-                                <input type="text"
-                                       className="form-control mb-2 mr-sm-2 mb-sm-0"
-                                       id="inlineFormInputName2"
-                                       value={pws_store.description}
-                                       placeholder="Jane Doe"/>
-                                <label className="sr-only" htmlFor="inlineFormInputName2">值</label>
-                                <textarea type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
-                                          id="inlineFormInputName2" placeholder="Jane Doe"
-                                          value={pws_store.value} />
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">关闭</button>
-                            <button type="button" className="btn btn-primary">保存</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <PopupItemView store={pws_store}/>
             <PaginationView store={new PaginationStore(total, 10, store, page)}/>
         </div>
     }
@@ -180,7 +212,8 @@ class ConfigListView extends React.Component {
             <div className="row">
                 <div className="col-11">
                     <SearchView store={store}/>
-                    <TableView store={store} pws_store={new PWSettingStore()}/>
+                    <TableView store={store}
+                               pws_store={new PWSettingStore(this.props.url, this.props.csrfmiddlewaretoken)}/>
                 </div>
             </div>
         </div>
@@ -190,6 +223,6 @@ class ConfigListView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <ConfigListView store={new BaseSearchStore(url)}/>,
+    <ConfigListView store={new BaseSearchStore(url)} url={url} csrfmiddlewaretoken={csrfmiddlewaretoken}/>,
     document.getElementById('root')
 );

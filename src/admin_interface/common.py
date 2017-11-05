@@ -19,7 +19,7 @@ class BaseHandler(object):
         except TypeError:
             pass
 
-    def query(self, url, method, params=None, data=None, **kwargs):
+    def request(self, url, method, params=None, data=None, **kwargs):
         """基础查询.
 
         Returns:

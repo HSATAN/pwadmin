@@ -24,6 +24,14 @@ class Index(LoginRequiredBaseView):
         data = user.sdk.config.list(desc=desc, page=page, size=size)
         return JsonResponse(data)
 
+    def post(self, request, *args, **kwargs):
+        key = request.POST.get('key', None)
+        value = request.POST.get('value', None)
+        description = request.POST.get('description', None)
+        user = request.user
+        resp = user.sdk.config.update(key=key, value=value, desc=description)
+        return JsonResponse(resp)
+
 
 class AD(LoginRequiredBaseView):
     """

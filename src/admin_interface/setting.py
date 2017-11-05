@@ -8,7 +8,7 @@ from .common import BaseHandler
 
 
 class Setting(BaseHandler):
-    QUERY = '/admin/setting/query'
+    CONFIG_URL = '/admin/setting'
     AD_QUERY = '/admin/ads/query'
     GIFT_QUERY = '/admin/gift/list2'
 
@@ -27,7 +27,7 @@ class Setting(BaseHandler):
         params = {'desc': desc,
                   'page': page,
                   'size': size}
-        return self.query(self.QUERY, 'get', params=params)
+        return self.request(self.CONFIG_URL, 'get', params=params)
 
     def ad_query(self, type=-1, page=1, size=25):
         """广告图片.
@@ -40,7 +40,7 @@ class Setting(BaseHandler):
             'page_index': page,
             'page_size': size
         }
-        return self.query(self.AD_QUERY, 'get', params=params)
+        return self.request(self.AD_QUERY, 'get', params=params)
 
     def gift(self, query=None, page=1, size=25, style=0, state=-1, special=0):
         """礼物.
@@ -56,4 +56,13 @@ class Setting(BaseHandler):
             'is_special': special,
             'query': query
         }
-        return self.query(self.GIFT_QUERY, 'get', params=params)
+        return self.request(self.GIFT_QUERY, 'get', params=params)
+
+    def update(self, key, value=None, desc=None):
+        data = {
+            'key': key,
+            'value': value,
+            'description': desc
+        }
+        return self.request(
+            self.CONFIG_URL, 'post', data=data)
