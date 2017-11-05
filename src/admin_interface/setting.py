@@ -12,7 +12,7 @@ class Setting(BaseHandler):
     AD_QUERY = '/admin/ads/query'
     GIFT_QUERY = '/admin/gift/list2'
 
-    def list(self, key, desc, page, size):
+    def list(self, desc=None, page=1, size=25):
         """配置列表.
 
         Args:
@@ -24,8 +24,7 @@ class Setting(BaseHandler):
         Returns:
 
         """
-        params = {'key': key,
-                  'desc': desc,
+        params = {'desc': desc,
                   'page': page,
                   'size': size}
         return self.query(self.QUERY, 'get', params=params)

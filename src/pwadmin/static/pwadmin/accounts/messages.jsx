@@ -19,8 +19,7 @@ class SearchView extends React.Component {
 
     componentDidMount(){
         const store = this.props.store;
-        store.query = null;
-        store.search = true;
+        store.Search();
     }
 
     handleClick(e) {

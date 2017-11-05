@@ -17,12 +17,11 @@ class Index(LoginRequiredBaseView):
         openapi: "3.0.0"
 
         """
-        key = request.GET.get('key', None)
-        desc = request.GET.get('desc', None)
+        desc = request.GET.get('query', None)
         page = request.GET.get('page', 1) or 1
         size = request.GET.get('size', 25) or 25
         user = request.user
-        data = user.sdk.config.list(key, desc, page, size)
+        data = user.sdk.config.list(desc=desc, page=page, size=size)
         return JsonResponse(data)
 
 

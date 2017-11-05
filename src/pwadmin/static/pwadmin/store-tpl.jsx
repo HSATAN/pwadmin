@@ -31,6 +31,11 @@ class BaseSearchStore {
         this.search = true;
     }
 
+    Search(){
+        this.query = null;
+        this.search = true;
+    }
+
     set Query(value){
         this.search = false;
         this.query = value;
