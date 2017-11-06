@@ -40,11 +40,42 @@ class AD(LoginRequiredBaseView):
     template = 'pwadmin/config/ad.html'
 
     def get_ajax(self, request, *args, **kwargs):
+        query = request.GET.get('query', None) or None
         _type = request.GET.get('type', -1) or -1
         page = request.GET.get('page', 1) or 1
         size = request.GET.get('size', 25) or 25
         user = request.user
         data = user.sdk.config.ad_query(type=_type, page=page, size=size)
+        return JsonResponse(data)
+
+    def post(self, request, *args, **kwargs):
+        id = request.POST.get('id')
+        title = request.POST.get('title')
+        image_url = request.POST.get('image_url')
+        link_url = request.POST.get('link_url')
+        target_url = request.POST.get('target_url')
+        extra = request.POST.get('extra')
+        state = request.POST.get('state')
+        _type = request.POST.get('type')
+        index = request.POST.get('index')
+        redirect_route = request.POST.get('redirect_route')
+        tuid = request.POST.get('tuid')
+
+        user = request.user
+        data = {
+            'id': id,
+            'title': title,
+            'image_url': image_url,
+            'link_url': link_url,
+            'target_url': target_url,
+            'extra': extra,
+            'state': state,
+            'type': _type,
+            'index': index,
+            'redirect_route': redirect_route,
+            'tuid': tuid
+        }
+        data = user.sdk.config.ad_update(data)
         return JsonResponse(data)
 
 

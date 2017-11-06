@@ -10,6 +10,7 @@ from .common import BaseHandler
 class Setting(BaseHandler):
     CONFIG_URL = '/admin/setting'
     AD_QUERY = '/admin/ads/query'
+    AD_SAVE = '/admin/ads/save2'
     GIFT_QUERY = '/admin/gift/list2'
 
     def list(self, desc=None, page=1, size=25):
@@ -59,6 +60,16 @@ class Setting(BaseHandler):
         return self.request(self.GIFT_QUERY, 'get', params=params)
 
     def update(self, key, value=None, desc=None):
+        """更新配置.
+
+        Args:
+            key:
+            value:
+            desc:
+
+        Returns:
+
+        """
         data = {
             'key': key,
             'value': value,
@@ -66,3 +77,11 @@ class Setting(BaseHandler):
         }
         return self.request(
             self.CONFIG_URL, 'post', data=data)
+
+    def ad_update(self, data):
+        """广告更新.
+
+        Returns:
+
+        """
+        return self.request(self.AD_SAVE, method='post', data=data)

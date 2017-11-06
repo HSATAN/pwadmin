@@ -155,10 +155,6 @@ class SearchView extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentDidMount() {
-        const store = this.props.store;
-        store.Search();
-    }
 
     handleClick(e) {
         e.preventDefault();
@@ -201,6 +197,12 @@ class SearchView extends React.Component {
 
 @observer
 class ConfigListView extends React.Component {
+
+    componentDidMount() {
+        const store = this.props.store;
+        store.Search();
+    }
+
     render() {
         const store = this.props.store;
         return <div>
