@@ -132,6 +132,123 @@ class PopupItemView extends React.Component {
             </div>
         </div>
     }
+}
+
+@observer
+class PopupItemCreateView extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const store = this.props.store;
+        return <div className="modal fade"
+                    id="createItem"
+                    tabIndex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">新增广告</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <form>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">标题</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.title}
+                                           onChange={store.UpdateField.bind(store, 'title')}
+                                           placeholder="标题"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">图片</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.image_url}
+                                           onChange={store.UpdateField.bind(store, 'image_url')}
+                                           placeholder="图片"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">跳转类型</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.redirect_route}
+                                           onChange={store.UpdateField.bind(store, 'redirect_route')}
+                                           placeholder="跳转类型"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">链接地址</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.link_url}
+                                           onChange={store.UpdateField.bind(store, 'link_url')}
+                                           placeholder="链接地址"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">三方链接</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.target_url}
+                                           onChange={store.UpdateField.bind(store, 'target_url')}
+                                           placeholder="三方链接"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">类型</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.type}
+                                           onChange={store.UpdateField.bind(store, 'type')}
+                                           placeholder="类型"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">扩展数据</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.extra}
+                                           onChange={store.UpdateField.bind(store, 'extra')}
+                                           placeholder="扩展数据"/>
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <label className="col-sm-2 col-form-label">序号</label>
+                                <div className="col-sm-10">
+                                    <input type="text"
+                                           className="form-control"
+                                           value={store.index}
+                                           onChange={store.UpdateField.bind(store, 'index')}
+                                           placeholder="序号"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">不保存退出</button>
+                        <button type="button" className="btn btn-primary" onClick={store.Create.bind(store)}
+                                data-dismiss="modal">
+                            保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
 }
 
@@ -304,28 +421,40 @@ class FilterView extends React.Component {
 class ADView extends React.Component {
 
     componentDidMount() {
-        const store = this.props.store;
+        const store = this.props.search_store;
         store.Search();
     }
 
     render() {
-        const store = this.props.store;
+        const store = this.props.search_store;
+        const url = this.props.url;
+        const csrfmiddlewaretoken = this.props.csrfmiddlewaretoken;
         return <div>
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item"><a href="#">Home</a></li>
-                <li className="breadcrumb-item"><a href="#">配置</a></li>
-                <li className="breadcrumb-item active">广告图片</li>
+            <ol className="breadcrumb row">
+                <div className="col-11">
+                    <li className="breadcrumb-item"><a href="#">Home</a></li>
+                    <li className="breadcrumb-item"><a href="#">配置</a></li>
+                    <li className="breadcrumb-item active">广告图片</li>
+                </div>
+                <div className="col-1">
+                    <button className="btn btn-success"
+                            data-toggle="modal"
+                            data-target="#createItem"
+                    ><i className="fa fa-plus" aria-hidden="true"></i>新增
+                    </button>
+                </div>
             </ol>
             <div className="row">
                 <div className="col-10">
                     <SearchView store={store}/>
                     <TableView store={store}
-                               ad_store={new ADStore(url = this.props.url, csrfmiddlewaretoken = this.props.csrfmiddlewaretoken)}/>
+                               ad_store={new ADStore(url, csrfmiddlewaretoken)}/>
                 </div>
                 <div className="col-2">
                     <FilterView store={store}/>
                 </div>
             </div>
+            <PopupItemCreateView store={new ADStore(url, csrfmiddlewaretoken)}/>
         </div>
     }
 }
@@ -333,7 +462,7 @@ class ADView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <ADView store={new BaseSearchStore(url)}
+    <ADView search_store={new BaseSearchStore(url)}
             url={url}
             csrfmiddlewaretoken={csrfmiddlewaretoken}
     />,

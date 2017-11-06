@@ -1,7 +1,7 @@
 import React from 'react';
 import {observable, computed, reaction, autorun, action} from "mobx";
 
-class BaseHTTPServicesStore {
+class BaseHTTPModelStore {
     @observable data = null;  // 服务器返回的数据, 同ajax.done的data
     @observable commit = false; // 是否提交数据到服务器.
 
@@ -15,6 +15,26 @@ class BaseHTTPServicesStore {
 
     DeleteItem(item) {
 
+    }
+
+    Create() {
+        this.action = 'PUT';
+        this.commit = true;
+    }
+
+    Delete(item) {
+        this.action = 'DELETE';
+        this.commit = true;
+    }
+
+    Update(item) {
+        this.action = 'POST';
+        this.commit = true;
+    }
+
+    Query(item) {
+        this.action = 'GET';
+        this.commit = true;
     }
 
     @action
@@ -44,7 +64,7 @@ class BaseHTTPServicesStore {
 
 }
 
-class PWSettingStore extends BaseHTTPServicesStore {
+class PWSettingStore extends BaseHTTPModelStore {
     @observable key = '';
     @observable description = '';
     @observable value = '';
@@ -80,7 +100,7 @@ class PWSettingStore extends BaseHTTPServicesStore {
 
 }
 
-class ADStore extends BaseHTTPServicesStore {
+class ADStore extends BaseHTTPModelStore {
     @observable id = '';
     @observable title = '';  // 标题
     @observable image_url = '';  // 图片
@@ -151,7 +171,6 @@ class ADStore extends BaseHTTPServicesStore {
         this.action = 'POST';
         this.commit = true;
     }
-
 }
 
 

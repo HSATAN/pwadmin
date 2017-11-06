@@ -87,6 +87,9 @@ class AD(LoginRequiredBaseView):
         resp = request.user.sdk.config.ad_delete(data={'id': _id})
         return JsonResponse(resp)
 
+    def put(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
 
 class Gift(LoginRequiredBaseView):
     """
