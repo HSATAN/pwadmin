@@ -9,8 +9,7 @@ from .common import BaseHandler
 
 class Setting(BaseHandler):
     CONFIG_URL = '/admin/setting'
-    AD_QUERY = '/admin/ads/query'
-    AD_SAVE = '/admin/ads/save2'
+    AD_URL = '/admin/ads'
     GIFT_QUERY = '/admin/gift/list2'
 
     def list(self, desc=None, page=1, size=25):
@@ -30,18 +29,19 @@ class Setting(BaseHandler):
                   'size': size}
         return self.request(self.CONFIG_URL, 'get', params=params)
 
-    def ad_query(self, type=-1, page=1, size=25):
+    def ad_query(self, type=-1, page=1, size=25, query=''):
         """广告图片.
 
         Returns:
 
         """
         params = {
+            'query': query,
             'type': type,
             'page_index': page,
             'page_size': size
         }
-        return self.request(self.AD_QUERY, 'get', params=params)
+        return self.request(self.AD_URL, 'get', params=params)
 
     def gift(self, query=None, page=1, size=25, style=0, state=-1, special=0):
         """礼物.
@@ -84,4 +84,15 @@ class Setting(BaseHandler):
         Returns:
 
         """
-        return self.request(self.AD_SAVE, method='post', data=data)
+        return self.request(self.AD_URL, method='post', data=data)
+
+    def ad_delete(self, data):
+        """广告删除.
+
+        Args:
+            data:
+
+        Returns:
+
+        """
+        return self.request(self.AD_URL, method='delete', json=data)

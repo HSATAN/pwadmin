@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import json
 from django.http import JsonResponse
 from contrib.views import LoginRequiredBaseView
 
@@ -45,21 +46,22 @@ class AD(LoginRequiredBaseView):
         page = request.GET.get('page', 1) or 1
         size = request.GET.get('size', 25) or 25
         user = request.user
-        data = user.sdk.config.ad_query(type=_type, page=page, size=size)
+        data = user.sdk.config.ad_query(query=query, type=_type, page=page, size=size)
         return JsonResponse(data)
 
     def post(self, request, *args, **kwargs):
-        id = request.POST.get('id')
-        title = request.POST.get('title')
-        image_url = request.POST.get('image_url')
-        link_url = request.POST.get('link_url')
-        target_url = request.POST.get('target_url')
-        extra = request.POST.get('extra')
-        state = request.POST.get('state')
-        _type = request.POST.get('type')
-        index = request.POST.get('index')
-        redirect_route = request.POST.get('redirect_route')
-        tuid = request.POST.get('tuid')
+        POST = json.loads(request.body)
+        id = POST.get('id')
+        title = POST.get('title')
+        image_url = POST.get('image_url')
+        link_url = POST.get('link_url')
+        target_url = POST.get('target_url')
+        extra = POST.get('extra')
+        state = POST.get('state')
+        _type = POST.get('type')
+        index = POST.get('index')
+        redirect_route = POST.get('redirect_route')
+        tuid = POST.get('tuid')
 
         user = request.user
         data = {
@@ -77,6 +79,13 @@ class AD(LoginRequiredBaseView):
         }
         data = user.sdk.config.ad_update(data)
         return JsonResponse(data)
+
+    def delete(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        _id = body.get('id')
+
+        resp = request.user.sdk.config.ad_delete(data={'id': _id})
+        return JsonResponse(resp)
 
 
 class Gift(LoginRequiredBaseView):

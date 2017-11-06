@@ -202,6 +202,10 @@ class TableView extends React.Component {
                                         onClick={popup_store.LoadItem.bind(popup_store, item)}
                                         data-target="#changeItem">修改
                                 </button>
+                                <button type="button"
+                                        className="btn btn-danger"
+                                        onClick={popup_store.DeleteItem.bind(popup_store, item)}>删除
+                                </button>
                             </th>
                         </tr>
                     })

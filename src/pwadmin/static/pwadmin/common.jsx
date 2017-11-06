@@ -69,4 +69,5 @@ class FilterBaseView extends React.Component {
     }
 }
 
+
 export {FilterBaseView, FilterBaseStore}
