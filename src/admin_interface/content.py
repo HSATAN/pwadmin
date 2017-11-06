@@ -10,7 +10,10 @@ class CommonInterface(BaseHandler):
         api_request = kwargs.pop('api_request')
         query_method = kwargs.pop('query_method')
         data = self.query_method(True, query_method, api_request, **kwargs)
-        return data
+        if isinstance(data, dict):
+            return data
+        else:
+            return data.json()
 
     def data_get(self, queries):
         backups = deepcopy(queries)

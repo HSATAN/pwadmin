@@ -128,3 +128,40 @@ ul li {
 .data_table tr, td {
     text-align: center;
 }
+
+.amend_pic {
+    position: fixed;
+    top: 50%;
+    left: 40%;
+    width: 300px;
+    height: 300px;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    margin-left: -150px;
+    margin-top: -150px;
+}
+
+.pic_big {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.operate {
+    background: #8cbc8c;
+    color: #fff;
+    display: inline-block;
+    padding: 4px 15px;
+    margin-bottom: 3px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 15px;
+    border: 1px solid transparent;
+    margin-left: 5px;
+}

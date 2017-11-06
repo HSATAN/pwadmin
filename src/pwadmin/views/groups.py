@@ -63,15 +63,22 @@ class CoverVerify(View, BaseHandler):
     template = 'pwadmin/groups/cover_verify.html'
 
     def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        return render(request, self.template)
+        query = {
+            'query_method': 'GET',
+            'api_request': '/admin/live/cover/list',
+            'state': 0,
+            'page_size': 10,
+            'page_index': 0
+        }
+        user = request.user
+        data = user.sdk.common.query_sneaky(**query)
+        return render(request, self.template, {'data': data, 'uid': user.uid})
 
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
         params.pop('csrfmiddlewaretoken')
         user = request.user
         data = user.sdk.common.query_sneaky(**params)
-        print data
         return HttpResponse(json.dumps(data))
 
 

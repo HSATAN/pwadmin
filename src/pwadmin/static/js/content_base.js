@@ -77,7 +77,3 @@ function query_func(data_extends, methodStr) {
         }
     });
 }
-
-function get_query_data() {
-
-}
