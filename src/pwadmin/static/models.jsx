@@ -11,7 +11,7 @@ class BaseReactionStore {
     constructor() {
         reaction(
             () => this.commit ? this.reactionData() : null,
-            data => data ? this.reaction(data) : null
+            data => data ? this[`reaction${this.action}`](data) : null
         );
     }
 
@@ -20,7 +20,22 @@ class BaseReactionStore {
     }
 
     @action
-    reaction(data) {
+    reactionGET(data) {
+
+    }
+
+    @action
+    reactionPOST(data) {
+
+    }
+
+    @action
+    reactionPUT(data) {
+
+    }
+
+    @action
+    reactionDELETE(data) {
 
     }
 }
@@ -54,21 +69,58 @@ class BaseHTTPStore extends BaseReactionStore {
         this.commit = true;
     }
 
-    Query(item) {
+    Query() {
+        this.action = 'GET';
+        this.commit = true;
+    }
+
+    Fetch(item) {
         this.action = 'GET';
         this.commit = true;
     }
 
     @action
-    reaction(data) {
+    reactionGET(data) {
         $.ajax({
             url: this.url,
-            method: this.action,
+            method: 'GET',
+            data: JSON.parse(data),
+        }).done(this.done).fail(this.fail)
+    }
+
+    @action
+    reactionPOST(data) {
+        $.ajax({
+            url: this.url,
+            method: 'POST',
             data: data,
             contentType: "application/json",
             headers: this.headers
         }).done(this.done).fail(this.fail)
     }
+
+    @action
+    reactionPUT(data) {
+        $.ajax({
+            url: this.url,
+            method: 'PUT',
+            data: data,
+            contentType: "application/json",
+            headers: this.headers
+        }).done(this.done).fail(this.fail)
+    }
+
+    @action
+    reactionDELETE(data) {
+        $.ajax({
+            url: this.url,
+            method: 'DELETE',
+            data: data,
+            contentType: "application/json",
+            headers: this.headers
+        }).done(this.done).fail(this.fail)
+    }
+
 
     @action.bound
     done(data, status, xhr) {
