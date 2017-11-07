@@ -4,13 +4,89 @@ import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
 import {BaseSearchStore} from './../store-tpl.jsx';
 import {PaginationView, PaginationStore} from "./../pagination.jsx";
-import {FilterBaseStore, FilterBaseView} from './../common.jsx';
+import {PWSettingStore} from "./models.jsx";
+
+@observer
+class PopupItemView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.hClick = this.hClick.bind(this);
+        this.hChange = this.hChange.bind(this);
+    }
+
+    hChange(field, e) {
+        const store = this.props.store;
+        store[field] = e.target.value;
+        store.save = false;
+
+    }
+
+    hClick(e) {
+        const store = this.props.store;
+        store.Save()
+    }
+
+    render() {
+        const store = this.props.store;
+        return <div className="modal fade" id="changeItem" tabIndex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">修改配置</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="form">
+                            <label className="sr-only" htmlFor="inlineFormInputName2">编号</label>
+                            <input type="text"
+                                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                   id="inlineFormInputName2"
+                                   readOnly
+                                   value={store.key}
+                                   placeholder="Jane Doe"/>
+                            <label className="sr-only"
+                                   htmlFor="inlineFormInputName2">配置名</label>
+                            <input type="text"
+                                   className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                   id="inlineFormInputName2"
+                                   value={store.description}
+                                   onChange={this.hChange.bind(this, 'description')}
+                                   placeholder="Jane Doe"/>
+                            <label className="sr-only" htmlFor="inlineFormInputName2">配置值</label>
+                            <textarea type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
+                                      id="inlineFormInputName2" placeholder="Jane Doe"
+                                      onChange={this.hChange.bind(this, 'value')}
+                                      value={store.value}/>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">不保存退出</button>
+                        <button type="button" className="btn btn-primary" onClick={this.hClick}>保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
 
 
 @observer
 class TableView extends React.Component {
+
     constructor(props) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(item, e) {
+        const pws_store = this.props.pws_store;
+        pws_store.value = item.value;
+        pws_store.description = item.description;
+        pws_store.key = item.key;
     }
 
     render() {
@@ -19,6 +95,8 @@ class TableView extends React.Component {
         if (_.isEmpty(data)) {
             return <div></div>
         }
+        const pws_store = this.props.pws_store;
+
         const code = data.code;
         const page_info = data.page_info || {};
         const total = Math.ceil(page_info.row_count / page_info.page_size);
@@ -32,26 +110,34 @@ class TableView extends React.Component {
         return <div>
             <table className="table table-striped">
                 <thead>
-                <tr className="row">
-                    <th className="col-3 text-truncate">编号</th>
-                    <th className="col-3 text-truncate">配置名</th>
-                    <th className="col-3 text-truncate">配置值</th>
-                    <th className="col-3 text-truncate">操作</th>
+                <tr>
+                    <th>编号</th>
+                    <th>配置名</th>
+                    <th>配置值</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {items.map(
                     (item, index) => {
-                        return <tr key={index} className="row">
-                            <th className="col-3 text-truncate">{item.key}</th>
-                            <th className="col-3 text-truncate">{item.description}</th>
-                            <th className="col-3 text-truncate">{item.value}</th>
-                            <th className="col-3 text-truncate">修改</th>
+                        return <tr key={index}>
+                            <th>{item.key}</th>
+                            <th>{item.description}</th>
+                            <th className="d-inline-block" style={{width: 20 + "rem"}}>{item.value}</th>
+                            <th>
+                                <button type="button"
+                                        className="btn btn-primary"
+                                        data-toggle="modal"
+                                        onClick={this.handleClick.bind(this, item)}
+                                        data-target="#changeItem">修改
+                                </button>
+                            </th>
                         </tr>
                     })
                 }
                 </tbody>
             </table>
+            <PopupItemView store={pws_store}/>
             <PaginationView store={new PaginationStore(total, 10, store, page)}/>
         </div>
     }
@@ -69,6 +155,7 @@ class SearchView extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+
     handleClick(e) {
         e.preventDefault();
         const store = this.props.store;
@@ -77,8 +164,7 @@ class SearchView extends React.Component {
 
     handleChange(e) {
         const store = this.props.store;
-        store.search = false;
-        store.query = e.target.value;
+        store.Query = e.target.value;
     }
 
 
@@ -111,6 +197,12 @@ class SearchView extends React.Component {
 
 @observer
 class ConfigListView extends React.Component {
+
+    componentDidMount() {
+        const store = this.props.store;
+        store.Search();
+    }
+
     render() {
         const store = this.props.store;
         return <div>
@@ -122,7 +214,8 @@ class ConfigListView extends React.Component {
             <div className="row">
                 <div className="col-11">
                     <SearchView store={store}/>
-                    <TableView store={store}/>
+                    <TableView store={store}
+                               pws_store={new PWSettingStore(this.props.url, this.props.csrfmiddlewaretoken)}/>
                 </div>
             </div>
         </div>
@@ -132,6 +225,6 @@ class ConfigListView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <ConfigListView store={new BaseSearchStore(url)}/>,
+    <ConfigListView store={new BaseSearchStore(url)} url={url} csrfmiddlewaretoken={csrfmiddlewaretoken}/>,
     document.getElementById('root')
 );

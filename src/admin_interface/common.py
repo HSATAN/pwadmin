@@ -19,21 +19,20 @@ class BaseHandler(object):
         except TypeError:
             pass
 
-    def query(self, url, method, params=None, data=None, **kwargs):
+    def request(self, url, method, params=None, data=None, **kwargs):
         """基础查询.
 
         Returns:
 
         """
         url = urljoin(self.host, url)
-        resp = self.session.request(
+        return self.session.request(
             method=method,
             url=url,
             params=params,
             data=data,
             **kwargs
         )
-        return resp.json()
 
     def query_method(self, auth=None, method='get', url='', **kwargs):
         url = urljoin(self.host, url)
