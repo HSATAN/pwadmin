@@ -1,106 +1,28 @@
 import React from 'react';
 import {observable, computed, reaction, autorun, action} from "mobx";
+import {ModelStore} from './../../models.jsx';
 
-class BaseHTTPModelStore {
-    @observable data = null;  // 服务器返回的数据, 同ajax.done的data
-    @observable commit = false; // 是否提交数据到服务器.
 
-    UpdateField(field, e) {
-
-    }
-
-    LoadItem(item) {
-
-    }
-
-    DeleteItem(item) {
-
-    }
-
-    Create() {
-        this.action = 'PUT';
-        this.commit = true;
-    }
-
-    Delete(item) {
-        this.action = 'DELETE';
-        this.commit = true;
-    }
-
-    Update(item) {
-        this.action = 'POST';
-        this.commit = true;
-    }
-
-    Query(item) {
-        this.action = 'GET';
-        this.commit = true;
-    }
-
-    @action
-    request(url, method, data, headers = {}) {
-        $.ajax({
-            url: url,
-            method: method,
-            data: data,
-            contentType: "application/json",
-            headers: headers
-        }).done(this.done).fail(this.fail)
-
-    }
-
-    @action.bound
-    done(data, status, xhr) {
-        this.data = data;
-        this.commit = false;
-    }
-
-    @action.bound
-    fail(qXHR, textStatus, errorThrown) {
-        this.commit = false;
-        alert(textStatus);
-        console.log(errorThrown);
-    }
-
-}
-
-class PWSettingStore extends BaseHTTPModelStore {
+class PWSettingStore extends ModelStore {
     @observable key = '';
     @observable description = '';
     @observable value = '';
-    @observable save = false;
-
-    constructor(url, csrfmiddlewaretoken) {
-        super();
-        this.csrfmiddlewaretoken = csrfmiddlewaretoken;
-        reaction(
-            () => this.reactionData(),
-            data => {
-                if (data) {
-                    this.request(url, 'POST', data)
-                }
-            });
-    }
 
     reactionData() {
-        if (!this.save) {
-            return false;
-        }
         return JSON.stringify({
             key: this.key,
             description: this.description,
-            csrfmiddlewaretoken: this.csrfmiddlewaretoken,
             value: this.value
         })
     }
 
     Save() {
-        this.save = true;
+        this.commit = true;
     }
 
 }
 
-class ADStore extends BaseHTTPModelStore {
+class ADStore extends ModelStore {
     @observable id = '';
     @observable title = '';  // 标题
     @observable image_url = '';  // 图片
@@ -111,21 +33,7 @@ class ADStore extends BaseHTTPModelStore {
     @observable extra = ''; // 扩展数据.
     @observable index = ''; // 序号.
     @observable create_time = ''; // 创建时间.
-    @observable action = 'GET'; //
-    constructor(url, csrfmiddlewaretoken) {
-        super();
-        reaction(
-            () => this.reactionData(),
-            data => data ? this.request(url, this.action, data, {
-                "X-CSRFToken": csrfmiddlewaretoken
-            }) : null
-        );
-    }
 
-    UpdateField(field, e) {
-        this[field] = e.target.value;
-
-    }
 
     DeleteItem(item) {
         const result = window.confirm("确定要删除吗");
@@ -136,24 +44,7 @@ class ADStore extends BaseHTTPModelStore {
         }
     }
 
-    LoadItem(item) {
-        this.id = item.id;
-        this.title = item.title;
-        this.image_url = item.image_url;
-        this.redirect_route = item.redirect_route; // 跳转类型.
-        this.link_url = item.link_url; // 链接地址.
-        this.target_url = item.target_url; // 三方链接.
-        this.type = item.type; // 类型.
-        this.extra = item.extra; // 扩展数据.
-        this.index = item.index; // 序号.
-        this.create_time = item.create_time; // 创建时间.
-        this.commit = false;
-    }
-
     reactionData() {
-        if (!this.commit) {
-            return false;
-        }
         return JSON.stringify({
             id: this.id,
             title: this.title,
@@ -173,5 +64,45 @@ class ADStore extends BaseHTTPModelStore {
     }
 }
 
+class GiftStore extends ModelStore {
+    @observable name = ''; // 名称
+    @observable price = '';
+    @observable description = '';
+    @observable image_url = ''; // 缩略图
+    @observable extra = ''; // 素材
+    @observable style = ''; // 类型
+    @observable live_uid = ''; // 主播陪我号
+    @observable rich_uid = ''; // 土豪陪我号
+    @observable id = ''; //
+    @observable index = ''; // 序号
 
-export {PWSettingStore, ADStore}
+
+    reactionData() {
+        return JSON.stringify({
+            name: this.name,
+            price: this.price,
+            description: this.description,
+            image_url: this.image_url,
+            extra: this.extra,
+            style: this.style,
+            live_uid: this.live_uid,
+            rich_uid: this.rich_uid,
+            id: this.id,
+            index: this.index
+        })
+    }
+
+    DeleteItem(id) {
+        const result = window.confirm("确定要删除吗");
+        if (result) {
+            this.action = 'DELETE';
+            this.id = id;
+            this.commit = true;
+        }
+    }
+
+
+}
+
+
+export {PWSettingStore, ADStore, GiftStore}

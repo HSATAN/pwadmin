@@ -10,7 +10,7 @@ from .common import BaseHandler
 class Setting(BaseHandler):
     CONFIG_URL = '/admin/setting'
     AD_URL = '/admin/ads'
-    GIFT_QUERY = '/admin/gift/list2'
+    GIFT_URL = '/admin/gift'
 
     def list(self, desc=None, page=1, size=25):
         """配置列表.
@@ -27,37 +27,7 @@ class Setting(BaseHandler):
         params = {'desc': desc,
                   'page': page,
                   'size': size}
-        return self.request(self.CONFIG_URL, 'get', params=params)
-
-    def ad_query(self, type=-1, page=1, size=25, query=''):
-        """广告图片.
-
-        Returns:
-
-        """
-        params = {
-            'query': query,
-            'type': type,
-            'page_index': page,
-            'page_size': size
-        }
-        return self.request(self.AD_URL, 'get', params=params)
-
-    def gift(self, query=None, page=1, size=25, style=0, state=-1, special=0):
-        """礼物.
-
-        Returns:
-
-        """
-        params = {
-            'page_index': page,
-            'page_size': size,
-            'style': style,
-            'state': state,
-            'is_special': special,
-            'query': query
-        }
-        return self.request(self.GIFT_QUERY, 'get', params=params)
+        return self.request(self.CONFIG_URL, 'get', params=params).json()
 
     def update(self, key, value=None, desc=None):
         """更新配置.
@@ -76,7 +46,59 @@ class Setting(BaseHandler):
             'description': desc
         }
         return self.request(
-            self.CONFIG_URL, 'post', data=data)
+            self.CONFIG_URL, 'post', data=data).json()
+
+    def gift_query(self, query=None, page=1, size=25, style=0, state=-1, special=0):
+        """礼物查询.
+
+        Returns:
+
+        """
+        params = {
+            'page_index': page,
+            'page_size': size,
+            'style': style,
+            'state': state,
+            'is_special': special,
+            'query': query
+        }
+        return self.request(self.GIFT_URL, 'get', params=params).json()
+
+    def gift_update(self, data):
+        """礼物更新.
+
+        Args:
+            data:
+
+        Returns:
+
+        """
+        return self.request(self.GIFT_URL, method='post', data=data).json()
+
+    def gift_delete(self, data):
+        """礼物删除.
+
+        Args:
+            data:
+
+        Returns:
+
+        """
+        return self.request(self.GIFT_URL, method='delete', json=data).json()
+
+    def ad_query(self, type=-1, page=1, size=25, query=''):
+        """广告图片.
+
+        Returns:
+
+        """
+        params = {
+            'query': query,
+            'type': type,
+            'page_index': page,
+            'page_size': size
+        }
+        return self.request(self.AD_URL, 'get', params=params).json()
 
     def ad_update(self, data):
         """广告更新.
@@ -84,7 +106,7 @@ class Setting(BaseHandler):
         Returns:
 
         """
-        return self.request(self.AD_URL, method='post', data=data)
+        return self.request(self.AD_URL, method='post', data=data).json()
 
     def ad_delete(self, data):
         """广告删除.
@@ -95,4 +117,4 @@ class Setting(BaseHandler):
         Returns:
 
         """
-        return self.request(self.AD_URL, method='delete', json=data)
+        return self.request(self.AD_URL, method='delete', json=data).json()

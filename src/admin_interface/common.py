@@ -26,14 +26,13 @@ class BaseHandler(object):
 
         """
         url = urljoin(self.host, url)
-        resp = self.session.request(
+        return self.session.request(
             method=method,
             url=url,
             params=params,
             data=data,
             **kwargs
         )
-        return resp.json()
 
     def query_method(self, auth=None, method='get', url='', **kwargs):
         url = urljoin(self.host, url)
