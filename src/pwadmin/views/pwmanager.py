@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
-from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth import views as auth_view
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from pwadmin.forms.pwmanager import SignInForm
+from admin_interface.account import Account
+from django.conf import settings
 
 
 class SignIn(View):
@@ -25,6 +28,8 @@ class SignIn(View):
                 password = form.cleaned_data['password']
                 user = authenticate(request, uid=uid, password=password)
                 if user is not None:
+                    token = Account.login(uid, password, host=settings.API_HOST)['token']
+                    user.set_sdk(token)
                     login(request, user)
                     return JsonResponse({
                         "code": 0
@@ -42,6 +47,17 @@ class SignIn(View):
             pass
 
 
-
 class LogoutView(auth_view.LogoutView):
     template_name = 'pwadmin/logged_out.html'
+
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if hasattr(user, 'delete_token'):
+            user.delete_token()
+        auth_logout(request)
+        next_page = self.get_next_page()
+        if next_page:
+            # Redirect to this page until the session has been cleared.
+            return HttpResponseRedirect(next_page)
+        return super(LogoutView, self).dispatch(request, *args, **kwargs)

@@ -32,4 +32,15 @@ DATABASES = {
     },
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'tmp', 'django_cache'),
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'MAX_ENTRIES': 100*100*100
+        }
+    }
+}
+
 API_HOST = 'http://172.16.10.134:9090'

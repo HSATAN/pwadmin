@@ -1,0 +1,11 @@
+<ul class="list-group">
+{#    <li href="javascript:void(0);" class="list-group-item">配置管理#}
+{#        <div class="list-group">#}
+{#            <a href="{% url 'pwadmin:accounts' %}" class="list-group-item {% if item == 'register' %}active{% else %}list-group-item-action{% endif %}">注册用户</a>#}
+{#            <a href="#" class="list-group-item list-group-item-action">用户动态</a>#}
+{#        </div>#}
+{#    </li>#}
+    <a href="{% url 'pwadmin:config-list' %}" class="list-group-item {% if item == 'config-list' %}active{% else %}list-group-item-action{% endif %}">配置管理</a>
+    <a href="{% url 'pwadmin:config-ad' %}" class="list-group-item {% if item == 'config-ad' %}active{% else %}list-group-item-action{% endif %}">广告图片</a>
+    <a href="{% url 'pwadmin:config-gift' %}" class="list-group-item {% if item == 'config-gift' %}active{% else %}list-group-item-action{% endif %}">礼物</a>
+</ul>

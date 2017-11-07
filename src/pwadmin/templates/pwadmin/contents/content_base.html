@@ -1,0 +1,29 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% block left_content %}
+    <div class="left_menu">
+        <ul class="list-group">
+            <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
+            <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
+            <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
+            <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
+            <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block right_content %}
+    {% block right_content_new %}{% endblock %}
+    <div class="modalPage">
+        <button class="pageNum" onclick="servlet_page({{ extends.page_left }})">上一页</button>
+        {% for val in extends.total_list %}
+            {% if extends.page == val %}
+            <button class="pageUnique" onclick="servlet_page({{ val }})">{{ val }}</button>
+            {% else %}
+            <button class="pageNum" onclick="servlet_page({{ val }})">{{ val }}</button>
+            {% endif %}
+        {% empty %}
+            ...
+        {% endfor %}
+        <button class="pageNum" onclick="servlet_page({{ extends.page_right }})">下一页</button>
+        <span class="page_count">共{{ extends.page_count }}页</span>
+    </div>
+{% endblock %}

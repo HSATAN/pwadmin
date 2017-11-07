@@ -1,34 +1,90 @@
 # -*- coding: utf-8 -*-
-import hashlib
-from requests import request
-from .strings import METHOD_GET
-from urlparse import *
+import math
+from six.moves.urllib_parse import urljoin
+import requests
+from requests import session
+from functools import wraps
 
 
 class BaseHandler(object):
-    def __init__(self, host):
+    def __init__(self, host='http://172.16.10.134:9090', user=None, token=None):
+        self.user = None
         self.host = host
+        self.session = session()
+        self.session.headers.update({"Authorization": "JWT {}".format(token)})
 
-    def generate_url(self, params):
-        return "{}{}".format(self.host, params)
+    def __del__(self):
+        try:
+            self.session.close()
+        except TypeError:
+            pass
+
+    def request(self, url, method, params=None, data=None, **kwargs):
+        """基础查询.
+
+        Returns:
+
+        """
+        url = urljoin(self.host, url)
+        return self.session.request(
+            method=method,
+            url=url,
+            params=params,
+            data=data,
+            **kwargs
+        )
+
+    def query_method(self, auth=None, method='get', url='', **kwargs):
+        url = urljoin(self.host, url)
+        return getattr(self, method, self.not_implemented)(url, **kwargs)
+
+    @wraps(requests.get)
+    def get(self, url, params=None, **kwargs):
+        return self.session.request('get', url, params=params, **kwargs)
+
+    @wraps(requests.post)
+    def post(self, url, data=None, json=None, **kwargs):
+        return self.session.request('post', url=url, data=data, json=json, **kwargs)
+
+    def not_implemented(self, **kwargs):
+        raise NotImplementedError("")
 
     @staticmethod
-    def sign_request(method, path, params):
-        keys = params.keys()
-        keys.sort()
-        params_str = ''.join([('%s=%s' % (key, params[key])) for key in keys])
-        sign_src = ''.join((method, path, params_str))
-        sign = hashlib.md5(sign_src).hexdigest().lower()
-        return sign
+    def get_page_list(begin_index, page_size, total):
+        """
+        分页
+        Args:
+            begin_index: 起始页，从0开始
+            page_size: 每页显示多少条数据
+            total: 总共多少条数据
 
-    def query_method(self, auth, method, url, **kwargs):
-        path = urlparse(url).path[1:]
-        if auth:
-            sign = self.sign_request(method, path, kwargs)
-            kwargs.pop("session_data")
-            kwargs["sign"] = sign
-        if method == METHOD_GET:
-            resp = request(method, url, params=kwargs)
+        Returns:
+
+        """
+        pages_show = 5
+        page_count = int(math.ceil(float(total) / page_size))
+        mid = int(math.ceil(float(pages_show) / 2))
+        if begin_index + 1 <= mid:
+            page_from = 1
+        elif begin_index + 1 >= page_count - pages_show + 1:
+            page_from = page_count - pages_show + 1
         else:
-            resp = request(method, url, data=kwargs)
-        return resp.json()
+            page_from = begin_index - mid + 2
+        pages = []
+        for count in range(page_from, page_from + 5):
+            if count > page_count:
+                continue
+            if count <= 0:
+                continue
+            pages.append(count)
+        return pages, page_count
+
+    @staticmethod
+    def get_left_right(page_now, page_count):
+        page_left = page_now - 1
+        if page_now == 1:
+            page_left = 1
+        page_right = page_now + 1
+        if page_now == page_count:
+            page_right = page_count
+        return page_left, page_right
