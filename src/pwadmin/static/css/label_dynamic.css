@@ -97,7 +97,7 @@
     float: right;
 }
 
-.data_table {
+#data_table {
     width: 1000px;
     border-bottom: 1px #ddd solid;
     height: 50px;
@@ -105,19 +105,19 @@
     margin-bottom: 20px;
 }
 
-.data_table tr {
+#data_table tr {
     height: 57px;
     text-align: center;
     border-bottom: 1px #ddd solid;
 }
 
-.data_table th {
+#data_table th {
     font-weight: bold;
     border-bottom: 1px #ddd solid;
     text-align: center;
 }
 
-.data_table td {
+#data_table td {
     text-align: center;
 }
 

@@ -3,12 +3,15 @@ $.ajaxFunc = function (source, successHandle, errorHandle) {
     var url = source.url;
     var methodStr = source.methodStr;
     var data = source.data;
+    var headers = {'X-CSRFToken': csrfmiddlewaretoken};
     $.ajax({
         url: url,
         type: methodStr,
         data: data,
         dataType: "json",
-        async: true}).done(successHandle).fail(errorHandle);
+        headers: headers,
+        async: true
+    }).done(successHandle).fail(errorHandle);
 };
 
 //获取页码、上一页、下一页
@@ -57,8 +60,7 @@ function hide_pic() {
     $('.amend_pic').css('display', 'none');
 }
 
-//函数，处理ajax失败的情况
+// 函数，处理ajax失败的情况
 function errorHandle() {
     alert('ajax error');
 }
-

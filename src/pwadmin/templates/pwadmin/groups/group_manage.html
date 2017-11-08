@@ -1,8 +1,7 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
 
-{% block extends_head %}
-    <link rel="stylesheet" href="{% static 'css/group_base.css' %}">
+{% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/group_manage.css' %}">
 {% endblock %}
 
@@ -23,23 +22,12 @@
                 <button class="clear in">清空</button>
             </div>
         </div>
-        <table class="data_table">
-            <tr>
-                <th>群组名</th>
-                <th>群头像</th>
-                <th>群主头像</th>
-                <th>群主陪我号</th>
-                <th>当前声望/总声望</th>
-                <th>成员数/游客数</th>
-                <th>门票</th>
-                <th>招新</th>
-                <th>操作</th>
-            </tr>
+        <table id="data_table">
+            <tbody></tbody>
         </table>
     </div>
 {% endblock %}
 
-{% block extends_script %}
-    <script src="{% static 'js/group_base.js' %}"></script>
+{% block script_extends %}
     <script src="{% static 'js/group_manage.js' %}"></script>
 {% endblock %}

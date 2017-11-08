@@ -44,7 +44,7 @@
 
 .data_search {
     width: 950px;
-    margin: 20px auto;
+    margin: 20px auto 10px;
 }
 
 .data_search div {
@@ -76,4 +76,35 @@
 
 .in {
     display: inline-block;
+}
+
+#data_table {
+    width: 950px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-size: 14px;
+}
+
+#data_table tr {
+    border: 1px solid #e8e8e8;
+}
+
+#data_table th {
+    text-align: center;
+    word-break: break-all;
+    font-weight: bold;
+    color: #333;
+}
+
+.total {
+    display: block;
+    color: deepskyblue;
+    font-size: 14px;
+    width: 950px;
+    height: 14px;
+    margin: 0 auto 7px;
+}
+
+button:focus{
+    outline: none;
 }

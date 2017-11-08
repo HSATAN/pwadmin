@@ -54,26 +54,6 @@ ul li {
     margin-top: 50px;
 }
 
-
-
-.data_table {
-    width: 900px;
-    margin: 20px auto;
-}
-
-.data_table th {
-    padding: 8px;
-    text-align: center;
-    word-break: break-all;
-    font-weight: bold;
-    font-size: 14px;
-    color: #333;
-}
-
-.data_table tr {
-    border: 1px solid #e8e8e8;
-}
-
 .search {
     background-color: #5cb85c;
     font-size: 14px;
@@ -96,11 +76,6 @@ ul li {
     color: black;
     margin-left: -7px;
 }
-
-.data_table tr, td {
-    text-align: center;
-}
-
 
 .operate {
     background: #8cbc8c;

@@ -1,161 +1,138 @@
 # -*- coding: utf-8 -*-
-import math
 import json
-import time
-from copy import deepcopy
 from django.shortcuts import render, HttpResponse
-from django.views.generic import View
-from utils.sdk import sneakSDK
-from admin_interface.strings import PAGE_SIZE
-from admin_interface.common import BaseHandler
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.core.serializers import serialize
-from admin_interface.strings import METHOD_GET, METHOD_POST
+from contrib.views import LoginRequiredBaseView
 
 
-class GroupManage(View, BaseHandler):
+class GroupManage(LoginRequiredBaseView):
     template = 'pwadmin/groups/group_manage.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
 
-
-class LiveOnline(View, BaseHandler):
+class LiveOnline(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_online.html'
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        return render(request, self.template, {'uid': user.uid})
-
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
-        params.pop('csrfmiddlewaretoken')
         user = request.user
         data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
-class LiveHide(View, BaseHandler):
+class LiveHide(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_hide.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LiveSearch(View, BaseHandler):
+class LiveSearch(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_search.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template)
-
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
-        params.pop('csrfmiddlewaretoken')
         user = request.user
         data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
-class LiveSpecial(View, BaseHandler):
+class LiveSpecial(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_special.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template)
-
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
-        params.pop('csrfmiddlewaretoken')
         user = request.user
         data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
-class CoverVerify(View, BaseHandler):
+class CoverVerify(LoginRequiredBaseView):
     template = 'pwadmin/groups/cover_verify.html'
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        return render(request, self.template, {'uid': user.uid})
-
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
-        params.pop('csrfmiddlewaretoken')
         user = request.user
         data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
-class LiveProduct(View, BaseHandler):
+class LiveProduct(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_product.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LiveRoomReport(View, BaseHandler):
+class LiveRoomReport(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_room_report.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LiveGiftReport(View, BaseHandler):
+class LiveGiftReport(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_gift_report.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LiveDramaReport(View, BaseHandler):
+class LiveDramaReport(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_drama_report.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LiveGiftIncome(View, BaseHandler):
+class LiveGiftIncome(LoginRequiredBaseView):
     template = 'pwadmin/groups/live_gift_income.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class LabelRankList(View, BaseHandler):
+class LabelRankList(LoginRequiredBaseView):
     template = 'pwadmin/groups/label_rank_list.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class SociatyList(View, BaseHandler):
+class SociatyList(LoginRequiredBaseView):
     template = 'pwadmin/groups/sociaty_list.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
-class SociatyLeaguerList(View, BaseHandler):
+class SociatyLeaguerList(LoginRequiredBaseView):
     template = 'pwadmin/groups/sociaty_leaguer_list.html'
 
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        return render(request, self.template)
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))

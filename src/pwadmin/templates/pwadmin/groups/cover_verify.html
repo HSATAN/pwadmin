@@ -9,8 +9,8 @@
     <div class="right_content">
         <div class="data_search">
             <input type="text" placeholder="请输入主播陪我号" class="tuid in">
-            <input type="text" placeholder="开始时间" class="begin_time in">
-            <input type="text" placeholder="结束时间" class="end_time in">
+            <input type="text" placeholder="开始时间" class="begin_time in time">
+            <input type="text" placeholder="结束时间" class="end_time in time">
             <div class="right in">
                 <button class="search in" onclick="flashData()">搜索</button>
                 <button class="clear in">清空</button>
@@ -19,13 +19,14 @@
             </div>
         </div>
         <span class="total">查询结束，总记录{{ data.data.page_info.row_count }}</span>
-        <table class="data_table">
+        <table id="data_table">
             <tbody>
             </tbody>
         </table>
         <div class="modalPage"></div>
     </div>
 {% endblock %}
+
 
 {% block script_extends %}
     <script src="{% static 'js/cover_verify.js' %}"></script>

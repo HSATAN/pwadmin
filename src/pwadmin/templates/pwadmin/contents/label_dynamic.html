@@ -17,8 +17,8 @@
     <div class="right_content">
         <div class="inline">
             <input type="text" placeholder="请输入陪我号" value="{{ extends.tuid }}" class="search_top peiwo_id">
-            <input type="text" placeholder="开始时间" value="{{ extends.begin_time }}" class="search_top start">
-            <input type="text" placeholder="结束时间" value="{{ extends.end_time }}" class="search_top end">
+            <input type="text" placeholder="开始时间" value="{{ extends.begin_time }}" class="search_top start time">
+            <input type="text" placeholder="结束时间" value="{{ extends.end_time }}" class="search_top end time">
         </div>
         <div class="inline search_right">
             <div class="search_day">
@@ -55,7 +55,7 @@
             <input type="checkbox" class="checkall">
         </div>
         <hr />
-        <table class="data_table">
+        <table id="data_table">
             <tr>
                 <th class="data_id">陪我号</th>
                 <th class="data_nick">昵称</th>

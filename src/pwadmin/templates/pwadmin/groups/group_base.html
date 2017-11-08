@@ -41,9 +41,8 @@
 {% block extends_script %}
     <script type="application/javascript">
         var csrfmiddlewaretoken = '{{ csrf_token }}';
-        var userId = '{{ uid }}';
+        var userId = {{ request.user.uid }};
     </script>
-    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/group_base.js' %}"></script>
     {% block script_extends %}{% endblock %}

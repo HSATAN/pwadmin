@@ -4,9 +4,10 @@ loadLabelclassification();
 // 加载主类别子类别
 loadCategories();
 
-// loadTable({});
+// 加载table部分
+loadTable({});
 
-// 加载table部分的代码
+// 获取table数据
 function loadTable(data) {
     var dataSend = {
         'query_method': 'GET',
@@ -17,8 +18,7 @@ function loadTable(data) {
         'page_index': 1,
         'type': 2,
         'order': 'weight',
-        'desc': 1,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'desc': 1
     };
     for (var i in data) {
         dataSend[i] = data[i];
@@ -31,8 +31,9 @@ function loadTable(data) {
     $.ajaxFunc(source, fillTable, errorHandle);
 }
 
-//获取tbody的string值
-function dataTable(data) {
+// 拼table string
+function getTableStr(data) {
+    var totalCount = getTotal(data);
     var str_main = "";
     str_main += "<tr><th>" + "主播陪我号" + "</th><th>" + "主播昵称" + "</th><th>" + "直播主题" + "</th><th>" + "投票标签" + "</th><th>" + "主类别" + "</th><th>" + "子类别" + "</th><th>" + "主播头像" + "</th><th>" + "封面图" + "</th><th>" + "背景图" + "</th><th>" + "收听人数/真实/累计" + "</th><th>" + "礼物个数/价值/最近" + "</th><th>" + "点亮次数/最近" + "</th><th>" + "开始时间" + "</th><th>" + "结束时间" + "</th><th>" + "状态" + "</th><th>" + "操作" + "</th></tr>";
     if (data.hasOwnProperty('data')) {
@@ -57,7 +58,7 @@ function dataTable(data) {
                         str_main += "<td>" + live.close_time + "</td>";
                     }
                     str_main +=
-                        "<td>" + state_now + "</td><td>" +
+                        "<td>" + state_now + "</td><td style='width:10%;'>" +
                         "<button class='operate'>" + "置顶" + "</button>" +
                         "<button class='operate'>" + "屏蔽" + "</button>" +
                         "<button class='operate'>" + "查看CP榜" + "</button>" +
@@ -75,26 +76,50 @@ function dataTable(data) {
             }
         }
     }
-    return str_main;
+    var totalStr = "查询结束。总记录数:" + totalCount;
+    return [str_main, totalStr];
 }
 
-//函数处理ajax获取到的数据，填入toby
-function fillTable(data, status, xhr) {
-    var tableStr = dataTable(data);
-    $('.data_table tbody').remove();
-    $('.data_table').append("<tbody></tbody>");
-    $('.data_table tbody').append(tableStr);
-}
-
-// 获取状态
-function getStateDesc(state) {
-    if (state === 0) {
-        return "正常";
-    } else if (state === 1) {
-        return "暂停";
-    } else if (state === 2) {
-        return "停止";
+$('.search').on('click', function () {
+    var desc = 0;
+    if ($('.desc').is(':checked')) {
+        desc = 1;
     }
-    return "未知";
+    var params = {
+        'owner_uid': $('.owner_uid').val(),
+        'owner_name': $('.owner_name').val(),
+        'gift_value': $('.gift_value').val(),
+        'live_id': $('.live_id').val(),
+        'state': $('#type').val(),
+        'label_id': $('#label_type').val(),
+        'order': $('#sort').val(),
+        'desc': desc,
+        'main_label_id': $('#main_label').val(),
+        'sub_label_id': $('#sub_label').val(),
+        'begin_time': $('.begin_time').val(),
+        'end_time': $('.end_time').val(),
+    };
+    var data_find = {
+        'desc': desc,
+        'page_size': 10,
+        'page_index': 1
+    };
+    for (var index in params) {
+        if (params[index] && (params[index] !== '')) {
+            data_find[index] = params[index];
+        }
+    }
+    loadTable(data_find);
+});
+
+// 房间填数据
+function fillTable(data, status, xhr) {
+    var tableStr = getTableStr(data)[0];
+    $('#data_table tbody').remove();
+    $('#data_table').append("<tbody></tbody>");
+    $('#data_table tbody').append(tableStr);
+    var totalStr = getTableStr(data)[1];
+    $('.total').empty();
+    $('.total').append(totalStr);
 }
 

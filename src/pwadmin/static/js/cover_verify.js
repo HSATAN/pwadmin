@@ -23,7 +23,7 @@ function ShowMessage(datas) {
             if (data.code === 0) {
                 clear_table();
                 var count = data.data.page_info.row_count;
-                $('<span class="total">查询结束，总记录' + count + '</span>').insertBefore($('.data_table'));
+                $('<span class="total">查询结束，总记录' + count + '</span>').insertBefore($('#data_table'));
                 var page_info = data.data.page_info;
                 var page_str = fill_pages(page_info);
                 $('.modalPage').append(page_str);
@@ -31,10 +31,10 @@ function ShowMessage(datas) {
                 $('.bottom').append(state_str);
             }
             else {
-                $(".data_table tbody").remove();
-                $(".data_table").append('<tbody></tbody>');
+                $("#data_table tbody").remove();
+                $("#data_table").append('<tbody></tbody>');
             }
-            $('.data_table tbody').append(tbody_str);
+            $('#data_table tbody').append(tbody_str);
         }
     });
 }
@@ -94,9 +94,9 @@ function fill_pages(page_info) {
 }
 
 function clear_table() {
-    $(".data_table tbody").remove();
+    $("#data_table tbody").remove();
     $(".total").remove();
-    $(".data_table").append('<tbody></tbody>');
+    $("#data_table").append('<tbody></tbody>');
     $(".modalPage").empty();
     $(".bottom").empty();
 }

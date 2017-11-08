@@ -1,7 +1,9 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
 
-{% block extends_head %}
-    <link rel="stylesheet" href="{% static 'css/group_base.css' %}">
+{% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/live_gift_income.css' %}">
+{% endblock %}
+{% block script_extends %}
+    <script src="{% static 'js/live_gift_income.js' %}"></script>
 {% endblock %}

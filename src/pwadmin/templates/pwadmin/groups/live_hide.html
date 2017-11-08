@@ -1,8 +1,7 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
 
-{% block extends_head %}
-    <link rel="stylesheet" href="{% static 'css/group_base.css' %}">
+{% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/live_hide.css' %}">
 {% endblock %}
 
@@ -36,7 +35,7 @@
                 <button class="clear in">清空</button>
             </div>
         </div>
-        <table class="data_table">
+        <table id="data_table">
             <tr>
                 <th>主播陪我号</th>
                 <th>主播昵称</th>
@@ -59,7 +58,6 @@
     </div>
 {% endblock %}
 
-{% block extends_script %}
-    <script src="{% static 'js/group_base.js' %}"></script>
+{% block script_extends %}
     <script src="{% static 'js/live_hide.js' %}"></script>
 {% endblock %}

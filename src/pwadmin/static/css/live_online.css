@@ -21,27 +21,10 @@
     margin-left: -7px;
 }
 
-.data_table th, td:first-child {
-    width: 7%;
-}
-
-.data_table td {
+#data_table td {
     vertical-align: top;
 }
 
-.data_table th, td:nth-child(2) {
-    width: 7%;
-}
 
-.data_table th, td:last-child {
-    width: 7%;
-}
-
-.total {
-    color: deepskyblue;
-    margin: 0 auto 0 40px;
-    display: inline-block;
-    font-size: 14px;
-}
 
 

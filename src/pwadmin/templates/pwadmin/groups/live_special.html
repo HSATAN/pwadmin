@@ -11,7 +11,7 @@
             <input type="text" placeholder="请输入主播陪我号" class="in owner_uid">
             <input type="text" placeholder="请输入主播昵称" class="in owner_name">
             <input type="text" placeholder="请输入礼物价值" class="in gift_value">
-            <input type="text" placeholder="请输入直播ID" class="in live_id"><br/>
+            <input type="text" placeholder="请输入直播ID" class="in live_id">
             <div class="in">
                 状态：
                 <select class='form-control in' style="width: 120px;" id="type">
@@ -50,14 +50,15 @@
                 <select class="form-control in" style="width: 120px;" id="sub_label">
                 </select>
             </div>
-            <input type="text" placeholder="开始时间" class="begin_time">
-            <input type="text" placeholder="结束时间" class="end_time">
+            <input type="text" placeholder="开始时间" class="begin_time time">
+            <input type="text" placeholder="结束时间" class="end_time time">
             <div class="right in">
                 <button class="search in">搜索</button>
                 <button class="clear in" onclick="clear_search()">清空</button>
             </div>
         </div>
-        <table class="data_table">
+        <span class="total"></span>
+        <table id="data_table">
             <tbody></tbody>
         </table>
     </div>

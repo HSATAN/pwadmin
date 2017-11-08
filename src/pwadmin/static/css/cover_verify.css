@@ -1,6 +1,3 @@
-.data_table th, td {
-    width: 16%;
-}
 
 .pic {
     width: 60px;
@@ -15,8 +12,7 @@
     font-size: 14px;
 }
 
-.data_table {
-    margin-top: 20px;
+#data_table {
     font-size: 14px;
 }
 

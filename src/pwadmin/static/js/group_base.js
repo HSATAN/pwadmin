@@ -25,8 +25,7 @@ function loadCategories(data) {
     var dataSend = {
         'query_method': 'GET',
         'api_request': '/admin/live_label_new/brief_label_query',
-        'uid': userId,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'uid': userId
     };
     for (var i in data) {
         dataSend[i] = data[i];
@@ -47,8 +46,7 @@ function loadLabelclassification() {
         'uid': userId,
         'page_index': 1,
         'kind': 0,
-        'page_size': 100,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'page_size': 100
     };
     var source = {
         'methodStr': 'POST',
@@ -87,8 +85,7 @@ function ShowMessageLives(datas) {
         'page_index': 1,
         'type': 0,
         'order': order,
-        'desc': 1,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'desc': 1
     };
     for (var one in datas) {
         data[one] = datas[one];
@@ -97,13 +94,13 @@ function ShowMessageLives(datas) {
         type: 'POST',
         url: '',
         data: data,
-        dataType: 'json',
+        dataType: 'json'
         // success: function (data) {
         // clear();
         // var data_response = data.data;
         // $('.total').append("<span class='total'>" + "查询结束，总记录" + data_response.page_info.row_count + "</span>");
         // var tbody_str = fill_data(data_response);
-        // $('.data_table tbody').append(tbody_str);
+        // $('#data_table tbody').append(tbody_str);
         // }
     }).done(function (data) {
         data_dable = data;
@@ -200,4 +197,31 @@ function find_data() {
         data_find['label_id'] = label_id;
     }
     ShowMessageLives(data_find);
+}
+
+// 获取状态，房间填数据时
+function getStateDesc(state) {
+    if (state === 0) {
+        return "正常";
+    } else if (state === 1) {
+        return "暂停";
+    } else if (state === 2) {
+        return "停止";
+    }
+    return "未知";
+}
+
+// 获取总数据条数
+function getTotal(data) {
+    var count = 0;
+    if (data.hasOwnProperty('data')) {
+        data = data.data;
+        if (data.hasOwnProperty('page_info')) {
+            var page_info = data.page_info;
+            if (page_info.hasOwnProperty('row_count')) {
+                count = page_info.row_count;
+            }
+        }
+    }
+    return count;
 }
