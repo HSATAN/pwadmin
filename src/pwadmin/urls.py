@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^fund/$', fund.FUND.as_view(), name='fund-wait-audit'),
     url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
+    url(r'^statistic/wildcat/$', statistic.Wildcat.as_view(), name='statistic-wildcat'),
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
     url(r'^permissions/groups/$', permissions.GroupList.as_view(), name='perm_group'),

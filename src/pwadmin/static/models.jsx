@@ -16,7 +16,7 @@ class BaseReactionStore {
     }
 
     reactionData() {
-
+        return true;
     }
 
     @action
@@ -164,4 +164,4 @@ class ModelStore extends BaseHTTPStore {
 
 }
 
-export {ModelStore}
+export {ModelStore, BaseHTTPStore, BaseReactionStore}

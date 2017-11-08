@@ -4,6 +4,7 @@ from .account import Account
 from .setting import Setting
 from .content import CommonInterface
 from .fund import Fund
+from .statistic import Statistic
 
 
 class SneakSDK(object):
@@ -14,3 +15,4 @@ class SneakSDK(object):
         self.common = CommonInterface(host)
         self.config = Setting(host, user=user, token=token)
         self.fund = Fund(host, user=user, token=token)
+        self.statistic = Statistic(host, user=user, token=token)
