@@ -5,6 +5,7 @@ from .setting import Setting
 from .content import CommonInterface
 from .fund import Fund
 from .statistic import Statistic
+from .groups import Groups
 
 
 class SneakSDK(object):
@@ -16,3 +17,4 @@ class SneakSDK(object):
         self.config = Setting(host, user=user, token=token)
         self.fund = Fund(host, user=user, token=token)
         self.statistic = Statistic(host, user=user, token=token)
+        self.groups = Groups(host, user=user, token=token)
