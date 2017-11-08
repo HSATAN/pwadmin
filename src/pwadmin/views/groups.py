@@ -27,9 +27,15 @@ class LiveOnline(View, BaseHandler):
     template = 'pwadmin/groups/live_online.html'
 
     def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        return render(request, self.template)
+        user = request.user
+        return render(request, self.template, {'uid': user.uid})
+
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        params.pop('csrfmiddlewaretoken')
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
 class LiveHide(View, BaseHandler):
@@ -45,34 +51,36 @@ class LiveSearch(View, BaseHandler):
     template = 'pwadmin/groups/live_search.html'
 
     def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
         return render(request, self.template)
+
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        params.pop('csrfmiddlewaretoken')
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
 class LiveSpecial(View, BaseHandler):
     template = 'pwadmin/groups/live_special.html'
 
     def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
         return render(request, self.template)
+
+    def post(self, request, *args, **kwargs):
+        params = request.POST.dict()
+        params.pop('csrfmiddlewaretoken')
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
+        return HttpResponse(json.dumps(data))
 
 
 class CoverVerify(View, BaseHandler):
     template = 'pwadmin/groups/cover_verify.html'
 
     def get(self, request, *args, **kwargs):
-        query = {
-            'query_method': 'GET',
-            'api_request': '/admin/live/cover/list',
-            'state': 0,
-            'page_size': 10,
-            'page_index': 0
-        }
         user = request.user
-        data = user.sdk.common.query_sneaky(**query)
-        return render(request, self.template, {'data': data, 'uid': user.uid})
+        return render(request, self.template, {'uid': user.uid})
 
     def post(self, request, *args, **kwargs):
         params = request.POST.dict()
@@ -150,5 +158,4 @@ class SociatyLeaguerList(View, BaseHandler):
 
     def get(self, request, *args, **kwargs):
         queries = request.GET.dict()
-        backups = deepcopy(queries)
         return render(request, self.template)

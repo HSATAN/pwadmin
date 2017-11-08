@@ -25,6 +25,11 @@
     width: 55px;
 }
 
+.data_table td {
+    vertical-align: top;
+    font-size: 14px;
+}
+
 .data_table th, td:first-child {
     width: 68px;
 }

@@ -19,6 +19,9 @@ class BaseHandler(object):
         except TypeError:
             pass
 
+    def generate_url(self, params):
+        return "{}{}".format(self.host, params)
+
     def query(self, url, method, params=None, data=None, **kwargs):
         """基础查询.
 
@@ -39,7 +42,7 @@ class BaseHandler(object):
         url = urljoin(self.host, url)
         method = method.lower()
         if method == 'get':
-            return self.get(url, params=kwargs)
+            return self.get(url, params=kwargs).json()
         if method == 'post':
             return self.query(url, method, data=kwargs)
         return getattr(self, method.lower(), self.not_implemented)(url, **kwargs)

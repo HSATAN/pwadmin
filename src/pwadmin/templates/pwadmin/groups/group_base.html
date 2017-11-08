@@ -1,9 +1,15 @@
 {% extends 'pwadmin/pwbase.html' %}
 {% load static %}
 {% block extends_head %}
+    <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/group_base.css' %}" type="text/css"/>
+    {% block head_extends %}{% endblock %}
 {% endblock %}
 {% block left_content %}
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+    <div class="layer"></div>
     <div class="left_menu">
         <ul class="list-group" id="list-group">
             <li><a href="{% url 'pwadmin:group_manage' %}" class="list-group-item">开放群组</a></li>
@@ -33,6 +39,12 @@
     </div>
 {% endblock %}
 {% block extends_script %}
+    <script type="application/javascript">
+        var csrfmiddlewaretoken = '{{ csrf_token }}';
+        var userId = '{{ uid }}';
+    </script>
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/group_base.js' %}"></script>
+    {% block script_extends %}{% endblock %}
 {% endblock %}
