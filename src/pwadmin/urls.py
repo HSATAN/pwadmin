@@ -3,7 +3,8 @@ from __future__ import unicode_literals, absolute_import
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (
-    pwmanager, index, task, accounts, statistic, permissions, contents, config
+    pwmanager, index, task, accounts, statistic, permissions, contents, config,
+    fund
 )
 
 urlpatterns = [
@@ -23,7 +24,10 @@ urlpatterns = [
     url(r'^config/$', config.Index.as_view(), name='config-list'),
     url(r'^config/ad/$', config.AD.as_view(), name='config-ad'),
     url(r'^config/Gift/$', config.Gift.as_view(), name='config-gift'),
+    url(r'^fund/$', fund.FUND.as_view(), name='fund-wait-audit'),
+    url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
+    url(r'^statistic/wildcat/$', statistic.Wildcat.as_view(), name='statistic-wildcat'),
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
     url(r'^permissions/groups/$', permissions.GroupList.as_view(), name='perm_group'),
@@ -34,4 +38,3 @@ urlpatterns = [
     url(r'^submit_dynamic/$', contents.SubmitDynamic.as_view(), name='submit_dynamic'),
     url(r'^white_list/$', contents.WhiteList.as_view(), name='white_list'),
 ]
-
