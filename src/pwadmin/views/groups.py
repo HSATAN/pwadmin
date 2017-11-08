@@ -1,138 +1,67 @@
 # -*- coding: utf-8 -*-
 import json
-from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from contrib.views import LoginRequiredBaseView
 
 
-class GroupManage(LoginRequiredBaseView):
+class BaseGroupsView(LoginRequiredBaseView):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        data = user.sdk.common.query_sneaky(**request.POST.dict())
+        return JsonResponse(data)
+
+
+class GroupManage(BaseGroupsView):
     template = 'pwadmin/groups/group_manage.html'
 
 
-class LiveOnline(LoginRequiredBaseView):
+class LiveOnline(BaseGroupsView):
     template = 'pwadmin/groups/live_online.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveHide(LoginRequiredBaseView):
+class LiveHide(BaseGroupsView):
     template = 'pwadmin/groups/live_hide.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveSearch(LoginRequiredBaseView):
+class LiveSearch(BaseGroupsView):
     template = 'pwadmin/groups/live_search.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveSpecial(LoginRequiredBaseView):
+class LiveSpecial(BaseGroupsView):
     template = 'pwadmin/groups/live_special.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class CoverVerify(LoginRequiredBaseView):
+class CoverVerify(BaseGroupsView):
     template = 'pwadmin/groups/cover_verify.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveProduct(LoginRequiredBaseView):
+class LiveProduct(BaseGroupsView):
     template = 'pwadmin/groups/live_product.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveRoomReport(LoginRequiredBaseView):
+class LiveRoomReport(BaseGroupsView):
     template = 'pwadmin/groups/live_room_report.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveGiftReport(LoginRequiredBaseView):
+class LiveGiftReport(BaseGroupsView):
     template = 'pwadmin/groups/live_gift_report.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveDramaReport(LoginRequiredBaseView):
+class LiveDramaReport(BaseGroupsView):
     template = 'pwadmin/groups/live_drama_report.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LiveGiftIncome(LoginRequiredBaseView):
+class LiveGiftIncome(BaseGroupsView):
     template = 'pwadmin/groups/live_gift_income.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class LabelRankList(LoginRequiredBaseView):
+class LabelRankList(BaseGroupsView):
     template = 'pwadmin/groups/label_rank_list.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class SociatyList(LoginRequiredBaseView):
+class SociatyList(BaseGroupsView):
     template = 'pwadmin/groups/sociaty_list.html'
 
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
-
-class SociatyLeaguerList(LoginRequiredBaseView):
+class SociatyLeaguerList(BaseGroupsView):
     template = 'pwadmin/groups/sociaty_leaguer_list.html'
-
-    def post(self, request, *args, **kwargs):
-        params = request.POST.dict()
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
