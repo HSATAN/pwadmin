@@ -19,24 +19,20 @@ class BaseHandler(object):
         except TypeError:
             pass
 
-    def generate_url(self, params):
-        return "{}{}".format(self.host, params)
-
-    def query(self, url, method, params=None, data=None, **kwargs):
+    def request(self, url, method, params=None, data=None, **kwargs):
         """基础查询.
 
         Returns:
 
         """
         url = urljoin(self.host, url)
-        resp = self.session.request(
+        return self.session.request(
             method=method,
             url=url,
             params=params,
             data=data,
             **kwargs
         )
-        return resp.json()
 
     def query_method(self, auth=None, method='get', url='', **kwargs):
         url = urljoin(self.host, url)
@@ -44,7 +40,7 @@ class BaseHandler(object):
         if method == 'get':
             return self.get(url, params=kwargs).json()
         if method == 'post':
-            return self.query(url, method, data=kwargs)
+            return self.request(url, method, data=kwargs).json()
         return getattr(self, method.lower(), self.not_implemented)(url, **kwargs)
 
     @wraps(requests.get)
