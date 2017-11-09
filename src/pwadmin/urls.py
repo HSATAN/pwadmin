@@ -4,7 +4,7 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (
     pwmanager, index, task, accounts, statistic, permissions, contents, config,
-    fund
+    fund, groups
 )
 
 urlpatterns = [
@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
     url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^statistic/wildcat/$', statistic.Wildcat.as_view(), name='statistic-wildcat'),
+    # 群组.
+    url(r'^groups/$', groups.IndexView.as_view(), name="groups"),
+    url(r'^groups/live/$', groups.LiveView.as_view(), name="groups-live"),
+    # 权限.
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
     url(r'^permissions/groups/$', permissions.GroupList.as_view(), name='perm_group'),

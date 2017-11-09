@@ -37,7 +37,7 @@
                         <a class="nav-link" href="{% url 'pwadmin:label_manage' %}">内容</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">群组</a>
+                        <a class="nav-link" href="{% url 'pwadmin:groups' %}">群组</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'pwadmin:fund-wait-audit' %}">提现</a>
@@ -75,8 +75,8 @@
             </div>
         </nav>
     </div>
-        <div class="row">
-            <div class="col-2">{% block left_content %}{% endblock %}</div>
-            <div class="col-10">{% block right_content %}{% endblock %}</div>
-        </div>
+    <div class="row">
+        <div class="col-2">{% block left_content %}{% endblock %}</div>
+        <div class="col-10">{% block right_content %}{% endblock %}</div>
+    </div>
 {% endblock %}
