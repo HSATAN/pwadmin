@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-import math
 import json
 import time
 from copy import deepcopy
 from django.shortcuts import render, HttpResponse
 from django.views.generic import View
-from utils.sdk import sneakSDK
 from admin_interface.strings import PAGE_SIZE
 from admin_interface.common import BaseHandler
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.core.serializers import serialize
 from admin_interface.strings import METHOD_GET, METHOD_POST
 from contrib.views import BaseGroupsView
 
@@ -44,7 +39,8 @@ class LabelDynamic(View, BaseHandler):
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
-                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i.get('update_time', 0) + 3600 * 8))
+                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S",
+                                                 time.localtime(i.get('update_time', 0) + 3600 * 8))
         return render(request, self.template, {'data': data, 'extends': extends})
 
     def post(self, request, *args, **kwargs):
@@ -81,7 +77,8 @@ class SubmitDynamic(View, BaseHandler):
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
-                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i.get('update_time', 0) + 3600 * 8))
+                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S",
+                                                 time.localtime(i.get('update_time', 0) + 3600 * 8))
         return render(request, self.template, {'data': data, 'extends': extends})
 
     def post(self, request, *args, **kwargs):
@@ -118,7 +115,8 @@ class ReportDynamic(View, BaseHandler):
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
-                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i.get('update_time', 0) + 3600 * 8))
+                i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S",
+                                                 time.localtime(i.get('update_time', 0) + 3600 * 8))
         return render(request, self.template, {'data': data, 'extends': extends})
 
     def post(self, request, *args, **kwargs):

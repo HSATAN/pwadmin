@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.cache import cache
 from django.conf import settings
-from utils.sdk import SneakSDK
+from admin_interface import SneakSDK
 
 
 class PwManager(models.Model):
