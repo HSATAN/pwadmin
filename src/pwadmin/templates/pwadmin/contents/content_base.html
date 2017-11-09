@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block extends_head %}
+    <link type="text/css" href="{% static 'css/common.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
     {% block head_extends %}{% endblock %}
 {% endblock %}
@@ -33,6 +34,7 @@
     </div>
 {% endblock %}
 {% block extends_script %}
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/content_base.js' %}"></script>
     {% block script_extends %}{% endblock %}
 {% endblock %}

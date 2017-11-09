@@ -1,29 +1,44 @@
 leftVaigation();
 
-var pageIndex = 1;
+var pageShow = 1;
 var pageSize = 10;
-
-// 加载table数据
-loadTablelabelManage({});
-
-// 获取table数据
-function loadTablelabelManage(data) {
-    var dataSend = {
+var source = {
+    'methodStr': 'POST',
+    'url': '',
+    'data': {
         'query_method': 'GET',
         'api_request': '/admin/feed/topic',
         'uid': userId,
         'page_size': 10,
         'begin_index': 0
-    };
-    for (var i in data) {
-        dataSend[i] = data[i];
     }
-    var source = {
-        'methodStr': 'POST',
-        'url': '',
-        'data': dataSend
-    };
+};
+var creator_id = "";
+var id = "";
+
+// 加载table数据
+loadTablelabelManage(source);
+
+// 获取table数据
+function loadTablelabelManage(source) {
     $.ajaxFunc(source, fillTablelabelManage, errorHandle);
+}
+
+// 获取table数据
+function editLabelmanage(source) {
+    $.ajaxFunc(source, successEditlabelManage, errorHandle);
+}
+
+// 修改数据功能
+function successEditlabelManage(data, status, xhr) {
+    console.log(data);
+    $('.amend').css('display', 'none');
+    if (data.code === 0) {
+        loadTablelabelManage(source);
+    }
+    else {
+        alert("error");
+    }
 }
 
 // 填table数据
@@ -40,13 +55,11 @@ function fillTablelabelManage(data, status, xhr) {
     $('.modalPage').empty();
     $('.modalPage').append(pageStr);
     $('.page').on('click', pageSearch);
+    $('.modify').on('click', modifyData);
+    $('.sure').on('click', editData);
+    $('.release').on('click', releaseData);
+    $('.back').on('click', backData);
 }
-
-pageSearch = function () {
-    pageIndex = $(this).attr('data-page');
-    var dataPage = {'begin_index': (pageIndex - 1) * pageSize};
-    loadTablelabelManage(dataPage);
-};
 
 // 拼table string
 function getTablelabelManageStr(data) {
@@ -56,21 +69,21 @@ function getTablelabelManageStr(data) {
         var labels = data.data;
         for (var labelIndex = 0; labelIndex < labels.length; labelIndex++) {
             var label = labels[labelIndex];
-            str_label += "<tr>" +
+            str_label += "<tr id='" + label.id + "'>" +
                 "<td class='td_sign' id='content_" + label.id + "'>" + label.content + "</td>" +
                 "<td class='td_str' id='subtitle_" + label.id + "'>" + label.subtitle + "</td>" +
                 "<td class='td_date'>" + label.create_time + "</td>" +
-                "<td class='td_opera'><button type='button' class='operate modify' data-id='" + label.id + "'>" + "修改" + "</button>";
+                "<td class='td_opera'><button type='button' class='operate modify' data-id='" + label.id + "' data-creator='" + label.creator_id + "'>" + "修改" + "</button>";
             if (data.have_release === 1) {
-                if (label.state === 1) {
-                    str_label += "<button type='button' class='operate back' data-id='" + label.id + "'>" + "撤回";
+                if (label.state === 2) {
+                    str_label += "<button type='button' class='operate back' data-id='" + label.id + "' data-creator='" + label.creator_id + "'>" + "撤回";
                 }
                 else {
-                    str_label += "<button type='button' disabled='disabled' data-id='" + label.id + "'>" + "发布";
+                    str_label += "<button type='button' disabled='disabled' data-id='" + label.id + "' data-creator='" + label.creator_id + "'>" + "发布";
                 }
             }
             else {
-                str_label += "<button type='button' class='operate release' data-id='" + label.id + "'>" + "发布";
+                str_label += "<button type='button' class='operate release' data-id='" + label.id + "' data-creator='" + label.creator_id + "'>" + "发布";
             }
             str_label += "</button></td></tr>";
         }
@@ -86,7 +99,7 @@ function fillPage(pageInfo) {
     var pageSize = pageInfo.pageSize; // 每页显示多少条数据
     var pageCount = Math.ceil(total / pageSize); // 总共有多少页
 
-    var pageGets = get_pages(pageCount, pageIndex, 10); // 获取页码数组，pageIndex当前是第几页，从1开始
+    var pageGets = get_pages(pageCount, pageShow, 10); // 获取页码数组，pageIndex当前是第几页，从1开始
     var pages = pageGets.pages;
     var pageLeft = pageGets.pageLeft;
     var pageRight = pageGets.pageRight;
@@ -95,8 +108,7 @@ function fillPage(pageInfo) {
         pageStr += "<button class='pageNum page' data-page='" + pageLeft + "'>" + "上一页" + "</button>";
         for (var indexPage = 0; indexPage < pages.length; indexPage++) {
             var pageNow = pages[indexPage];
-            console.log(pageNow+","+pageIndex);
-            if (pageNow === pageIndex) {
+            if (pageNow === pageShow) {
                 pageStr += "<button class='pageUnique page' data-page='" + pageNow + "'>" + pageNow + "</button>";
             }
             else {
@@ -117,86 +129,90 @@ function fillPage(pageInfo) {
     // page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[2] + "');\">" + '下一页' + "</button>";
 }
 
-var BaseUrl = window.location.href;
-BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
-BaseUrl = decodeURI(BaseUrl);
-
-function servlet_page(page) {
-    var data = {
-        'page': page
-    };
-    patchwork_url(data);
-}
-
-var id;
-var sign_title;
-var sign_content;
-$('.modify').on('click', function () {
+// 页码查询
+pageSearch = function () {
+    pageShow = parseInt($(this).attr('data-page'));
+    source['data']['begin_index'] = (pageShow - 1) * pageSize;
+    loadTablelabelManage(source);
+};
+// 修改事件
+modifyData = function () {
     $('.amend').css('display', 'block');
     id = $(this).attr('data-id');    //标签id
-    sign_title = $('#subtitle_' + id).text();      //标题
-    sign_content = $('#content_' + id).text();      //标签内容
-    $('.sign_content').val(sign_content);
-    $('.sign_title').val(sign_title);
+    creator_id = $(this).attr('data-creator');
+    $('.sign_content').val($('#content_' + id).text()); //标签内容
+    $('.sign_title').val($('#subtitle_' + id).text()); //标题
+};
+// 修改提交
+editData = function () {
+    var sourceEdit = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': {
+            'query_method': 'POST',
+            'api_request': '/admin/feed/topic',
+            'tid': id,
+            'creator_id': creator_id,
+            'content': $('.sign_content').val(),
+            'subtitle': $('.sign_title').val()
+        }
+    };
+    editLabelmanage(sourceEdit);
+};
+// 发布
+releaseData = function () {
+    var sourceRelease = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': {
+            'query_method': 'POST',
+            'api_request': '/admin/feed/topic/release',
+            'tid': $(this).attr('data-id')
+        }
+    };
+    editLabelmanage(sourceRelease);
+};
+// 撤回
+backData = function () {
+    var sourceBack = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': {
+            'query_method': 'POST',
+            'api_request': '/admin/feed/topic/withdraw',
+            'tid': $(this).attr('data-id')
+        }
+    };
+    editLabelmanage(sourceBack);
+};
+// 添加
+$('.span_add').on('click', function () {
+    var sourceInsert = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': {
+            'query_method': 'POST',
+            'api_request': '/admin/feed/topic',
+            'creator_id': userId,
+            'content': $('.right_sign').val(),  //标题
+            'subtitle': $('#msgcontent').val(),     //内容
+            'uid': userId,
+            'tid': 0
+        }
+    };
+    editLabelmanage(sourceInsert);
 });
-
+// 取消编辑
 $('.space_out').on('click', function () {
     $('.amend').css('display', 'none');
 });
-
+// 关闭编辑
 $('.cancel').on('click', function () {
     $('.amend').css('display', 'none');
 });
-
-$('.sure').on('click', function () {
-    var data = {
-        'query_method': 'POST',
-        'api_request': '/admin/feed/topic',
-        'creator_id': 1,
-        'tid': id,
-        'content': $('.sign_content').val(),
-        'subtitle': $('.sign_title').val()
-    };
-    query_func(data, 'POST');
-});
-
+// 清空
 $('.span_clear').on('click', function () {
     $('.right_sign').val("");
     $('#msgcontent').val("");
 });
 
-$('.span_add').on('click', function () {
-    var data = {
-        'query_method': 'POST',
-        'api_request': '/admin/feed/topic',
-        'creator_id': 1,
-        'content': $('.right_sign').val(),  //标题
-        'subtitle': $('#msgcontent').val()     //内容
-    };
-    query_func(data, 'POST');
-    window.location.reload();
-});
-
-
-$('.release').on('click', function () {
-    var id = $(this).attr('data-id');
-    var data = {
-        'query_method': 'POST',
-        'api_request': '/admin/feed/topic/release',
-        'tid': id
-    };
-    query_func(data, 'POST');
-    window.location.reload();
-});
-
-
-$('.back').on('click', function () {
-    var id = $(this).attr('data-id');
-    var data = {
-        'query_method': 'POST',
-        'api_request': '/admin/feed/topic/withdraw',
-        'tid': id
-    };
-    query_func(data, 'POST');
-    window.location.reload();
-});
