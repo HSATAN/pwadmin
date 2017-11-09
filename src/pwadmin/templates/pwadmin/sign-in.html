@@ -7,28 +7,16 @@
 
 {% block content %}
     <div class="container">
-        <div id="signin"></div>
+        <div id="root"></div>
     </div>
 
 {% endblock %}
 
 {% block extends_script %}
-    <script src="{% static 'pwadmin/sign-in.min.js' %}"></script>
     <script type="application/javascript">
-        const React = signin.React;
-        const ReactDOM = signin.ReactDOM;
-        const SignIn = signin.SignIn;
-        ReactDOM.render(
-            React.createElement(
-                SignIn,
-                {
-                    csrf_token: `{{ csrf_token }}`,
-                    sign_in_url: `{% url 'pwadminAPI:sign-in' %}`,
-                    next: `{{ next }}`
-                },
-                null
-            ),
-            document.getElementById('signin')
-        )
+        var url = '{% url 'pwadminAPI:sign-in' %}';
+        var csrfmiddlewaretoken = '{{ csrf_token }}';
+        var next = '{{ next }}';
     </script>
+    <script src="{% static 'pwadmin/sign-in.min.js' %}"></script>
 {% endblock %}
