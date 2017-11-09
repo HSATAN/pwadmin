@@ -18,7 +18,11 @@ class CommonInterface(BaseHandler):
         page_now = int(queries.get('page', 1))
         page_index = page_now - 1
         data = self.query_sneaky(**queries)
-        page_list, page_count = self.get_page_list(page_index, page_size, data.get('total', 0))
+        if data.has_key('total'):
+            total = data.get('total', 0)
+        else:
+            total = len(data.get('data'))
+        page_list, page_count = self.get_page_list(page_index, page_size, total)
         page_left, page_right = self.get_left_right(page_now, page_count)
         extends = {
             'page_count': page_count,

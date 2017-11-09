@@ -40,8 +40,6 @@ class LiveView(LoginRequiredBaseView):
         return JsonResponse(resp)
 
 
-
-
 class BaseGroupsView(LoginRequiredBaseView):
     def post(self, request, *args, **kwargs):
         user = request.user
