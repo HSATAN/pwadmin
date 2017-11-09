@@ -12,36 +12,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.serializers import serialize
 from admin_interface.strings import METHOD_GET, METHOD_POST
+from contrib.views import BaseGroupsView
 
 
-class LabelManage(View, BaseHandler):
+class LabelManage(BaseGroupsView):
     template = 'pwadmin/contents/label_manage.html'
-
-    def get(self, request, *args, **kwargs):
-        queries = request.GET.dict()
-        backups = deepcopy(queries)
-        page_size = int(queries.get('page_size', PAGE_SIZE))
-        page_now = int(request.GET.get('page', 1))
-        page_index = page_now - 1
-        additional = {
-            'api_request': '/admin/feed/topic',
-            'query_method': METHOD_GET,
-            'page_size': page_size,
-            'begin_index': page_index * page_size
-        }
-        queries = dict(queries.items() + additional.items())
-        user = request.user
-        data, extends = user.sdk.common.data_get(queries)
-        extends = dict(extends.items() + backups.items())
-        return render(request, self.template, {'data': data, 'extends': extends})
-
-    def post(self, request, *args, **kwargs):
-        params = request.POST
-        params = params.dict()
-        params.pop('csrfmiddlewaretoken')
-        user = request.user
-        data = user.sdk.common.query_sneaky(**params)
-        return HttpResponse(json.dumps(data))
 
 
 class LabelDynamic(View, BaseHandler):

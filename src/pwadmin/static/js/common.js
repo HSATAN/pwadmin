@@ -15,39 +15,36 @@ $.ajaxFunc = function (source, successHandle, errorHandle) {
 };
 
 //获取页码、上一页、下一页
-function get_pages(page_count, page_index) {
-    var page_show = 10;
-    var mid = 5;
-    if (page_index <= mid) {
-        var page_from = 1;
-    }
-    else if (page_index >= page_count - page_show + 1) {
-        page_from = page_count - page_show + 1;
+function get_pages(pageCount, pageIndex, pageShow) {
+    // page_count总共多少页，page_index当前第几页, pageShow最多显示多少个
+    var midPages = Math.ceil(pageShow);
+    var pageFrom = 1;
+    if (pageIndex <= midPages) {
+        pageFrom = 1;
     }
     else {
-        page_from = page_index - mid + 1;
-    }
-    var pages = [];
-    for (var page = page_from; page <= page_from + 9; page++) {
-        if (page <= page_count) {
-            pages.push(page);
+        if (pageIndex >= pageCount - midPages + 1) {
+            pageFrom = pageCount - pageShow + 1;
+        }
+        else {
+            pageFrom = pageIndex - midPages + 1;
         }
     }
-    var page_left = 1;
-    var page_right = page_count;
-    if (page_index === 1) {
-        page_left = 1;
+    var pages = [];
+    for (var indexPage = pageFrom; indexPage < pageFrom + pageShow; indexPage++) {
+        if (indexPage <= pageCount) {
+            pages.push(indexPage);
+        }
     }
-    else {
-        page_left = page_index - 1;
+    var pageLeft = pageIndex - 1;
+    var pageRight = pageIndex + 1;
+    if (pageLeft <= 0) {
+        pageLeft = pageIndex;
     }
-    if (page_index === page_count) {
-        page_right = page_count;
+    if (pageRight > pageCount) {
+        pageRight = pageIndex;
     }
-    else {
-        page_right = page_index + 1;
-    }
-    return [pages, page_left, page_right];
+    return {'pages': pages, 'pageLeft': pageLeft, 'pageRight': pageRight};
 }
 
 //pic，图片放大显示
@@ -63,4 +60,23 @@ function hide_pic() {
 // 函数，处理ajax失败的情况
 function errorHandle() {
     alert('ajax error');
+}
+
+function leftVaigation() {
+    var url = window.location.href;
+    var bases = url.split('/');
+    var index = $.inArray('pwadmin', bases);
+    var base = bases[index + 1];
+    var aes = $("#list-group").find('a');
+    var targets = [];
+    for (var dex = 0; dex < aes.length; dex++) {
+        if (aes[dex].href.indexOf(base) !== -1) {
+            targets.push(aes[dex]);
+        }
+    }
+    var len = targets.length;
+    var target_a = targets[len - 1];
+    var target_li = $(target_a).parent('li');
+    target_a.style.color = 'white';
+    target_li.css('background-color', '#02a1c9');
 }

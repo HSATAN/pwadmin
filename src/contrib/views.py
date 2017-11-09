@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.http import JsonResponse
 
 
 class BaseView(View):
@@ -41,3 +42,10 @@ class LoginRequiredBaseView(BaseView):
             method = "{}_ajax".format(method) if request.is_ajax() else "{}_template".format(method)
             handler = getattr(self, method, getattr(self, request.method.lower(), self.http_method_not_allowed))
         return handler(request, *args, **kwargs)
+
+
+class BaseGroupsView(LoginRequiredBaseView):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        data = user.sdk.common.query_sneaky(**request.POST.dict())
+        return JsonResponse(data)

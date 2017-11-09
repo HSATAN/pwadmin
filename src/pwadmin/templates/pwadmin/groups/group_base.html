@@ -1,7 +1,6 @@
 {% extends 'pwadmin/pwbase.html' %}
 {% load static %}
 {% block extends_head %}
-    <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'css/group_base.css' %}" type="text/css"/>
     {% block head_extends %}{% endblock %}
 {% endblock %}
@@ -39,11 +38,6 @@
     </div>
 {% endblock %}
 {% block extends_script %}
-    <script type="application/javascript">
-        var csrfmiddlewaretoken = '{{ csrf_token }}';
-        var userId = {{ request.user.uid }};
-    </script>
-    <script src="{% static 'js/common.js' %}"></script>
     <script src="{% static 'js/group_base.js' %}"></script>
     {% block script_extends %}{% endblock %}
 {% endblock %}

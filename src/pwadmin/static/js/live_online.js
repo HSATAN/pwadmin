@@ -58,7 +58,7 @@ function getTableStr(data) {
                         str_main += "<td>" + live.close_time + "</td>";
                     }
                     str_main +=
-                        "<td>" + state_now + "</td><td>" +
+                        "<td>" + state_now + "</td><td style='width: 10%;'>" +
                         "<button class='operate'>" + "置顶" + "</button>" +
                         "<button class='operate'>" + "屏蔽" + "</button>" +
                         "<button class='operate'>" + "查看CP榜" + "</button>" +

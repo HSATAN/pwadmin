@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-import json
-from django.http import JsonResponse, HttpResponse
-from contrib.views import LoginRequiredBaseView
-
-
-class BaseGroupsView(LoginRequiredBaseView):
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        data = user.sdk.common.query_sneaky(**request.POST.dict())
-        return JsonResponse(data)
+from contrib.views import BaseGroupsView
 
 
 class GroupManage(BaseGroupsView):
@@ -65,3 +56,4 @@ class SociatyList(BaseGroupsView):
 
 class SociatyLeaguerList(BaseGroupsView):
     template = 'pwadmin/groups/sociaty_leaguer_list.html'
+

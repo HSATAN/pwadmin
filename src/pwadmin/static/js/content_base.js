@@ -1,3 +1,5 @@
+leftVaigation();
+
 var BaseUrl = window.location.href;
 BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
 BaseUrl = decodeURI(BaseUrl);

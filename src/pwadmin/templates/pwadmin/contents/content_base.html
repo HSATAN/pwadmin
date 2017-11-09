@@ -1,7 +1,17 @@
 {% extends 'pwadmin/pwbase.html' %}
+{% load static %}
+
+{% block extends_head %}
+    <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
+    {% block head_extends %}{% endblock %}
+{% endblock %}
 {% block left_content %}
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+    <div class="layer"></div>
     <div class="left_menu">
-        <ul class="list-group">
+        <ul id="list-group" class="list-group">
             <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
             <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
             <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
@@ -11,19 +21,18 @@
     </div>
 {% endblock %}
 {% block right_content %}
-    {% block right_content_new %}{% endblock %}
-    <div class="modalPage">
-        <button class="pageNum" onclick="servlet_page({{ extends.page_left }})">上一页</button>
-        {% for val in extends.total_list %}
-            {% if extends.page == val %}
-            <button class="pageUnique" onclick="servlet_page({{ val }})">{{ val }}</button>
-            {% else %}
-            <button class="pageNum" onclick="servlet_page({{ val }})">{{ val }}</button>
-            {% endif %}
-        {% empty %}
-            ...
-        {% endfor %}
-        <button class="pageNum" onclick="servlet_page({{ extends.page_right }})">下一页</button>
-        <span class="page_count">共{{ extends.page_count }}页</span>
+    <div class="right_content">
+        <div class="data_search">
+            {% block data_search %}{% endblock %}
+        </div>
+        <span class="total"></span>
+        <table id="data_table" class="data_table">
+            <tbody></tbody>
+        </table>
+        <div class="modalPage"></div>
     </div>
+{% endblock %}
+{% block extends_script %}
+    <script src="{% static 'js/content_base.js' %}"></script>
+    {% block script_extends %}{% endblock %}
 {% endblock %}

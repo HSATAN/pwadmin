@@ -3,14 +3,11 @@
 {% block title %}
     陪我管理系统-内容
 {% endblock %}
-{% url 'pwadmin:label_manage' as base_url %}
-{% block extends_head %}
-    <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
+{% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/label_manage.css' %}" type="text/css"/>
 {% endblock %}
 
-{% block right_content_new %}
-    <div class="space"></div>
+{% block data_search %}
     <div class="amend">
         <div class="modify_data">
             <div class="space_front size">
@@ -36,50 +33,17 @@
             </div>
         </div>
     </div>
-    <div class="right_content">
+    <div class="searchTop">
         <h3>
             标题
-            <input type="text" class="right_sign" placeholder="标签不限字数，尽量控制在14字">
+            <input type="text" class="right_sign" id="right_sign" placeholder="标签不限字数，尽量控制在14字">
             <span class="span_add extend">添加</span>
             <span class="span_clear extend">清空</span>
         </h3>
     </div>
     <textarea class="form-control" id="msgcontent" name="msgcontent" style="padding:30px; margin-bottom: 10px;" rows="3"
               placeholder="输入说明 例子：此标签由XXX创建"></textarea>
-    <div class="data_div">
-        <table id="data_table">
-            <tr>
-                <th class="td_sign head">标签</th>
-                <th class="td_str head">说明</th>
-                <th class="td_date head">更新时间</th>
-                <th class="td_opera head">操作</th>
-            </tr>
-            {% for i in data.data %}
-            <tr>
-                <td class="td_sign" id="content_{{ i.id }}">{{ i.content }}</td>
-                <td class="td_str" id="subtitle_{{ i.id }}">{{ i.subtitle }}</td>
-                <td class="td_date">{{ i.create_time }}</td>
-                <td class="td_opera">
-                    <button type="button" class="operate modify" data-id="{{ i.id }}">修改</button>
-                    {% if data.have_release == 1 %}
-                        {% if i.state == 2 %}
-                            <button type="button" class="operate back" data-id="{{ i.id }}">撤回</button>
-                        {% else %}
-                            <button type="button" disabled="disabled" data-id="{{ i.id }}">发布</button>
-                        {% endif %}
-                    {% else %}
-                        <button type="button" class="operate release" data-id="{{ i.id }}">发布</button>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
 {% endblock %}
-{% block extends_script %}
-    <script type="application/javascript">
-      var csrfmiddlewaretoken='{{ csrf_token }}';
-    </script>
-    <script src="{% static 'js/content_base.js' %}"></script>
+{% block script_extends %}
     <script src="{% static 'js/label_manage.js' %}"></script>
 {% endblock %}
