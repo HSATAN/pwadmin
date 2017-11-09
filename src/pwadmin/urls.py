@@ -26,7 +26,7 @@ urlpatterns = [
     # 配置.
     url(r'^config/$', config.Index.as_view(), name='config-list'),
     url(r'^config/ad/$', config.AD.as_view(), name='config-ad'),
-    url(r'^config/Gift/$', config.Gift.as_view(), name='config-gift'),
+    url(r'^config/gift/$', config.Gift.as_view(), name='config-gift'),
     # 提现
     url(r'^fund/$', fund.FUND.as_view(), name='fund-wait-audit'),
     url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
