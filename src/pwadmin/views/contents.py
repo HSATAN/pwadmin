@@ -30,7 +30,8 @@ class LabelManage(View, BaseHandler):
             'begin_index': page_index * page_size
         }
         queries = dict(queries.items() + additional.items())
-        data, extends = sneakSDK.common.data_get(queries)
+        user = request.user
+        data, extends = user.sdk.common.data_get(queries)
         extends = dict(extends.items() + backups.items())
         return render(request, self.template, {'data': data, 'extends': extends})
 
@@ -38,7 +39,8 @@ class LabelManage(View, BaseHandler):
         params = request.POST
         params = params.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
@@ -62,7 +64,8 @@ class LabelDynamic(View, BaseHandler):
             'state': state
         }
         queries = dict(queries.items() + additional.items())
-        data, extends = sneakSDK.common.data_get(queries)
+        user = request.user
+        data, extends = user.sdk.common.data_get(queries)
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
@@ -73,7 +76,8 @@ class LabelDynamic(View, BaseHandler):
         params = request.POST
         params = params.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
@@ -97,7 +101,8 @@ class SubmitDynamic(View, BaseHandler):
             'state': state
         }
         queries = dict(queries.items() + additional.items())
-        data, extends = sneakSDK.common.data_get(queries)
+        user = request.user
+        data, extends = user.sdk.common.data_get(queries)
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
@@ -108,7 +113,8 @@ class SubmitDynamic(View, BaseHandler):
         params = request.POST
         params = params.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
@@ -132,7 +138,8 @@ class ReportDynamic(View, BaseHandler):
             'state': state
         }
         queries = dict(queries.items() + additional.items())
-        data, extends = sneakSDK.common.data_get(queries)
+        user = request.user
+        data, extends = user.sdk.common.data_get(queries)
         extends = dict(extends.items() + backups.items())
         if len(data.get('data')) > 0:
             for i in data.get('data'):
@@ -143,7 +150,8 @@ class ReportDynamic(View, BaseHandler):
         params = request.POST
         params = params.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))
 
 
@@ -158,7 +166,8 @@ class WhiteList(View, BaseHandler):
             'query_method': METHOD_GET
         }
         queries = dict(queries.items() + additional.items())
-        data, extends = sneakSDK.common.data_get(queries)
+        user = request.user
+        data, extends = user.sdk.common.data_get(queries)
         extends = dict(extends.items() + backups.items())
         return render(request, self.template, {'data': data, 'extends': extends})
 
@@ -166,5 +175,6 @@ class WhiteList(View, BaseHandler):
         params = request.POST
         params = params.dict()
         params.pop('csrfmiddlewaretoken')
-        data = sneakSDK.common.query_sneaky(**params)
+        user = request.user
+        data = user.sdk.common.query_sneaky(**params)
         return HttpResponse(json.dumps(data))

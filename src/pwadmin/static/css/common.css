@@ -1,0 +1,110 @@
+.pageNum {
+    display: inline-block;
+    border: 1px solid #dddddd;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #01a0c9;
+    background-color: white;
+}
+
+.pageUnique {
+    display: inline-block;
+    border: 1px solid #02a1c9;
+    background-color: #02a1c9;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: white;
+}
+
+.modalPage {
+    margin: 80px;
+}
+
+.pic {
+    width: 60px;
+    height: 60px;
+}
+
+.amend_pic {
+    position: fixed;
+    left: 200px;
+    top: 150px;
+    width: 300px;
+    height: 300px;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.pic_big {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.data_search {
+    width: 950px;
+    margin: 20px auto 10px;
+}
+
+.data_search div {
+    margin-right: 10px;
+}
+
+.data_search input {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 3px 10px 3px 0;
+}
+
+.data_search select {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 6px 12px;
+    height: 34px;
+    word-break: break-all;
+    color: #555;
+    margin: 3px;
+}
+
+.right {
+    float: right;
+}
+
+.in {
+    display: inline-block;
+}
+
+#data_table {
+    width: 950px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-size: 14px;
+}
+
+#data_table tr {
+    border: 1px solid #e8e8e8;
+}
+
+#data_table th {
+    text-align: center;
+    word-break: break-all;
+    font-weight: bold;
+    color: #333;
+}
+
+.total {
+    display: block;
+    color: deepskyblue;
+    font-size: 14px;
+    width: 950px;
+    height: 14px;
+    margin: 0 auto 7px;
+}
+
+button:focus{
+    outline: none;
+}

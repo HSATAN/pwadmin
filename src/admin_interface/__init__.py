@@ -13,7 +13,7 @@ class SneakSDK(object):
         self.host = host
 
         self.account = Account(host, user=user, token=token)
-        self.common = CommonInterface(host)
+        self.common = CommonInterface(host, user=user, token=token)
         self.config = Setting(host, user=user, token=token)
         self.fund = Fund(host, user=user, token=token)
         self.statistic = Statistic(host, user=user, token=token)

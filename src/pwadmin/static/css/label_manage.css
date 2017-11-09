@@ -10,9 +10,9 @@
 .td_date { width: 20%; text-align: center;}
 .td_opera { width: 20%; text-align: center;}
 .data_div { height: 551px;}
-.data_table { width: 1020px; font-size: 14px; margin-bottom: 20px;}
-.data_table tr { border-bottom:1px #ddd solid; height: 50px;}
-.data_table th { border-bottom:1px #ddd solid; height: 50px; font-weight: bold;}
+#data_table { width: 1020px; font-size: 14px; margin-bottom: 20px;}
+#data_table tr { border-bottom:1px #ddd solid; height: 50px;}
+#data_table th { border-bottom:1px #ddd solid; height: 50px; font-weight: bold;}
 .modify_data { width: 600px; height: 340px; background-color: #fff; position: fixed;
     top: 40px; left: 50%; margin-left: -300px; z-index: 9999; border-radius: 5px;}
 .space_front { font-size: 18px; font-weight: 500; color: inherit;}

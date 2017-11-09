@@ -97,7 +97,7 @@
     float: right;
 }
 
-.data_table {
+#data_table {
     width: 1000px;
     border-bottom: 1px #ddd solid;
     height: 50px;
@@ -105,19 +105,19 @@
     margin-bottom: 20px;
 }
 
-.data_table tr {
+#data_table tr {
     height: 57px;
     text-align: center;
     border-bottom: 1px #ddd solid;
 }
 
-.data_table th {
+#data_table th {
     font-weight: bold;
     border-bottom: 1px #ddd solid;
     text-align: center;
 }
 
-.data_table td {
+#data_table td {
     text-align: center;
 }
 
@@ -178,58 +178,6 @@
 .time_search {
     background-color: #02a1c9;
     border: 1px solid #02a1c9;
-}
-
-.status_select {
-    color: #fff;
-    background-color: #5cb85c;
-    border-color: #4cae4c;
-    display: inline-block;
-    padding: 4px 15px;
-    margin-bottom: 3px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border-radius: 15px;
-    border: 1px solid transparent;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin: 0;
-    float: left;
-    margin-left: -1px;
-}
-
-.status_none {
-    display: inline-block;
-    padding: 4px 15px;
-    margin-bottom: 3px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-    margin: 0;
-    float: left;
-    margin-left: -1px;
 }
 
 .control_switch {

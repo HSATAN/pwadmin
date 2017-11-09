@@ -35,7 +35,7 @@ class LoginRequiredBaseView(BaseView):
         # request method isn't on the approved list.
 
         method = request.method.lower()
-        if not method in self.http_method_names:
+        if method not in self.http_method_names:
             handler = self.http_method_not_allowed
         else:
             method = "{}_ajax".format(method) if request.is_ajax() else "{}_template".format(method)
