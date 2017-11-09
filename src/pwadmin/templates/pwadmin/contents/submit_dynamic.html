@@ -4,12 +4,11 @@
     陪我管理系统-内容
 {% endblock %}
 
-{% block extends_head %}
-<link rel="stylesheet" href="{% static 'css/submit_synamic.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/submit_synamic.css' %}" type="text/css"/>
 {% endblock %}
 
-{% block right_content_new %}
+{% block right_content %}
     <div class="space"></div>
     <div class="amend_pic">
         <img src="#" alt="" class="pic_big">
@@ -49,7 +48,7 @@
         <div class="control_switch">
             <input type="checkbox" class="checkall">
         </div>
-        <hr />
+        <hr/>
         <table id="data_table">
             <tr>
                 <th class="data_id">陪我号</th>
@@ -61,32 +60,33 @@
                 <th class="data_select">选中</th>
             </tr>
             {% for i in data.data %}
-            <tr>
-                <td class="data_id">{{ i.user.uid }}</td>
-                <td class="data_nick">{{ i.user.name }}</td>
-                <td class="data_sign">{{ i.topic.content }}</td>
-                <td class="data_pics">
-                    <div class="pics">
-                        {% for j in i.extra.images %}
-                            <img class="pic" src="{{ j.thumbnail_url }}" data-src="{{ j.image_url }}" alt="None" onclick="window.open('{{ j.image_url }}')">
-                        {% endfor %}
-                    </div>
-                </td>
-                <td class="data_copywriting" id="data_copywriting">{{ i.content }}</td>
-                <td class="data_date"> {{ i.update_time }} </td>
-                <td class="data_select">
-                    <input id="{{ i.id }}" name="id" class="{{ i.user.uid }}" type="checkbox">
-                </td>
-            </tr>
+                <tr>
+                    <td class="data_id">{{ i.user.uid }}</td>
+                    <td class="data_nick">{{ i.user.name }}</td>
+                    <td class="data_sign">{{ i.topic.content }}</td>
+                    <td class="data_pics">
+                        <div class="pics">
+                            {% for j in i.extra.images %}
+                                <img class="pic" src="{{ j.thumbnail_url }}" data-src="{{ j.image_url }}" alt="None"
+                                     onclick="window.open('{{ j.image_url }}')">
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td class="data_copywriting" id="data_copywriting">{{ i.content }}</td>
+                    <td class="data_date"> {{ i.update_time }} </td>
+                    <td class="data_select">
+                        <input id="{{ i.id }}" name="id" class="{{ i.user.uid }}" type="checkbox">
+                    </td>
+                </tr>
             {% endfor %}
         </table>
         <div class="deal">
             {% if extends.state == 0 or extends.state == '0' %}
-            <button type="button" class="operate ignore" onclick="deal(1)">忽略</button>
-            <button type="button" class="operate ban" onclick="deal(2)">封号</button>
-            <button type="button" class="operate alert" onclick="deal(3)">警告</button>
+                <button type="button" class="operate ignore" onclick="deal(1)">忽略</button>
+                <button type="button" class="operate ban" onclick="deal(2)">封号</button>
+                <button type="button" class="operate alert" onclick="deal(3)">警告</button>
             {% else %}
-            <button type="button" class="operate recover" onclick="deal(0)">恢复</button>
+                <button type="button" class="operate recover" onclick="deal(0)">恢复</button>
             {% endif %}
             <button type="button" class="operate show" onclick="deal(9)">显示ID</button>
         </div>
@@ -99,16 +99,29 @@
             <button type="button" class="msg" onclick="send_message(3)">恶意刷屏</button>
             <button type="button" class="msg" onclick="send_message(2)">诋毁辱骂</button>
         </div>
+        <div class="modalPage">
+            <button class="pageNum" onclick="servlet_page({{ extends.page_left }})">上一页</button>
+            {% for val in extends.total_list %}
+                {% if extends.page == val %}
+                    <button class="pageUnique" onclick="servlet_page({{ val }})">{{ val }}</button>
+                {% else %}
+                    <button class="pageNum" onclick="servlet_page({{ val }})">{{ val }}</button>
+                {% endif %}
+            {% empty %}
+                ...
+            {% endfor %}
+            <button class="pageNum" onclick="servlet_page({{ extends.page_right }})">下一页</button>
+            <span class="page_count">共{{ extends.page_count }}页</span>
+        </div>
     </div>
 {% endblock %}
-{% block extends_script %}
+{% block script_extends %}
     <script type="application/javascript">
-      var csrfmiddlewaretoken='{{ csrf_token }}';
-      var begin_time_param = '{{ extends.begin_time }}';
-      var end_time_param = '{{ extends.end_time }}';
-      var state_param = '{{ extends.state }}';
-      var tuid_param = '{{ extends.tuid }}';
+        var csrfmiddlewaretoken = '{{ csrf_token }}';
+        var begin_time_param = '{{ extends.begin_time }}';
+        var end_time_param = '{{ extends.end_time }}';
+        var state_param = '{{ extends.state }}';
+        var tuid_param = '{{ extends.tuid }}';
     </script>
-    <script src="{% static 'js/content_base.js' %}"></script>
     <script src="{% static 'js/submit_dynamic.js' %}"></script>
 {% endblock %}

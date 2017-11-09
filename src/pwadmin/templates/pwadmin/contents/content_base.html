@@ -36,20 +36,3 @@
     <script src="{% static 'js/content_base.js' %}"></script>
     {% block script_extends %}{% endblock %}
 {% endblock %}
-{#{% block right_content %}#}
-{#    {% block right_content_new %}{% endblock %}#}
-{#    <div class="modalPage">#}
-{#        <button class="pageNum" onclick="servlet_page({{ extends.page_left }})">上一页</button>#}
-{#        {% for val in extends.total_list %}#}
-{#            {% if extends.page == val %}#}
-{#            <button class="pageUnique" onclick="servlet_page({{ val }})">{{ val }}</button>#}
-{#            {% else %}#}
-{#            <button class="pageNum" onclick="servlet_page({{ val }})">{{ val }}</button>#}
-{#            {% endif %}#}
-{#        {% empty %}#}
-{#            ...#}
-{#        {% endfor %}#}
-{#        <button class="pageNum" onclick="servlet_page({{ extends.page_right }})">下一页</button>#}
-{#        <span class="page_count">共{{ extends.page_count }}页</span>#}
-{#    </div>#}
-{#{% endblock %}#}

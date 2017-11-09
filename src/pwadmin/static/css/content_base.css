@@ -190,14 +190,6 @@ button:disabled {
     text-align: center;
 }
 
-.button_del {
-    padding: 4px 15px;
-    border: 1px solid #ccc;
-    background-color: #f4f4f4;
-    color: black;
-    font-size: inherit;
-}
-
 .deal {
     width: 1000px;
     text-align: right;
