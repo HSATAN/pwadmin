@@ -1,6 +1,4 @@
-.list-group li:nth-child(5) { background-color: #02a1c9;}
-.list-group li:nth-child(5) a { color: #fff;}
-.search { width: 1000px; margin-top: 20px;}
+.search { margin-top: 20px;}
 .peiwo_id { width: 400px; font-size: 14px;}
 .td_uid { width: 100px;}
 .td_name { width: 800px;}
@@ -9,3 +7,28 @@
     border-radius: 15px; background-color: #fff; font-weight: 400; cursor: pointer;
     border-bottom-left-radius: 0; border-top-left-radius: 0; border: 1px solid #ccc;
     margin-left: -6px;}
+
+.button_del {
+    padding: 4px 15px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    color: black;
+    font-size: inherit;
+}
+
+.data_tab {
+    width: 1020px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.data_tab tr {
+    border-bottom: 1px #ddd solid;
+    height: 50px;
+}
+
+.data_tab th {
+    border-bottom: 1px #ddd solid;
+    height: 50px;
+    font-weight: bold;
+}

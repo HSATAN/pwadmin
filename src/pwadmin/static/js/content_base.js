@@ -1,3 +1,5 @@
+leftVaigation();
+
 var BaseUrl = window.location.href;
 BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
 BaseUrl = decodeURI(BaseUrl);
@@ -76,8 +78,4 @@ function query_func(data_extends, methodStr) {
             window.location.reload();
         }
     });
-}
-
-function get_query_data() {
-
 }

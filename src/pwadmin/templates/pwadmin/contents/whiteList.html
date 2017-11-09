@@ -4,15 +4,14 @@
     陪我管理系统-内容
 {% endblock %}
 
-{% block extends_head %}
-<link rel="stylesheet" href="{% static 'css/whiteList.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css" />
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/whiteList.css' %}" type="text/css"/>
 {% endblock %}
 
 {% block right_content %}
     <div class="search">
         <input type="number" placeholder="请输入陪我号" class="peiwo_id input">
-        <button type="button" class="button_add">添加</button>
+        <button type="button" class="button_add" id="button_add">添加</button>
     </div>
     <table class="data_tab">
         <tr>
@@ -31,10 +30,9 @@
         {% endfor %}
     </table>
 {% endblock %}
-{% block extends_script %}
+{% block script_extends %}
     <script type="application/javascript">
-      var csrfmiddlewaretoken='{{ csrf_token }}'
+        var csrfmiddlewaretoken = '{{ csrf_token }}'
     </script>
-    <script src="{% static 'js/content_base.js' %}"></script>
     <script src="{% static 'js/whiteList.js' %}"></script>
 {% endblock %}
