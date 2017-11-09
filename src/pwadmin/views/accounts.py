@@ -2,7 +2,6 @@
 import math
 import logging
 from datetime import timedelta, date
-from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -13,7 +12,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from pwadmin import models as pwa_models
 from contrib.views import BaseView
-from utils.sdk import SneakSDK
 
 logger = logging.getLogger(__file__)
 
@@ -22,7 +20,6 @@ class Accounts(View):
     """用户-基础信息-注册用户.
     """
     template = 'pwadmin/accounts/register_user.html'
-    account = SneakSDK(host=settings.API_HOST).account
 
     def get(self, request, *args, **kwargs):
         if request.path_info == reverse_lazy('pwadminAPI:accounts'):
@@ -39,7 +36,7 @@ class Accounts(View):
         Returns:
 
         """
-        data = self.account.query_user()
+        data = request.user.sdk.account.query_user()
         return JsonResponse(data=data)
 
     def get_template(self, request, *args, **kwargs):
@@ -100,8 +97,8 @@ class AccountList(BaseView):
         size = request.GET.get('size', '10')
         page = request.GET.get('page', '1')
         order_by = request.GET.get('order_by', 'uid')
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.list(query, size=size, page=page,
-                                                                                order_by=order_by)
+        data = request.user.sdk.account.list(query, size=size, page=page,
+                                             order_by=order_by)
         return JsonResponse(data)
 
 
@@ -155,7 +152,7 @@ class ResetPassword(BaseView):
         password = request.POST.get('password')
         assert password
         note = request.POST.get('note', '')
-        resp = SneakSDK(host=settings.API_HOST, user=request.user).account.reset_password(password, tuid, note)
+        resp = request.user.sdk.account.reset_password(password, tuid, note)
         return JsonResponse(resp)
 
     @method_decorator(login_required)
@@ -304,7 +301,7 @@ class CaptchaList(BaseView):
         begin_time = request.GET.get('begin_time', None)
         end_time = request.GET.get('end_time', None)
 
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.captcha(
+        data = request.user.sdk.account.captcha(
             phone=query, page_index=page, page_size=size, state=state,
             captcha_type=captcha_type, begin_time=begin_time, end_time=end_time
         )
@@ -359,7 +356,7 @@ class PaymentList(BaseQueryList):
         type = request.GET.get('type', '')
         date = request.GET.get('date', '')
         begin_time, end_time = self.process_date(date)
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.payment(
+        data = request.user.sdk.account.payment(
             tuid, type=type, begin_time=begin_time, end_time=end_time)
         return JsonResponse(data)
 
@@ -382,7 +379,7 @@ class ScoreList(BaseQueryList):
         page_index = request.GET.get('page_index', 1) or 1
         page_size = request.GET.get('page_size', 25) or 25
         begin_time, end_time = self.process_date(date)
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.score(
+        data = request.user.sdk.account.score(
             tuid, page_index=page_index, page_size=page_size, type=type, begin_time=begin_time, end_time=end_time)
         return JsonResponse(data)
 
@@ -410,7 +407,7 @@ class RecordList(BaseQueryList):
         channel = request.GET.get('channel', None) or -1
         call_id = request.GET.get('call_id', None) or 0
         begin_time, end_time = self.process_date(date)
-        data = SneakSDK(host=settings.API_HOST, user=request.user).account.record(
+        data = request.user.sdk.account.record(
             uid=uid1, uid2=uid2, state=state, page_index=page_index, page_size=page_size,
             end_state=end_state, call_type=call_type, channel=channel, call_id=call_id,
             begin_time=begin_time, end_time=end_time)

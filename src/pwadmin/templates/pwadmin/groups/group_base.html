@@ -1,5 +1,10 @@
 {% extends 'pwadmin/pwbase.html' %}
 {% load static %}
+
+{% block title %}
+    群组-陪我管理系统
+{% endblock %}
+
 {% block extends_head %}
     <link type="text/css" href="{% static 'css/common.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/group_base.css' %}" type="text/css"/>
@@ -12,7 +17,9 @@
     <div class="layer"></div>
     <div class="left_menu">
         <ul class="list-group" id="list-group">
-            <li><a href="{% url 'pwadmin:group_manage' %}" class="list-group-item">开放群组</a></li>
+            <li><a href="{% url 'pwadmin:group_manage' %}"
+                   class="list-group-item {% if item == 'fund-wait-audit' %}active{% else %}list-group-item-action{% endif %}">开放群组</a>
+            </li>
             <li><a href="{% url 'pwadmin:live_online' %}" class="list-group-item">直播</a></li>
             <ul class="list">
                 <li><a href="{% url 'pwadmin:live_online' %}" class="list-group-item">在线房间</a></li>
