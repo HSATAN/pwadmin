@@ -12,7 +12,9 @@
     </div>
 {% endblock %}
 
-{% block extends_script %}
+
+{% block script_extends %}
+
     <script type="application/javascript">
         var url = '{% url 'pwadminAPI:groups' %}';
         var csrfmiddlewaretoken = '{{ csrf_token }}'
