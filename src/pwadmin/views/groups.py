@@ -57,6 +57,3 @@ class SociatyList(BaseGroupsView):
 class SociatyLeaguerList(BaseGroupsView):
     template = 'pwadmin/groups/sociaty_leaguer_list.html'
 
-
-class LabelManage(BaseGroupsView):
-    template = 'pwadmin/contents/label_manage.html'
