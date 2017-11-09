@@ -20,6 +20,10 @@
     margin: 40px auto 30px auto;
 }
 
+.page {
+    cursor: pointer;
+}
+
 .pic {
     width: 60px;
     height: 60px;
