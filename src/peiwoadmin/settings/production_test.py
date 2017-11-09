@@ -98,4 +98,3 @@ CACHES = {
 }
 
 API_HOST = 'http://172.16.10.134:9090'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
