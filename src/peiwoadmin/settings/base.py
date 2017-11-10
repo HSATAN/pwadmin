@@ -119,11 +119,11 @@ USE_TZ = True
 
 
 STATICFILES_DIRS = [
-    os.path.join(CONF_DIR, 'static')
+    os.path.join(CONF_DIR, 'static'),
+    os.path.join(SRC_DIR, 'pwadmin', 'static')
 ]
 STATIC_ROOT = os.path.join(CONF_DIR, 'static_root')
 MEDIA_ROOT = os.path.join(CONF_DIR, 'media_root')
-
 
 STATIC_URL = '/static/'
 

@@ -1,0 +1,23 @@
+{% extends 'pwadmin/groups/group_base.html' %}
+{% load static %}
+
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/group_manage.css' %}">
+{% endblock %}
+
+
+
+{% block right_content %}
+    <div id="root">
+    </div>
+{% endblock %}
+
+
+{% block script_extends %}
+
+    <script type="application/javascript">
+        var url = '{% url 'pwadminAPI:groups' %}';
+        var csrfmiddlewaretoken = '{{ csrf_token }}'
+    </script>
+    <script src="{% static 'pwadmin/groups/index.min.js' %}"></script>
+{% endblock %}

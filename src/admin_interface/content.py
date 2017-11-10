@@ -9,14 +9,7 @@ class CommonInterface(BaseHandler):
     def query_sneaky(self, **kwargs):
         api_request = kwargs.pop('api_request')
         query_method = kwargs.pop('query_method')
-        params_base = {
-            'version': 9999,
-            'uid': 1,
-            "session_data": "81ded44dbc365b7f8e05be22c7ceee32"
-        }
-        params = dict(params_base.items() + kwargs.items())
-        url = self.generate_url(api_request)
-        data = self.query_method(True, query_method, url, **params)
+        data = self.query_method(True, query_method, api_request, **kwargs)
         return data
 
     def data_get(self, queries):
@@ -25,7 +18,11 @@ class CommonInterface(BaseHandler):
         page_now = int(queries.get('page', 1))
         page_index = page_now - 1
         data = self.query_sneaky(**queries)
-        page_list, page_count = self.get_page_list(page_index, page_size, data.get('total', 0))
+        if data.has_key('total'):
+            total = data.get('total', 0)
+        else:
+            total = len(data.get('data'))
+        page_list, page_count = self.get_page_list(page_index, page_size, total)
         page_left, page_right = self.get_left_right(page_now, page_count)
         extends = {
             'page_count': page_count,

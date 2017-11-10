@@ -1,3 +1,5 @@
+leftVaigation();
+
 var BaseUrl = window.location.href;
 BaseUrl = BaseUrl.substring(0, BaseUrl.indexOf("?") - 1);
 BaseUrl = decodeURI(BaseUrl);
@@ -12,6 +14,7 @@ pic.mouseout(function () {
     $('.amend_pic').css('display', 'none');
 });
 
+
 function get_times(day) {
     var start_date = new Date();
     start_date.setDate(start_date.getDate() - day);
@@ -21,7 +24,6 @@ function get_times(day) {
     var end = end_date.Format("yyyy-MM-dd HH:mm:ss");
     return [start, end]
 }
-
 Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
         "M+": this.getMonth() + 1, //月份
@@ -37,8 +39,6 @@ Date.prototype.Format = function (fmt) { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
-
-
 function patchwork_url(data) {
     var param_str = '';
     for (var key in data) {
@@ -76,8 +76,4 @@ function query_func(data_extends, methodStr) {
             window.location.reload();
         }
     });
-}
-
-function get_query_data() {
-
 }

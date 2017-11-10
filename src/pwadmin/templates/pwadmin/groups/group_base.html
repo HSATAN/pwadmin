@@ -1,0 +1,52 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% load static %}
+
+{% block title %}
+    群组-陪我管理系统
+{% endblock %}
+
+{% block extends_head %}
+    <link type="text/css" href="{% static 'css/common.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/group_base.css' %}" type="text/css"/>
+    {% block head_extends %}{% endblock %}
+{% endblock %}
+{% block left_content %}
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+    <div class="layer"></div>
+    <div class="left_menu">
+        <ul class="list-group" id="list-group">
+            <li><a href="{% url 'pwadmin:group_manage' %}"
+                   class="list-group-item {% if item == 'fund-wait-audit' %}active{% else %}list-group-item-action{% endif %}">开放群组</a>
+            </li>
+            <li><a href="{% url 'pwadmin:live_online' %}" class="list-group-item">直播</a></li>
+            <ul class="list">
+                <li><a href="{% url 'pwadmin:live_online' %}" class="list-group-item">在线房间</a></li>
+                <li><a href="{% url 'pwadmin:live_hide' %}" class="list-group-item">屏蔽房间</a></li>
+                <li><a href="{% url 'pwadmin:live_search' %}" class="list-group-item">查看房间</a></li>
+                <li><a href="{% url 'pwadmin:live_special' %}" class="list-group-item">特殊声优房间</a></li>
+                <li><a href="{% url 'pwadmin:cover_verify' %}" class="list-group-item">封面审核</a></li>
+                <li><a href="{% url 'pwadmin:live_product' %}" class="list-group-item">直播效率</a></li>
+            </ul>
+            <li><a href="{% url 'pwadmin:live_room_report' %}" class="list-group-item">数据查询</a></li>
+            <ul class="list">
+                <li><a href="{% url 'pwadmin:live_room_report' %}" class="list-group-item">直播实时数据</a></li>
+                <li><a href="{% url 'pwadmin:live_gift_report' %}" class="list-group-item">直播礼物数据</a></li>
+                <li><a href="{% url 'pwadmin:live_drama_report' %}" class="list-group-item">直播剧本数据</a></li>
+                <li><a href="{% url 'pwadmin:live_gift_income' %}" class="list-group-item">直播收入统计</a></li>
+            </ul>
+            <li><a href="{% url 'pwadmin:label_rank_list' %}" class="list-group-item">配置房间内全服榜单</a></li>
+            <li><a href="{% url 'pwadmin:sociaty_list' %}" class="list-group-item">公会管理</a></li>
+            <ul class="list">
+                <li><a href="{% url 'pwadmin:sociaty_list' %}" class="list-group-item">查看公会信息</a></li>
+                <li><a href="{% url 'pwadmin:sociaty_leaguer_list' %}" class="list-group-item">查看工会成员信息</a></li>
+            </ul>
+        </ul>
+    </div>
+{% endblock %}
+{% block extends_script %}
+    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+    <script src="{% static 'js/group_base.js' %}"></script>
+    {% block script_extends %}{% endblock %}
+{% endblock %}

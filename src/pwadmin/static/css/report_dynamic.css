@@ -24,11 +24,11 @@
 .no { }
 .control_switch { width: 1000px; height: 10px; padding-right: 10px; margin-top: 70px;}
 .checkall { float: right;}
-.data_table { width: 1000px; border-bottom:1px #ddd solid; height: 50px;
+#data_table { width: 1000px; border-bottom:1px #ddd solid; height: 50px;
     font-size: 14px; margin-bottom: 20px;}
-.data_table tr { height: 57px; text-align: center; border-bottom:1px #ddd solid;}
-.data_table th { font-weight: bold; border-bottom:1px #ddd solid; text-align: center;}
-.data_table td { text-align: center; overflow:hidden; word-break: break-all;
+#data_table tr { height: 57px; text-align: center; border-bottom:1px #ddd solid;}
+#data_table th { font-weight: bold; border-bottom:1px #ddd solid; text-align: center;}
+#data_table td { text-align: center; overflow:hidden; word-break: break-all;
     vertical-align: middle; display: table-cell;}
 .data_id { width: 95px;}
 .data_nick { width: 240px;}

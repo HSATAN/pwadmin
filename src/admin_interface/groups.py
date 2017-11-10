@@ -169,3 +169,4 @@ class Groups(BaseHandler):
 
         """
         return self.request(self.LIVE_DELETE_TOPIC, 'post', params=params).json()
+

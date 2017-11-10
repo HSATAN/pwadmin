@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{%  static 'ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{%  static 'ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' %}"/>
+    <link type="text/css" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet"/>
     {% block extends_head %}
     {% endblock %}
     <title>{% block title %}{% endblock %}</title>
@@ -26,6 +27,19 @@
 <script src="{% static 'ajax/libs/popper.js/1.11.0/umd/popper.min.js' %}"></script>
 <script src="{% static 'ajax/libs/lodash.js/4.17.4/lodash.min.js' %}"></script>
 <script src="{% static 'ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript">
+    var csrfmiddlewaretoken = '{{ csrf_token }}';
+    var userId = {% if request.user.id %}{{ request.user.uid }}{% else %}''{% endif %};
+    $(".time").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        autoclose: true,
+        language: 'zh-CN',
+        minuteStep: 5,
+        todayBtn: 'linked'
+    });
+</script>
 {% block extends_script %}
 {% endblock %}
 </body>
