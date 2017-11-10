@@ -85,12 +85,16 @@ $('.search').on('click', function () {
     if ($('.desc').is(':checked')) {
         desc = 1;
     }
+    var state = $('#type').val();
+    if (state === "") {
+        state = -1;
+    }
     var params = {
         'owner_uid': $('.owner_uid').val(),
         'owner_name': $('.owner_name').val(),
         'gift_value': $('.gift_value').val(),
         'live_id': $('.live_id').val(),
-        'state': $('#type').val(),
+        'state': state,
         'label_id': $('#label_type').val(),
         'order': $('#sort').val(),
         'desc': desc,
@@ -121,5 +125,6 @@ function fillTable(data, status, xhr) {
     var totalStr = getTableStr(data)[1];
     $('.total').empty();
     $('.total').append(totalStr);
+    $().on('click', top);
 }
 
