@@ -1,66 +1,60 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
-
-{% block head_extends %}
-    <link rel="stylesheet" href="{% static 'css/live_search.css' %}">
+{% block title %}
+    陪我管理系统-群组
 {% endblock %}
-
-{% block right_content %}
-    <div class="right_content">
-        <div class="data_search">
-            <input type="text" placeholder="请输入主播陪我号" class="in owner_uid">
-            <input type="text" placeholder="请输入主播昵称" class="in owner_name">
-            <input type="text" placeholder="请输入礼物价值" class="in gift_value">
-            <input type="text" placeholder="请输入直播ID" class="in live_id">
-            <div class="in">
-                状态：
-                <select class='form-control in' style="width: 120px;" id="type">
-                    <option value="">全部</option>
-                    <option value="0" selected>正常</option>
-                    <option value="1">暂停</option>
-                    <option value="2">停止</option>
-                </select>
-            </div>
-            <div class="in">
-                标签分类：
-                <select class="form-control in" style="width: 120px; font-size: 14px;" id="label_type">
-                </select>
-            </div>
-            <div class="in">
-                排序字段：
-                <select name="sort" id="sort" class="in">
-                    <option value="weight">权重</option>
-                    <option value="create_time">开始时间</option>
-                    <option value="gift_value">礼物价值</option>
-                    <option value="light_number">点亮次数</option>
-                    <option value="actual_guest_number">真实用户</option>
-                    <option value="actual_unique_guest_number">累计真实用户</option>
-                </select>
-            </div>
-            <div class="in">
-                是否逆序：<input type="checkbox" checked name="desc" class="desc">
-            </div>
-            <div class="in">
-                主类别：
-                <select class="form-control in" style="width: 120px;" id="main_label">
-                </select>
-            </div>
-            <div class="in">
-                子类别：
-                <select class="form-control in" style="width: 120px;" id="sub_label">
-                </select>
-            </div>
-            <input type="text" placeholder="开始时间" class="begin_time time">
-            <input type="text" placeholder="结束时间" class="end_time time">
-            <div class="right in">
-                <button class="search in">搜索</button>
-                <button class="clear in" onclick="clear_search()">清空</button>
-            </div>
-        </div>
-        <span class="total"></span>
-        <table id="data_table">
-            <tbody></tbody>
-        </table>
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/live_search.css' %}" type="text/css"/>
+{% endblock %}
+{% block content_extra %}{% endblock %}
+{% block data_search %}
+    <input type="text" placeholder="请输入主播陪我号" class="in owner_uid">
+    <input type="text" placeholder="请输入主播昵称" class="in owner_name">
+    <input type="text" placeholder="请输入礼物价值" class="in gift_value">
+    <input type="text" placeholder="请输入直播ID" class="in live_id">
+    <div class="in">
+        状态：
+        <select class='form-control in' style="width: 120px;" id="type">
+            <option value="">全部</option>
+            <option value="0" selected>正常</option>
+            <option value="1">暂停</option>
+            <option value="2">停止</option>
+        </select>
+    </div>
+    <div class="in">
+        标签分类：
+        <select class="form-control in" style="width: 120px; font-size: 14px;" id="label_type">
+        </select>
+    </div>
+    <div class="in">
+        排序字段：
+        <select name="sort" id="sort" class="in">
+            <option value="weight">权重</option>
+            <option value="create_time">开始时间</option>
+            <option value="gift_value">礼物价值</option>
+            <option value="light_number">点亮次数</option>
+            <option value="actual_guest_number">真实用户</option>
+            <option value="actual_unique_guest_number">累计真实用户</option>
+        </select>
+    </div>
+    <div class="in">
+        是否逆序：<input type="checkbox" checked name="desc" class="desc">
+    </div>
+    <div class="in">
+        主类别：
+        <select class="form-control in" style="width: 120px;" id="main_label">
+        </select>
+    </div>
+    <div class="in">
+        子类别：
+        <select class="form-control in" style="width: 120px;" id="sub_label">
+        </select>
+    </div>
+    <input type="text" placeholder="开始时间" class="begin_time time">
+    <input type="text" placeholder="结束时间" class="end_time time">
+    <div class="right in">
+        <button class="search in">搜索</button>
+        <button class="clear in" onclick="clear_search()">清空</button>
     </div>
 {% endblock %}
 

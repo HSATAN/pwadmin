@@ -1,3 +1,4 @@
+leftVaigation();
 //ajax封装
 $.ajaxFunc = function (source, successHandle, errorHandle) {
     var url = source.url;
