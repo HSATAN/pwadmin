@@ -56,22 +56,31 @@ $('.mode').on('click', function () {
 $('.days').on('click', function () {
     changeDay($('.days'), $(this));
     var action = $(this).attr('data-action');
-    if (action === 0)
-    {
-        var query = {
-            'tuid': $('.peiwo_id').attr(),
-            'begin_time': $('.start').attr(),
-            'end_time': $('.end').attr(),
-        };
+    if (action === 0) {
     }
     else if (action === -1) {
         $('.data_search input').attr('');
-        var query = {'state': 0};
     }
     else {
-
+        var end = dateToString(new Date());
+        var start = new Date();
+        start.setDate(start.getDate() - action);
+        start = dateToString(start);
+        $('.start').attr('value', start);
+        $('.end').attr('value', end);
     }
-    loadTablelabelDynamic(query);
+    var query = {
+        'tuid': $('.peiwo_id').val(),
+        'begin_time': $('.start').val(),
+        'end_time': $('.end').val()
+    };
+    var querySend = {};
+    for (var index in query) {
+        if (query[index] && (query[index] !== '')) {
+            querySend[index] = query[index];
+        }
+    }
+    loadTablelabelDynamic(querySend);
 });
 
 // 拼table string
@@ -116,6 +125,7 @@ function getTablelabelDynamicstr(data) {
     var pageStr = fillPage(pageInfo);
     return {'tableStr': str_label, 'totalStr': totalStr, 'pageStr': pageStr};
 }
+
 // change状态查询的css
 function changeState(modes, thisMode) {
     modes.removeClass('stateSelect');
@@ -123,6 +133,7 @@ function changeState(modes, thisMode) {
     thisMode.removeClass('statusNull');
     thisMode.addClass('stateSelect');
 }
+
 // change日期查询一排的css
 function changeDay(days, thisDay) {
     days.removeClass('operateSelect');
@@ -130,6 +141,7 @@ function changeDay(days, thisDay) {
     thisDay.removeClass('operateNull');
     thisDay.addClass('operateSelect');
 }
+
 // 状态查询
 // $('.mode').on('click', function () {
 //     state = $(this).attr('data-state');
