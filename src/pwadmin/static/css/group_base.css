@@ -65,3 +65,12 @@
 .bottom {
     margin: 5px;
 }
+
+#top {
+    display: block;
+    position: fixed;
+    right: 0;
+    left: 0;
+    background-color: #222;
+    z-index: 9999;
+}
