@@ -25,7 +25,7 @@ class FilterView extends React.Component {
         return [
             {value: '', verbose_name: '无限制'},
             {value: '1', verbose_name: '男'},
-            {value: 'female', verbose_name: '女'},
+            {value: '2', verbose_name: '女'},
         ]
     }
 
