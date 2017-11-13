@@ -112,8 +112,12 @@ class TableView extends React.Component {
                 <thead>
                 <tr>
                     <th>编号</th>
-                    <th>配置名</th>
-                    <th>配置值</th>
+                    <th className="d-inline-block text-truncate"
+                        style={{width: 20 + "rem"}}>配置名
+                    </th>
+                    <th className="d-inline-block text-truncate"
+                        style={{width: 20 + "rem"}}>配置值
+                    </th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -122,8 +126,14 @@ class TableView extends React.Component {
                     (item, index) => {
                         return <tr key={index}>
                             <th>{item.key}</th>
-                            <th>{item.description}</th>
-                            <th className="d-inline-block" style={{width: 20 + "rem"}}>{item.value}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 20 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.description}>{item.description}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 20 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.value}>{item.value}</th>
                             <th>
                                 <button type="button"
                                         className="btn btn-primary"
