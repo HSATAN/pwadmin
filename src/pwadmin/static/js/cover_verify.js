@@ -1,45 +1,43 @@
 //加载页面，dom
-ShowMessage({});
+loadTableliveSpecial({});
 
-function ShowMessage(datas) {
-    var data = {
+var pageRequest = 1;
+function loadTableliveSpecial(data) {
+    var dataSend = {
         'query_method': 'GET',
         'api_request': '/admin/live/cover/list',
+        'uid': userId,
         'state': 0,
         'page_size': 10,
-        'page_index': 0,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
+        'page_index': 0
     };
-    for (var one in datas) {
-        data[one] = datas[one];
+    for (var i in data) {
+        dataSend[i] = data[i];
     }
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            var tbody_str = fill_data(data);
-            if (data.code === 0) {
-                clear_table();
-                var count = data.data.page_info.row_count;
-                $('<span class="total">查询结束，总记录' + count + '</span>').insertBefore($('#data_table'));
-                var page_info = data.data.page_info;
-                var page_str = fill_pages(page_info);
-                $('.modalPage').append(page_str);
-                var state_str = fill_state();
-                $('.bottom').append(state_str);
-            }
-            else {
-                $("#data_table tbody").remove();
-                $("#data_table").append('<tbody></tbody>');
-            }
-            $('#data_table tbody').append(tbody_str);
-        }
-    });
+    var source = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': dataSend
+    };
+    $.ajaxFunc(source, fillTablecoverVerify, errorHandle);
 }
 
-function fill_data(data) {
+function fillTablecoverVerify(data, status, xhr) {
+    var strGet = getTablecoverVerify(data);
+    var tableStr = strGet.tableStr;
+    $('#data_table tbody').remove();
+    $('#data_table').append("<tbody></tbody>");
+    $('#data_table tbody').append(tableStr);
+    var totalStr = strGet.totalStr;
+    $('.total').empty();
+    $('.total').append(totalStr);
+    var pageStr = strGet.pageStr;
+    $('.modalPage').empty();
+    $('.modalPage').append(pageStr);
+}
+
+function getTablecoverVerify(data) {
+    var totalCount = getTotal(data);
     var tbody_str = "";
     tbody_str += "<tr>" +
         "<th>主播陪我号</th>" +
@@ -71,26 +69,15 @@ function fill_data(data) {
             }
         }
     }
-    return tbody_str
-}
-
-//pages
-function fill_pages(page_info) {
-    var page_count = page_info.page_count;
-    var page_index = page_info.page_index;
-    var pages = get_pages(page_count, page_index);
-    var page_str = "";
-    page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[1] + "');\">" + '上一页' + "</button>";
-    for (var pageIndex = pages[0][0]; pageIndex < pages[0][0] + pages[0].length; pageIndex++) {
-        if (pageIndex === page_index) {
-            page_str += "<button class='pageUnique' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-        }
-        else {
-            page_str += "<button class='pageNum' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-        }
-    }
-    page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[2] + "');\">" + '下一页' + "</button>";
-    return page_str;
+    var totalStr = "查询结束。总记录数:" + totalCount;
+    var pageInfo = {
+        'total': totalCount,
+        'pageSize': 10,
+        'pageShow': 10,
+        'pageRequest': pageRequest
+    };
+    var pageStr = fillPage(pageInfo);
+    return {'tableStr': tbody_str, 'totalStr': totalStr, 'pageStr': pageStr}
 }
 
 function clear_table() {

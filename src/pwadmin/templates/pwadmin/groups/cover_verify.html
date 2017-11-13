@@ -1,32 +1,23 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
-
-{% block head_extends %}
-    <link rel="stylesheet" href="{% static 'css/cover_verify.css' %}">
+{% block title %}
+    陪我管理系统-群组
 {% endblock %}
-
-{% block right_content %}
-    <div class="right_content">
-        <div class="data_search">
-            <input type="text" placeholder="请输入主播陪我号" class="tuid in">
-            <input type="text" placeholder="开始时间" class="begin_time in time">
-            <input type="text" placeholder="结束时间" class="end_time in time">
-            <div class="right in">
-                <button class="search in" onclick="flashData()">搜索</button>
-                <button class="clear in">清空</button>
-                <div class="bottom">
-                </div>
-            </div>
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/cover_verify.css' %}" type="text/css"/>
+{% endblock %}
+{% block content_extra %}{% endblock %}
+{% block data_search %}
+    <input type="text" placeholder="请输入主播陪我号" class="tuid in">
+    <input type="text" placeholder="开始时间" class="begin_time in time">
+    <input type="text" placeholder="结束时间" class="end_time in time">
+    <div class="right in">
+        <button class="search in" onclick="flashData()">搜索</button>
+        <button class="clear in">清空</button>
+        <div class="bottom">
         </div>
-        <span class="total">查询结束，总记录{{ data.data.page_info.row_count }}</span>
-        <table id="data_table">
-            <tbody>
-            </tbody>
-        </table>
-        <div class="modalPage"></div>
     </div>
 {% endblock %}
-
 
 {% block script_extends %}
     <script src="{% static 'js/cover_verify.js' %}"></script>

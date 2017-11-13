@@ -1,23 +1,28 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
-
-{% block head_extends %}
-    <link rel="stylesheet" href="{% static 'css/group_manage.css' %}">
+{% block title %}
+    陪我管理系统-群组
 {% endblock %}
-
-
-
-{% block right_content %}
-    <div id="root">
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/group_manage.css' %}" type="text/css"/>
+{% endblock %}
+{% block content_extra %}{% endblock %}
+{% block data_search %}
+    <input type="text" placeholder="请输入群组名" class="in">
+    <input type="text" placeholder="请输入群组陪我号" class="in">
+    <input type="text" placeholder="请输入群组id" class="in">
+    招新：
+    <select id="new" class="in">
+        <option value="-1">全部</option>
+        <option value="1">开启</option>
+        <option value="0">关闭</option>
+    </select>
+    <div class="search_right in right">
+        <button class="search in">搜索</button>
+        <button class="clear in">清空</button>
     </div>
 {% endblock %}
 
-
 {% block script_extends %}
-
-    <script type="application/javascript">
-        var url = '{% url 'pwadminAPI:groups' %}';
-        var csrfmiddlewaretoken = '{{ csrf_token }}'
-    </script>
-    <script src="{% static 'pwadmin/groups/index.min.js' %}"></script>
+    <script src="{% static 'js/group_manage.js' %}"></script>
 {% endblock %}

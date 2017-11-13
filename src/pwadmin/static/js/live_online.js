@@ -1,12 +1,12 @@
 // 加载标签分类
 loadLabelclassification();
-
 // 加载主类别子类别
 loadCategories();
-
 // 加载table部分
 loadTableliveOnline({});
 
+
+var pageRequest = 1;
 // 获取table数据
 function loadTableliveOnline(data) {
     var dataSend = {
@@ -28,11 +28,26 @@ function loadTableliveOnline(data) {
         'url': '',
         'data': dataSend
     };
-    $.ajaxFunc(source, fillTable, errorHandle);
+    $.ajaxFunc(source, fillTableLiveonline, errorHandle);
+}
+
+
+function fillTableLiveonline(data, status, xhr) {
+    var strGet = getTableliveOnline(data);
+    var tableStr = strGet.tableStr;
+    $('#data_table tbody').remove();
+    $('#data_table').append("<tbody></tbody>");
+    $('#data_table tbody').append(tableStr);
+    var totalStr = strGet.totalStr;
+    $('.total').empty();
+    $('.total').append(totalStr);
+    var pageStr = strGet.pageStr;
+    $('.modalPage').empty();
+    $('.modalPage').append(pageStr);
 }
 
 // 拼table string
-function getTableStr(data) {
+function getTableliveOnline(data) {
     var totalCount = getTotal(data);
     var str_main = "";
     str_main += "<tr><th>" + "主播陪我号" + "</th><th>" + "主播昵称" + "</th><th>" + "直播主题" + "</th><th>" + "投票标签" + "</th><th>" + "主类别" + "</th><th>" + "子类别" + "</th><th>" + "主播头像" + "</th><th>" + "封面图" + "</th><th>" + "背景图" + "</th><th>" + "收听人数/真实/累计" + "</th><th>" + "礼物个数/价值/最近" + "</th><th>" + "点亮次数/最近" + "</th><th>" + "开始时间" + "</th><th>" + "结束时间" + "</th><th>" + "状态" + "</th><th>" + "操作" + "</th></tr>";
@@ -77,7 +92,14 @@ function getTableStr(data) {
         }
     }
     var totalStr = "查询结束。总记录数:" + totalCount;
-    return [str_main, totalStr];
+    var pageInfo = {
+        'total': totalCount,
+        'pageSize': 10,
+        'pageShow': 10,
+        'pageRequest': pageRequest
+    };
+    var pageStr = fillPage(pageInfo);
+    return {'tableStr': str_main, 'totalStr': totalStr, 'pageStr': pageStr};
 }
 
 //搜索
@@ -108,14 +130,3 @@ $('.search').on('click', function () {
     }
     loadTableliveOnline(data_find);
 });
-
-// 房间填数据
-function fillTable(data, status, xhr) {
-    var tableStr = getTableStr(data)[0];
-    $('#data_table tbody').remove();
-    $('#data_table').append("<tbody></tbody>");
-    $('#data_table tbody').append(tableStr);
-    var totalStr = getTableStr(data)[1];
-    $('.total').empty();
-    $('.total').append(totalStr);
-}
