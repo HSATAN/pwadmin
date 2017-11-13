@@ -256,7 +256,8 @@ button:focus {
 }
 
 .modalPage {
-    margin: 40px auto 30px auto;
+    width: 950px;
+    margin: 30px auto 40px auto;
 }
 
 .totalPage {

@@ -154,3 +154,7 @@ function dateToString(now) {
     var dateTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
     return dateTime;
 }
+
+$('.clear').on('click', function () {
+    $('.data_search input').val('');
+});

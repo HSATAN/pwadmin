@@ -7,7 +7,7 @@ loadTableliveOnline({});
 
 
 var pageRequest = 1;
-// 获取table数据
+// 获取页面table数据
 function loadTableliveOnline(data) {
     var dataSend = {
         'query_method': 'GET',
@@ -30,8 +30,6 @@ function loadTableliveOnline(data) {
     };
     $.ajaxFunc(source, fillTableLiveonline, errorHandle);
 }
-
-
 function fillTableLiveonline(data, status, xhr) {
     var strGet = getTableliveOnline(data);
     var tableStr = strGet.tableStr;
@@ -45,7 +43,6 @@ function fillTableLiveonline(data, status, xhr) {
     $('.modalPage').empty();
     $('.modalPage').append(pageStr);
 }
-
 // 拼table string
 function getTableliveOnline(data) {
     var totalCount = getTotal(data);
@@ -103,30 +100,30 @@ function getTableliveOnline(data) {
 }
 
 //搜索
-$('.search').on('click', function () {
-    var desc = 0;
-    if ($('.desc').is(':checked')) {
-        desc = 1;
-    }
-    var params = {
-        'owner_uid': $('.owner_uid').val(),
-        'owner_name': $('.owner_name').val(),
-        'live_id': $('.live_id').val(),
-        'label_id': $('#label_type').val(),
-        'order': $('#order').val(),
-        'desc': desc,
-        'main_label_id': $('#main_label').val(),
-        'sub_label_id': $('#sub_label').val()
-    };
-    var data_find = {
-        'desc': desc,
-        'page_size': 10,
-        'page_index': 1
-    };
-    for (var index in params) {
-        if (params[index] && (params[index] !== '')) {
-            data_find[index] = params[index];
-        }
-    }
-    loadTableliveOnline(data_find);
-});
+// $('.search').on('click', function () {
+//     var desc = 0;
+//     if ($('.desc').is(':checked')) {
+//         desc = 1;
+//     }
+//     var params = {
+//         'owner_uid': $('.owner_uid').val(),
+//         'owner_name': $('.owner_name').val(),
+//         'live_id': $('.live_id').val(),
+//         'label_id': $('#label_type').val(),
+//         'order': $('#order').val(),
+//         'desc': desc,
+//         'main_label_id': $('#main_label').val(),
+//         'sub_label_id': $('#sub_label').val()
+//     };
+//     var data_find = {
+//         'desc': desc,
+//         'page_size': 10,
+//         'page_index': 1
+//     };
+//     for (var index in params) {
+//         if (params[index] && (params[index] !== '')) {
+//             data_find[index] = params[index];
+//         }
+//     }
+//     loadTableliveOnline(data_find);
+// });
