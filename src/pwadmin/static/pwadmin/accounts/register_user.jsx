@@ -24,8 +24,8 @@ class FilterView extends React.Component {
     getGender() {
         return [
             {value: '', verbose_name: '无限制'},
-            {value: 'male', verbose_name: '男'},
-            {value: 'female', verbose_name: '女'},
+            {value: '1', verbose_name: '男'},
+            {value: '2', verbose_name: '女'},
         ]
     }
 
@@ -48,7 +48,7 @@ class FilterView extends React.Component {
             <div className="card-body">
                 <FilterBaseView store={new FilterBaseStore(store, '性别', 'gender', '', this.getGender())}
                                 style={filter_s}/>
-                <FilterBaseView store={new FilterBaseStore(store, '时间', 'time', '', this.getGender())}
+                <FilterBaseView store={new FilterBaseStore(store, '时间', 'time', '7', this.getTime())}
                                 style={filter_s}/>
 
             </div>
