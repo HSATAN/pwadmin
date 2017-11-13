@@ -55,4 +55,5 @@ urlpatterns = [
     url(r'^label_rank_list/$', groups.LabelRankList.as_view(), name='label_rank_list'),
     url(r'^sociaty_list/$', groups.SociatyList.as_view(), name='sociaty_list'),
     url(r'^sociaty_leaguer_list/$', groups.SociatyLeaguerList.as_view(), name='sociaty_leaguer_list'),
+    url(r'^room_adjust/$', groups.OperateLiveRooms.as_view(), name='room_adjust'),
 ]

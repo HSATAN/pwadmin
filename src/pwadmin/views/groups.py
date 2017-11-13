@@ -4,6 +4,8 @@
 """
 from __future__ import unicode_literals, absolute_import
 from contrib.views import BaseGroupsView
+from admin_interface.groups import Groups
+from contrib.views import BaseView
 
 
 class GroupManage(BaseGroupsView):
@@ -60,3 +62,13 @@ class SociatyList(BaseGroupsView):
 
 class SociatyLeaguerList(BaseGroupsView):
     template = 'pwadmin/groups/sociaty_leaguer_list.html'
+
+
+class OperateLiveRooms(BaseView):
+    groups = Groups()
+
+    def post(self, request):
+        print request.POST.dict()
+        # self.groups.live_top()
+
+
