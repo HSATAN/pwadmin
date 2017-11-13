@@ -5,7 +5,7 @@ browserify src/pwadmin/static/pwadmin/sign-in.jsx -t babelify --standalone signi
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class SignIn extends React.Component {
+class SignInView extends React.Component {
     constructor(props) {
         super(props);
 
@@ -21,12 +21,10 @@ class SignIn extends React.Component {
         this.login = this.login.bind(this);
     }
 
-    handleChange(event) {
-
-        const $target = $(event.target);
-        let up = {};
-        up[$target.attr('id')] = $target.val();
-        this.setState(up);
+    handleChange(field, event) {
+        this.setState({
+            [field]: event.target.value
+        });
     }
 
     handleSubmit(e) {
@@ -35,41 +33,53 @@ class SignIn extends React.Component {
     }
 
     login() {
+        const next = this.props.next;
+        const url = this.props.url;
+        const csrfmiddlewaretoken = this.props.csrfmiddlewaretoken;
         $.ajax({
-            url: this.props.sign_in_url,
+            url: url,
             method: 'POST',
+            headers: {'X-CSRFToken': csrfmiddlewaretoken},
             data: {
-                csrfmiddlewaretoken: this.props.csrf_token,
                 uid: this.state.uid,
                 password: this.state.password
-            },
-            success: function (data, status, xhr) {
-                if (data.code == 0){
-                    window.location.href = this.props.next
-                }else{
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                const code = data.code.toString();
+                if (code === "0") {
+                    window.location.href = next;
+                } else {
                     alert(data.msg);
                 }
-            }.bind(this),
-            error: function (xhr, status, thrown) {
-                console.log("Error", thrown);
-            }.bind(this)
-        });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            );
     }
 
     render() {
-        return <form id="signin-form">
-            <input type="hidden" name="csrfmiddlewaretoken" value={this.props.csrf_token}/>
+        return <form>
             <div className="form-inline">
-                <label className="form-control-label mx-sm-3" htmlFor="uid">UID</label>
-                <input type="text" className="form-inline" id="uid" name="uid" onChange={this.handleChange}/>
+                <label className="form-control-label mx-sm-3">UID</label>
+                <input type="text" className="form-inline" onChange={this.handleChange.bind(this, 'uid')}/>
             </div>
             <div className="form-inline">
-                <label className="form-control-label mx-sm-3" htmlFor="password">密码</label>
-                <input type="password" className="form-inline" id="password" name="password" onChange={this.handleChange}/>
+                <label className="form-control-label mx-sm-3">密码</label>
+                <input type="password" className="form-inline" onChange={this.handleChange.bind(this, 'password')}/>
             </div>
             <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>登陆</button>
         </form>
     }
 }
 
-export {React, ReactDOM, SignIn}
+//
+// ========================================
+ReactDOM.render(
+    <SignInView url={url}
+                csrfmiddlewaretoken={csrfmiddlewaretoken}
+                next={next}
+    />,
+    document.getElementById('root')
+);

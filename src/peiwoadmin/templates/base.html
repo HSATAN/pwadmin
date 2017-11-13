@@ -30,8 +30,8 @@
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
 <script type="text/javascript">
-    var csrfmiddlewaretoken='{{ csrf_token }}';
-    var userId = {{ request.user.uid }};
+    var csrfmiddlewaretoken = '{{ csrf_token }}';
+    var userId = {% if request.user.id %}{{ request.user.uid }}{% else %}''{% endif %};
     $(".time").datetimepicker({
         format: 'yyyy-mm-dd hh:ii:ss',
         autoclose: true,

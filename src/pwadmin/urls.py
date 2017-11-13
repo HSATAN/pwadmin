@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^logout/$', pwmanager.LogoutView.as_view(), name='logout'),
     url(r'^task/$', task.Task.as_view(), name='task'),
     # 用户.
-    url(r'^accounts/$', login_required(accounts.Accounts.as_view()), name='accounts'),
+    url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
     url(r'^account/list/$', accounts.AccountList.as_view(), name='account-list'),
     url(r'^account/reported/$', accounts.ReportedUser.as_view(), name='account-reported'),
     url(r'^account/password/$', accounts.ResetPassword.as_view(), name='account-password'),
