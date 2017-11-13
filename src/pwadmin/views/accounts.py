@@ -4,9 +4,6 @@ import logging
 from datetime import timedelta, date
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from pwadmin import models as pwa_models
@@ -22,13 +19,15 @@ class Accounts(LoginRequiredBaseView):
 
     def get_ajax(self, request, *args, **kwargs):
         """
-
         """
-        data = request.user.sdk.account.query_user()
+        params = dict(
+            uid=request.GET.get('query', '') or None,
+            gender=request.GET.get('gender', '') or None,
+            page_index=request.GET.get('page', '') or 1,
+            page_size=request.GET.get('size', '') or 25
+        )
+        data = request.user.sdk.account.query_user(params)
         return JsonResponse(data=data)
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template, context={})
 
 
 class AccountList(LoginRequiredBaseView):

@@ -5,101 +5,52 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
-import {BaseSearchStore} from './../store-tpl.jsx';
+import {BaseSearchStore, FilterBaseStore} from './../query-store.jsx';
+import {FilterBaseView} from './../query-components.jsx'
 
 const filter_s = {
     padding: 0,
 };
 
 
-/**
- * query Component.
- * @param queryItem:
- *      queryItem is object -> {
- *          verbose_name: '',
-  *         field_name: '',
-  *         selected: '',
-   *        values: [{verbose_name: '', value: ''}]}
- */
-@observer
-class FilterBaseView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-        this.renderSpecified = this.renderSpecified.bind(this);
-    }
-
-    handleClick(event) {
-        const store = this.props.store;
-        const queryItem = this.props.queryItem;
-
-        const $target = $(event.target);
-        const value = $target.data('value');
-        const name = $target.data('field');
-        queryItem.selected = value;
-        store.filter.push({name: name, value:value});
-        if (value != 'specified') {
-            store.search = true;
-        } else {
-            store.search = false;
-        }
-    }
-
-    renderSpecified() {
-        return <form className="form-inline">
-            <input type="text"
-                   className="form-control mb-2 mr-sm-2 mb-sm-0"
-                   id="inlineFormInputName2"
-                   placeholder="下限"
-                   style={{width: "35%"}}
-            />
-            <input type="text"
-                   className="form-control mb-2 mr-sm-2 mb-sm-0"
-                   id="inlineFormInputGroupUsername2"
-                   placeholder="上限"
-                   style={{width: "35%"}}
-            />
-            <button type="submit"
-                    className="btn btn-primary"
-                    style={{width: "22%"}}
-            >确定
-            </button>
-        </form>
-    }
-
-    render() {
-        const queryItem = this.props.queryItem;
-        return <div>
-            <h4 className="card-title">By {queryItem.verbose_name}</h4>
-            <div className="list-group">
-                {queryItem.values.map((i, index) => {
-                    return <a href="#"
-                              key={index}
-                              className={"list-group-item " + (queryItem.selected == i.value ? 'active' : 'list-group-item-action')}
-                              style={filter_s}
-                              data-value={i.value}
-                              data-field={queryItem.field_name}
-                              onClick={this.handleClick}
-                    >{i.verbose_name}</a>
-                })}
-                {queryItem.selected == 'specified' ? this.renderSpecified() : null}
-            </div>
-        </div>
-    }
-}
-
-
 @observer
 class FilterView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.getGender = this.getGender.bind(this);
+        this.getTime = this.getTime.bind(this);
+    }
+
+    getGender() {
+        return [
+            {value: '', verbose_name: '无限制'},
+            {value: 'male', verbose_name: '男'},
+            {value: 'female', verbose_name: '女'},
+        ]
+    }
+
+    getTime() {
+        return [
+            {value: '', verbose_name: '无限制'},
+            {value: '1', verbose_name: '今天'},
+            {value: '7', verbose_name: '7天内'},
+            {value: '30', verbose_name: '30天内'},
+            {value: 'specified', verbose_name: '指定'},
+        ]
+    }
+
     render() {
-        const filter_store = this.props.filter_store;
         const store = this.props.store;
         return <div className="card">
             <div className="card-header">
                 Filter
             </div>
             <div className="card-body">
-                {filter_store.filters.map((obj, index) => <FilterBaseView key={index} queryItem={obj} store={store}/>)}
+                <FilterBaseView store={new FilterBaseStore(store, '性别', 'gender', '', this.getGender())}
+                                style={filter_s}/>
+                <FilterBaseView store={new FilterBaseStore(store, '时间', 'time', '', this.getGender())}
+                                style={filter_s}/>
+
             </div>
         </div>
     }
@@ -113,24 +64,17 @@ class SearchView extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(e) {
         e.preventDefault();
         const store = this.props.store;
-        store.search = true;
+        store.Query();
     }
-
-    handleChange(e) {
-        const store = this.props.store;
-        store.search = false;
-        store.query = e.target.value;
-    }
-
 
     render() {
+        const store = this.props.store;
         return <div>
             <form>
                 <div className="form-group row">
@@ -139,7 +83,7 @@ class SearchView extends React.Component {
                                className="form-control"
                                id="like-min"
                                name="like-min"
-                               onChange={this.handleChange}
+                               onChange={store.UpdateField.bind(store, 'query')}
                                placeholder="请输入陪我ID/请输入陪我昵称/请输入电话号码"/>
                     </div>
                     <div className="col-sm-2">
@@ -160,11 +104,16 @@ class SearchView extends React.Component {
 @observer
 class TableView extends React.Component {
     render() {
-        const object_list = this.props.object_list;
-        if (_.isEmpty(object_list)) {
+        const store = this.props.store;
+        const data = store.data;
+        if (_.isEmpty(data)) {
             return <div></div>
         }
-        const data = object_list.data.list;
+        if (data.code.toString() !== '0') {
+            alert(data.msg);
+            return <div></div>
+        }
+        const objects = data.data.list;
         return <div>
             <div>
                 <div className="actions">
@@ -201,7 +150,7 @@ class TableView extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                {data.map(
+                {objects.map(
                     (item, index) => {
                         return <tr key={index}>
                             <th><img src={"https://o6dq1o4az.qnssl.com/" + item.raw_images + "/thumbnail"}
@@ -229,11 +178,8 @@ class TableView extends React.Component {
 
 @observer
 class RegisterUser extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
+        const store = this.props.store;
         return <div>
             <ol className="breadcrumb">
                 <li className="breadcrumb-item"><a href="#">Home</a></li>
@@ -241,12 +187,12 @@ class RegisterUser extends React.Component {
                 <li className="breadcrumb-item active">注册用户</li>
             </ol>
             <div className="row">
-                <div className="col-9">
-                    {this.props.search}
-                    {this.props.table}
+                <div className="col-10">
+                    <SearchView store={store}/>
+                    <TableView store={store}/>
                 </div>
-                <div className="col-3">
-                    {this.props.filter}
+                <div className="col-2">
+                    <FilterView store={store}/>
                 </div>
             </div>
 
@@ -254,80 +200,9 @@ class RegisterUser extends React.Component {
     }
 }
 
-/**
- * 暂时先写成静态的, 之后再考虑服务器传来的
- */
-class FilterStore {
-    @observable filters = [
-            {
-                verbose_name: '性别',
-                field_name: 'gender',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'male', verbose_name: '男'},
-                    {value: 'female', verbose_name: '女'},
-                ]
-            },
-            {
-                verbose_name: '时间',
-                field_name: 'time',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: '1', verbose_name: '今天'},
-                    {value: '7', verbose_name: '7天内'},
-                    {value: '30', verbose_name: '30天内'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            },
-            {
-                verbose_name: '喜欢',
-                field_name: 'like',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            },
-            {
-                verbose_name: '被喜欢',
-                field_name: 'liked',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            },
-            {
-                verbose_name: '投喂',
-                field_name: 'feed',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            },
-            {
-                verbose_name: '收获',
-                field_name: 'harvest',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            },
-        ]
-}
-
-
 // ========================================
-const store = new BaseSearchStore();
-const filter_store = new FilterStore();
 ReactDOM.render(
-    <RegisterUser search={<SearchView store={store}/>}
-                  table={<TableView/>}
-                  filter={<FilterView store={store} filter_store={filter_store}/>}
+    <RegisterUser store={new BaseSearchStore(url)}
     />,
     document.getElementById('root')
 );
