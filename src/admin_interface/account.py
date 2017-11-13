@@ -58,7 +58,7 @@ class Account(BaseHandler):
         resp = requests.post(url, data={'uid': uid, 'password': password})
         return resp.json()
 
-    def query_user(self, **kwargs):
+    def query_user(self, params):
         """
 
         Args:
@@ -84,31 +84,7 @@ class Account(BaseHandler):
         Returns:
 
         """
-        PARAMS = {
-            'tuid': None,
-            'uids': None,
-            'page_index': None,
-            'page_size': None,
-            'begin_time': None,
-            'end_time': None,
-            'order': None,
-            'gender': None,
-            'name': None,
-            'phone': None,
-            'stat_priority': None,
-            'like_begin': None,
-            'like_end': None,
-            'liked_begin': None,
-            'liked_end': None,
-            'paid_begin': None,
-            'paid_end': None,
-            'income_begin': None,
-            'income_end': None
-        }
-        params = {}
-        for k in kwargs:
-            if k in PARAMS and params.get(k, None) is not None:
-                params[k] = params.get(k)
+
         return self.request(self.QUERY_USER,
                             'get',
                             params=params).json()

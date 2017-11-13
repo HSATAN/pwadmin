@@ -1,61 +1,48 @@
 # -*- coding: utf-8 -*-
-import math
 import logging
-from datetime import timedelta, date
+import math
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
-from django.views.generic import View
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from contrib.views import BaseView, LoginRequiredBaseView
 from pwadmin import models as pwa_models
-from contrib.views import BaseView
+from pwadmin.views.generic import BaseQueryList
 
 logger = logging.getLogger(__file__)
 
 
-class Accounts(View):
+class Accounts(BaseQueryList):
     """用户-基础信息-注册用户.
     """
     template = 'pwadmin/accounts/register_user.html'
 
-    def get(self, request, *args, **kwargs):
-        if request.path_info == reverse_lazy('pwadminAPI:accounts'):
-            return self.get_api(request, *args, **kwargs)
-        return self.get_template(request, *args, **kwargs)
-
-    def get_api(self, request, *args, **kwargs):
+    def get_ajax(self, request, *args, **kwargs):
         """
-        Args:
-            request:
-            *args:
-            **kwargs:
-
-        Returns:
-
         """
-        data = request.user.sdk.account.query_user()
+
+        _date = request.GET.get('time', '7') or '7'
+        begin_time, end_time = self.process_date(_date)
+
+        params = dict(
+            uid=request.GET.get('query', '') or None,
+            gender=request.GET.get('gender', '') or -1,
+            page_index=request.GET.get('page', '') or 1,
+            page_size=request.GET.get('size', '') or 25,
+            begin_time=begin_time,
+            end_time=end_time
+        )
+        data = request.user.sdk.account.query_user(params)
         return JsonResponse(data=data)
 
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template)
 
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template, context={})
-
-    def reported(self, request, *args, **kwargs):
-        pass
-
-
-class AccountList(BaseView):
+class AccountList(LoginRequiredBaseView):
     """获取用户列表, 之所以不使用Accounts, 是因为使用了新的api.
     之后api统一了在移除之.
 
     """
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -112,10 +99,9 @@ class ReportedUser(BaseView):
         return render(request, self.template, {})
 
 
-class ResetPassword(BaseView):
+class ResetPassword(LoginRequiredBaseView):
     template = 'pwadmin/accounts/resetpassword.html'
 
-    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -155,22 +141,13 @@ class ResetPassword(BaseView):
         resp = request.user.sdk.account.reset_password(password, tuid, note)
         return JsonResponse(resp)
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
 
-
-class MessageManagement(BaseView):
+class MessageManagement(LoginRequiredBaseView):
     """系统消息管理.
 
     """
     template = 'pwadmin/accounts/messages.html'
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -224,17 +201,12 @@ class MessageManagement(BaseView):
         })
 
 
-class CaptchaList(BaseView):
+class CaptchaList(LoginRequiredBaseView):
     """用户数据查询-验证码查询.
 
     """
     template = 'pwadmin/accounts/captcha-list.html'
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -308,37 +280,6 @@ class CaptchaList(BaseView):
         return JsonResponse(data)
 
 
-class BaseQueryList(BaseView):
-    TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-
-    def process_date(self, _date):
-        """
-
-        Args:
-            _date:
-
-        Returns:
-
-        """
-        # 无时间约束.
-
-        if _date == '':
-            return '', ''
-        end_day = date.today() + timedelta(1)
-        try:
-            _date = int(_date)
-        except TypeError as e:
-            logger.warning(str(e))
-            return '', ''
-
-        begin_day = end_day + timedelta(-_date)
-        return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
-
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-
 class PaymentList(BaseQueryList):
     """用户数据查询-雁阵吗查询.
 
@@ -346,7 +287,6 @@ class PaymentList(BaseQueryList):
 
     template = 'pwadmin/accounts/payment-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -367,7 +307,6 @@ class ScoreList(BaseQueryList):
     """
     template = 'pwadmin/accounts/score-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -390,7 +329,6 @@ class RecordList(BaseQueryList):
     """
     template = 'pwadmin/accounts/record-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
