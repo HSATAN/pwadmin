@@ -91,7 +91,6 @@ class TableView extends React.Component {
                     <th>状态</th>
                     <th>支付宝账号</th>
                     <th>支付宝姓名</th>
-                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -107,9 +106,13 @@ class TableView extends React.Component {
                             <th>{item.uid}</th>
                             <th>{item.uid}</th>
                             <th>{item.state}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 10 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.alipay_account}>
+                                {item.alipay_account}
+                            </th>
                             <th>{item.alipay_name}</th>
-                            <th>{item.alipay_account}</th>
-                            <th>操作</th>
                         </tr>
                     })
                 }

@@ -283,12 +283,16 @@ class TableView extends React.Component {
                     <th>标题</th>
                     <th>图片</th>
                     <th>跳转类型</th>
-                    <th>链接地址</th>
-                    <th>三方链接</th>
-                    <th>用户</th>
+                    <th className="d-inline-block text-truncate"
+                        style={{width: 10 + "rem"}}>链接地址
+                    </th>
+                    <th className="d-inline-block text-truncate"
+                        style={{width: 10 + "rem"}}>三方链接
+                    </th>
+
                     <th>类型</th>
-                    <th>序号</th>
-                    <th>扩展数据</th>
+
+
                     <th>查看次数</th>
                     <th>点击次数</th>
                     <th>创建时间</th>
@@ -303,12 +307,15 @@ class TableView extends React.Component {
                             <th><img src={item.image_url + "/thumbnail"} style={{width: 64 + "px", height: 64 + "px"}}/>
                             </th>
                             <th>{item.redirect_route}</th>
-                            <th>{item.link_url}</th>
-                            <th>{item.target_url}</th>
-                            <th>{item.uid}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 10 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.link_url}>{item.link_url}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 10 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.target_url}>{item.target_url}</th>
                             <th>{item.type}</th>
-                            <th>{item.index}</th>
-                            <th>{item.extra}</th>
                             <th>{item.view_times}</th>
                             <th>{item.click_times}</th>
                             <th>{item.create_time}</th>
