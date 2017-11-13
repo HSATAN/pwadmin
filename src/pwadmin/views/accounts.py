@@ -7,55 +7,36 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
-from django.views.generic import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from pwadmin import models as pwa_models
-from contrib.views import BaseView
+from contrib.views import BaseView, LoginRequiredBaseView
 
 logger = logging.getLogger(__file__)
 
 
-class Accounts(View):
+class Accounts(LoginRequiredBaseView):
     """用户-基础信息-注册用户.
     """
     template = 'pwadmin/accounts/register_user.html'
 
-    def get(self, request, *args, **kwargs):
-        if request.path_info == reverse_lazy('pwadminAPI:accounts'):
-            return self.get_api(request, *args, **kwargs)
-        return self.get_template(request, *args, **kwargs)
-
-    def get_api(self, request, *args, **kwargs):
+    def get_ajax(self, request, *args, **kwargs):
         """
-        Args:
-            request:
-            *args:
-            **kwargs:
-
-        Returns:
 
         """
         data = request.user.sdk.account.query_user()
         return JsonResponse(data=data)
 
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template)
-
     def post(self, request, *args, **kwargs):
         return render(request, self.template, context={})
 
-    def reported(self, request, *args, **kwargs):
-        pass
 
-
-class AccountList(BaseView):
+class AccountList(LoginRequiredBaseView):
     """获取用户列表, 之所以不使用Accounts, 是因为使用了新的api.
     之后api统一了在移除之.
 
     """
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -112,10 +93,9 @@ class ReportedUser(BaseView):
         return render(request, self.template, {})
 
 
-class ResetPassword(BaseView):
+class ResetPassword(LoginRequiredBaseView):
     template = 'pwadmin/accounts/resetpassword.html'
 
-    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -155,22 +135,13 @@ class ResetPassword(BaseView):
         resp = request.user.sdk.account.reset_password(password, tuid, note)
         return JsonResponse(resp)
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
 
-
-class MessageManagement(BaseView):
+class MessageManagement(LoginRequiredBaseView):
     """系统消息管理.
 
     """
     template = 'pwadmin/accounts/messages.html'
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -224,17 +195,12 @@ class MessageManagement(BaseView):
         })
 
 
-class CaptchaList(BaseView):
+class CaptchaList(LoginRequiredBaseView):
     """用户数据查询-验证码查询.
 
     """
     template = 'pwadmin/accounts/captcha-list.html'
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -308,7 +274,7 @@ class CaptchaList(BaseView):
         return JsonResponse(data)
 
 
-class BaseQueryList(BaseView):
+class BaseQueryList(LoginRequiredBaseView):
     TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
     def process_date(self, _date):
@@ -334,10 +300,6 @@ class BaseQueryList(BaseView):
         begin_day = end_day + timedelta(-_date)
         return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
 
-    @method_decorator(login_required)
-    def get_template(self, request, *args, **kwargs):
-        return render(request, self.template, {})
-
 
 class PaymentList(BaseQueryList):
     """用户数据查询-雁阵吗查询.
@@ -346,7 +308,6 @@ class PaymentList(BaseQueryList):
 
     template = 'pwadmin/accounts/payment-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -367,7 +328,6 @@ class ScoreList(BaseQueryList):
     """
     template = 'pwadmin/accounts/score-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
@@ -390,7 +350,6 @@ class RecordList(BaseQueryList):
     """
     template = 'pwadmin/accounts/record-list.html'
 
-    @method_decorator(login_required)
     def get_ajax(self, request, *args, **kwargs):
         """
         openapi: "3.0.0"
