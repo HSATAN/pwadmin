@@ -48,14 +48,6 @@ class TableView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(item, e) {
-        const pws_store = this.props.pws_store;
-        pws_store.value = item.value;
-        pws_store.description = item.description;
-        pws_store.key = item.key;
     }
 
     render() {
@@ -82,8 +74,6 @@ class TableView extends React.Component {
                 <tr>
                     <th>陪我号</th>
                     <th>昵称/性别</th>
-                    <th>账户余额</th>
-                    <th>通话总时长</th>
                     <th>当次提现金额</th>
                     <th>提现服务费</th>
                     <th>当日提现次数/金额(元)</th>
@@ -98,8 +88,6 @@ class TableView extends React.Component {
                     (item, index) => {
                         return <tr key={index}>
                             <th>{item.uid}</th>
-                            <th>{item.uid}</th>
-                            <th>{item.money_raw}</th>
                             <th>{item.uid}</th>
                             <th>{item.money / 100}</th>
                             <th>{item.charge / 100}</th>
