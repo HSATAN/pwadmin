@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-import math
 import logging
-from datetime import timedelta, date
+import math
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from pwadmin import models as pwa_models
 from contrib.views import BaseView, LoginRequiredBaseView
+from pwadmin import models as pwa_models
+from pwadmin.views.generic import BaseQueryList
 
 logger = logging.getLogger(__file__)
 
 
-class Accounts(LoginRequiredBaseView):
+class Accounts(BaseQueryList):
     """用户-基础信息-注册用户.
     """
     template = 'pwadmin/accounts/register_user.html'
@@ -20,11 +21,17 @@ class Accounts(LoginRequiredBaseView):
     def get_ajax(self, request, *args, **kwargs):
         """
         """
+
+        _date = request.GET.get('time', '7') or '7'
+        begin_time, end_time = self.process_date(_date)
+
         params = dict(
             uid=request.GET.get('query', '') or None,
-            gender=request.GET.get('gender', '') or None,
+            gender=request.GET.get('gender', '') or -1,
             page_index=request.GET.get('page', '') or 1,
-            page_size=request.GET.get('size', '') or 25
+            page_size=request.GET.get('size', '') or 25,
+            begin_time=begin_time,
+            end_time=end_time
         )
         data = request.user.sdk.account.query_user(params)
         return JsonResponse(data=data)
@@ -271,33 +278,6 @@ class CaptchaList(LoginRequiredBaseView):
             captcha_type=captcha_type, begin_time=begin_time, end_time=end_time
         )
         return JsonResponse(data)
-
-
-class BaseQueryList(LoginRequiredBaseView):
-    TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-
-    def process_date(self, _date):
-        """
-
-        Args:
-            _date:
-
-        Returns:
-
-        """
-        # 无时间约束.
-
-        if _date == '':
-            return '', ''
-        end_day = date.today() + timedelta(1)
-        try:
-            _date = int(_date)
-        except TypeError as e:
-            logger.warning(str(e))
-            return '', ''
-
-        begin_day = end_day + timedelta(-_date)
-        return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
 
 
 class PaymentList(BaseQueryList):
