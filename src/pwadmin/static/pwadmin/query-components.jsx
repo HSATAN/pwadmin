@@ -36,5 +36,40 @@ class FilterBaseView extends React.Component {
     }
 }
 
+@observer
+class PaginationView extends React.Component {
+    render() {
+        const store = this.props.store;
+        return <nav className="form-inline" aria-label="Page navigation example">
+            <div className="input-group">
+                <ul className="pagination mb-4">
+                    <li className={store.isFirstPage ? "page-item disabled" : "page-item"}>
+                        <a className="page-link"
+                           href="javascript:void(0)"
+                           onClick={store.previous.bind(store)}
+                        ><i className="fa fa-angle-left" aria-hidden="true"></i></a>
+                    </li>
+                    {store.currentItems.map(page =>
+                        <li className={page === store.Current ? "page-item active" : "page-item"}>
+                            <a className="page-link" href="javascript:void(0)"
+                               onClick={store.page.bind(store, page)}>{page}</a>
+                        </li>
+                    )}
+                    <li className={store.isLastPage ? "page-item disabled" : "page-item"}>
+                        <a className="page-link"
+                           href="javascript:void(0)"
+                           onClick={store.next.bind(store)}
+                        ><i className="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+            <div className="input-group mb-4">
+                <input type="text" className="form-control" placeholder="页码" aria-label="Username"
+                       onChange={store.page.bind(store, null)}
+                       aria-describedby="basic-addon1"/>
+            </div>
+        </nav>
+    }
+}
 
-export {FilterBaseView}
+
+export {FilterBaseView, PaginationView}

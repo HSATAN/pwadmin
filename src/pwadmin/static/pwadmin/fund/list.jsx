@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
-import {BaseSearchStore, FilterBaseStore} from './../query-store.jsx';
-import {FilterBaseView} from './../query-components.jsx';
-import {PaginationView, PaginationStore} from "./../pagination.jsx";
+import {BaseSearchStore, FilterBaseStore, PageStore} from './../query-store.jsx';
+import {FilterBaseView, PaginationView} from './../query-components.jsx';
+import {TableStore} from './../form-store.jsx';
 
 
 @observer
@@ -50,43 +50,38 @@ class TableView extends React.Component {
         super(props);
     }
 
+
     render() {
         const store = this.props.store;
-        const data = store.data;
-        if (_.isEmpty(data)) {
-            return <div></div>
-        }
-
-        const code = data.code;
-        if (code != '0') {
-            alert(data.msg);
-            return <div></div>
-        }
-        const page_info = data.page_info || {};
-        const total = Math.ceil(page_info.row_count / page_info.page_size);
-        const page = page_info.page_index;
-        const items = data.data;
-
-
+        console.log(store.data);
         return <div>
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>陪我号</th>
-                    <th>昵称/性别</th>
-                    <th>当次提现金额</th>
-                    <th>提现服务费</th>
-                    <th>当日提现次数/金额(元)</th>
-                    <th>提现时间</th>
-                    <th>状态</th>
-                    <th>支付宝账号</th>
-                    <th>支付宝姓名</th>
+                    <th scope="col">
+                        <input type="checkbox"
+                               checked={store.checkedAllStatus}
+                               onChange={store.UpdateAllChecked.bind(store)}/>
+                    </th>
+                    <th scope="col">陪我号</th>
+                    <th scope="col">昵称/性别</th>
+                    <th scope="col">当次提现金额</th>
+                    <th scope="col">提现服务费</th>
+                    <th scope="col">当日提现次数/金额(元)</th>
+                    <th scope="col">提现时间</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">支付宝账号</th>
+                    <th scope="col">支付宝姓名</th>
                 </tr>
                 </thead>
                 <tbody>
-                {items.map(
+                {store.data.map(
                     (item, index) => {
                         return <tr key={index}>
+                            <td><input type="checkbox"
+                                       value={item.withdraw_id}
+                                       checked={store.selected.get(item.withdraw_id)}
+                                       onChange={store.UpdateChecked.bind(store, item.withdraw_id)}/></td>
                             <th>{item.uid}</th>
                             <th>{item.uid}</th>
                             <th>{item.money / 100}</th>
@@ -106,7 +101,6 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
-            <PaginationView store={new PaginationStore(total, 10, store, page)}/>
         </div>
     }
 }
@@ -148,6 +142,8 @@ class WaitAuditView extends React.Component {
 
     render() {
         const store = this.props.store;
+        const items = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.data : [];
+        const page_info = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.page_info : {};
         return <div>
             <ol className="breadcrumb">
                 <li className="breadcrumb-item"><a href="#">Home</a></li>
@@ -157,7 +153,8 @@ class WaitAuditView extends React.Component {
             <div className="row">
                 <div className="col-10">
                     <SearchView store={store}/>
-                    <TableView store={store}/>
+                    <TableView store={new TableStore(items)}/>
+                    <PaginationView store={new PageStore(page_info.page_size, page_info.row_count)}/>
                 </div>
                 <div className="col-2">
                     <FilterView store={store}/>
@@ -170,6 +167,7 @@ class WaitAuditView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <WaitAuditView store={new BaseSearchStore(url)}/>,
+    <WaitAuditView store={new BaseSearchStore(url)}/>
+    ,
     document.getElementById('root')
 );
