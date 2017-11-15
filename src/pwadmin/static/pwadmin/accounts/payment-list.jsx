@@ -190,11 +190,11 @@ class PaymentView extends React.Component {
                 <li className="breadcrumb-item active">收支查询</li>
             </ol>
             <div className="row">
-                <div className="col-9">
+                <div className="col-10">
                     <SearchView store={store}/>
                     <TableView store={store}/>
                 </div>
-                <div className="col-3">
+                <div className="col-2">
                     <FilterView store={store}/>
                 </div>
             </div>
