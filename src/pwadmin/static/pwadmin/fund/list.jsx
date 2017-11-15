@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
-import {BaseSearchStore, FilterBaseStore} from './../query-store.jsx';
-import {FilterBaseView} from './../query-components.jsx';
-import {PaginationView, PaginationStore} from "./../pagination.jsx";
+import {BaseSearchStore, FilterBaseStore, PageStore} from './../query-store.jsx';
+import {FilterBaseView, PaginationView} from './../query-components.jsx';
+import {TableStore} from './../form-store.jsx';
 
 
 @observer
@@ -45,48 +45,52 @@ class FilterView extends React.Component {
 
 @observer
 class TableView extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const store = this.props.store;
-        const data = store.data;
-        if (_.isEmpty(data)) {
-            return <div></div>
-        }
-
-        const code = data.code;
-        if (code != '0') {
-            alert(data.msg);
-            return <div></div>
-        }
-        const page_info = data.page_info || {};
-        const total = Math.ceil(page_info.row_count / page_info.page_size);
-        const page = page_info.page_index;
-        const items = data.data;
-
-
         return <div>
+            {!_.isEmpty(store.actions) ? <div className="form-inline">
+                <div className="col-lg-6 pl-0">
+                    <div className="input-group">
+                        <span className="input-group-addon">操作</span>
+                        <select className="form-control" value={store.action} onChange={store.UpdateAction.bind(store)}>
+                            {store.actions.map(obj => <option value={obj.value}>{obj.verbose_name}</option>)}
+                        </select>
+                        <span className="input-group-btn">
+                            <button className="btn btn-outline-dark"
+                                    onClick={store.ExecAction.bind(store)}
+                                    type="button">GO</button></span>
+                    </div>
+                </div>
+                <div className="col-lg-6 pl-0">选择了{store.CheckedCount}</div>
+            </div> : null}
+
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>陪我号</th>
-                    <th>昵称/性别</th>
-                    <th>当次提现金额</th>
-                    <th>提现服务费</th>
-                    <th>当日提现次数/金额(元)</th>
-                    <th>提现时间</th>
-                    <th>状态</th>
-                    <th>支付宝账号</th>
-                    <th>支付宝姓名</th>
+                    <th scope="col">
+                        <input type="checkbox"
+                               checked={store.checkedAllStatus}
+                               onChange={store.UpdateAllChecked.bind(store)}/>
+                    </th>
+                    <th scope="col">陪我号</th>
+                    <th scope="col">昵称/性别</th>
+                    <th scope="col">当次提现金额</th>
+                    <th scope="col">提现服务费</th>
+                    <th scope="col">当日提现次数/金额(元)</th>
+                    <th scope="col">提现时间</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">支付宝账号</th>
+                    <th scope="col">支付宝姓名</th>
                 </tr>
                 </thead>
                 <tbody>
-                {items.map(
+                {store.data.map(
                     (item, index) => {
                         return <tr key={index}>
+                            <td><input type="checkbox"
+                                       value={item.withdraw_id}
+                                       checked={store.Selected.get(item.withdraw_id)}
+                                       onChange={store.UpdateChecked.bind(store, item.withdraw_id)}/></td>
                             <th>{item.uid}</th>
                             <th>{item.uid}</th>
                             <th>{item.money / 100}</th>
@@ -106,7 +110,8 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
-            <PaginationView store={new PaginationStore(total, 10, store, page)}/>
+            {!_.isEmpty(store.data) ?
+                <PaginationView store={new PageStore(store.num_pages)}/> : null}
         </div>
     }
 }
@@ -148,6 +153,16 @@ class WaitAuditView extends React.Component {
 
     render() {
         const store = this.props.store;
+        const items = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.data : [];
+        const page_info = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.page_info : {};
+        const num_pages = Math.ceil(page_info.row_count / page_info.page_size);
+        const actions = !_.isEmpty(store.data) && store.data.code.toString() === '0' && store.data.actions ?
+            store.data.actions :
+            [
+                {verbose_name: '--', value: ''},
+                {verbose_name: '通过', value: 'pass'},
+                {verbose_name: '失败', value: 'failed'},
+            ];
         return <div>
             <ol className="breadcrumb">
                 <li className="breadcrumb-item"><a href="#">Home</a></li>
@@ -157,7 +172,7 @@ class WaitAuditView extends React.Component {
             <div className="row">
                 <div className="col-10">
                     <SearchView store={store}/>
-                    <TableView store={store}/>
+                    <TableView store={new TableStore(items, actions, num_pages)}/>
                 </div>
                 <div className="col-2">
                     <FilterView store={store}/>
@@ -170,6 +185,7 @@ class WaitAuditView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <WaitAuditView store={new BaseSearchStore(url)}/>,
+    <WaitAuditView store={new BaseSearchStore(url)}/>
+    ,
     document.getElementById('root')
 );

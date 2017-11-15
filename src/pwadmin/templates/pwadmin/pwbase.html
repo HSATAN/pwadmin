@@ -75,8 +75,16 @@
             </div>
         </nav>
     </div>
+
     <div class="row">
-        <div class="col-2">{% block left_content %}{% endblock %}</div>
-        <div class="col-10">{% block right_content %}{% endblock %}</div>
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+            <ul class="nav nav-pills flex-column">
+                {% block left_content %}{% endblock %}
+            </ul>
+        </nav>
+
+        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+            {% block right_content %}{% endblock %}
+        </main>
     </div>
 {% endblock %}

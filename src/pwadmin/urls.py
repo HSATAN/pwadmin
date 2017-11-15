@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^task/$', task.Task.as_view(), name='task'),
     # 用户.
     url(r'^accounts/$', accounts.Accounts.as_view(), name='accounts'),
-    url(r'^account/list/$', accounts.AccountList.as_view(), name='account-list'),
     url(r'^account/reported/$', accounts.ReportedUser.as_view(), name='account-reported'),
     url(r'^account/password/$', accounts.ResetPassword.as_view(), name='account-password'),
     url(r'^account/messages/$', accounts.MessageManagement.as_view(), name='account-messages'),

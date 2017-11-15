@@ -11,6 +11,7 @@ class PwManagerAdmin(admin.ModelAdmin):
     list_display = ['id', 'uid', 'name', 'role']
     search_fields = ['id', 'uid', 'name']
     list_filter = ['create_time']
+    list_per_page = 25
 
 
 @admin.register(models.PwMessage)
