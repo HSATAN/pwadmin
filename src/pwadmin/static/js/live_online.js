@@ -96,7 +96,7 @@ function getTableliveOnline(data) {
                     else {
                         str_main += "<button class='operate special' onclick=\"live_special('" + live.owner_uid + "', '" + live.live_id + "', 0)\">" + "特殊声优" + "</button>";
                     }
-                    str_main += "<button class='operate' onclick=\"live_edit_topic('" + live.owner_uid + "', '" + live.live_id + "'>" + "修改标签类别" + "</button>" +
+                    str_main += "<button class='operate' onclick=\"live_edit_topic('" + live.owner_uid + "', '" + live.live_id + "');\">" + "修改标签类别" + "</button>" +
                         "<button class='operate' onclick=\"live_del_topic('" + live.owner_uid + "', '" + live.live_id + "');\">" + "删除直播主题" + "</button>" +
                         "</td></tr>";
                 }
@@ -112,11 +112,6 @@ function getTableliveOnline(data) {
     };
     var pageStr = fillPage(pageInfo);
     return {'tableStr': str_main, 'totalStr': totalStr, 'pageStr': pageStr};
-}
-
-// 修改标签类别
-function live_edit_topic(tuid, liveId) {
-
 }
 
 // 置顶
@@ -502,6 +497,40 @@ $('.amend_out_robot').on('click', function () {
 $('.poll_out').on('click', function () {
     $('.amend_poll').css('display', 'none');
 });
+
+$('.label_out').on('click', function () {
+    $('.amend_label').css('display', 'none');
+});
+
+$('.amend_label_out').on('click', function () {
+    $('.amend_label').css('display', 'none');
+});
+
+$('.label_sure').on('click', function () {
+    var source = {
+        'methodStr': 'POST',
+        'url': ACTION_URL,
+        'data': {
+            'live_id': commonFields['liveId'],
+            'uid': userId,
+            'main_label_id': $('.label_main').val(),
+            'sub_label_id': $('.label_sub').val(),
+            'operate_type': 'live_edit_category'
+        }
+    };
+    $.ajaxFunc(source, successLiveeditCategory, errorHandle);
+});
+
+function successLiveeditCategory(data, status, xhr) {
+    $('.amend_label').css('display', 'none');
+    loadTableliveOnline({});
+    if (data.code === 0) {
+        alert('success');
+    }
+    else {
+        alert(data.msg);
+    }
+}
 //搜索
 // $('.search').on('click', function () {
 //     var desc = 0;
@@ -580,4 +609,57 @@ function fillLabelclassificationnew(data, status, xhr) {
             }
         }
     }
+}
+
+
+// 修改标签类别
+function live_edit_topic(tuid, liveId) {
+    commonFields['liveId'] = liveId;
+    commonFields['tuid'] = tuid;
+    $('.amend_label').css('display', 'block');
+    loadCategoriesNew({});
+}
+
+function loadCategoriesNew(data) {
+    var dataSend = {
+        'query_method': 'GET',
+        'api_request': '/admin/live_label_new/brief_label_query',
+        'uid': userId
+    };
+    for (var i in data) {
+        dataSend[i] = data[i];
+    }
+    var source = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': dataSend
+    };
+    $.ajaxFunc(source, fillCategoryNew, errorHandle);
+}
+
+function fillCategoryNew(data, status, xhr) {
+    var strMaincategory = "<option value>" + "全部" + "</option>";
+    var majors = data.data;
+    for (var indexLabel = 0; indexLabel < majors.length; indexLabel++) {
+        var major = majors[indexLabel];
+        strMaincategory += "<option value='" + major.id + "'>" + major.name + "</option>";
+    }
+    $(".label_main").append(strMaincategory);
+    $(".label_main").change(function () {
+        var main_val = $(this).val();
+        for (var indexLabel = 0; indexLabel < majors.length; indexLabel++) {
+            if (Number(majors[indexLabel].id) === Number(main_val)) {
+                fill_subs_new(majors[indexLabel].sub_labels);
+            }
+        }
+    });
+}
+
+function fill_subs_new(subs) {
+    var sub_str = "";
+    for (var indexSub = 0; indexSub < subs.length; indexSub++) {
+        sub_str += "<option value='" + subs[indexSub].id + "'>" + subs[indexSub].name + "</option>";
+    }
+    $(".label_sub").empty();
+    $(".label_sub").append(sub_str);
 }

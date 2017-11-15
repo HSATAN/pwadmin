@@ -95,6 +95,8 @@ class OperateLiveRooms(BaseView):
             data = sdk.groups.live_vote(params)
         elif operate_type == 'live_del_topic':
             data = sdk.groups.live_del_topic(params)
+        elif operate_type == 'live_edit_category':
+            data = sdk.groups.live_update_label(params)
         else:
             pass
         return JsonResponse(data)
