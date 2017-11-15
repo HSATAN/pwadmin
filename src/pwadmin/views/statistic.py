@@ -7,14 +7,6 @@ from django.contrib.auth.decorators import login_required
 from contrib.views import LoginRequiredBaseView
 
 
-class Statistic(View):
-    template = 'pwadmin/statistic/index.html'
-
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template)
-
-
 class Wildcat(LoginRequiredBaseView):
     """匿名聊正在匹配的用户.
 

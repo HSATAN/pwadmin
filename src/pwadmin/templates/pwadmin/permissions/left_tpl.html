@@ -1,0 +1,28 @@
+<li class="nav-item">
+    <a href="{% url 'pwadmin:perm_menu' %}"
+       class="nav-link {% if item == 'perm_menu' %}active{% endif %}">菜单</a>
+</li>
+<li class="nav-item">
+    <a href="{% url 'pwadmin:perm_manager' %}"
+       class="nav-link {% if item == 'perm_manager' %}active{% endif %}">用户</a>
+</li>
+<li class="nav-item">
+    <a href="{% url 'pwadmin:perm_group' %}"
+       class="nav-link {% if item == 'perm_group' %}active{% endif %}">Group</a>
+
+</li>
+
+<li class="nav-item">
+    <a href="{% url 'pwadmin:perm_menu_tree' %}"
+       class="nav-link {% if item == 'perm_menu_tree' %}active{% endif %}">菜单树</a>
+</li>
+
+
+<li class="nav-item">
+    <a href=""
+       class="nav-link {% if item == 'perm_user_group' %}active{% endif %}">用户Group</a>
+</li>
+<li class="nav-item">
+
+    <a href="" class="nav-link {% if nav_name == 'perm_user_app' %}active{% endif %}">用户APP</a>
+</li>

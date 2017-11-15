@@ -62,6 +62,6 @@ class MenuTree(View):
         tree = cache.get(key)
         if not tree:
             tree = self.model.objects.tree()
-            cache.set(key, tree, 24*60*60)
+            cache.set(key, tree, 24 * 60 * 60)
         return render(request, self.template_name, {'tree': json.dumps(tree, ensure_ascii=False),
                                                     'nav_name': 'perm_menu_tree'})

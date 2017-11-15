@@ -1,15 +1,4 @@
 {% extends 'base.html' %}
-{% block style %}
-    <style>
-        .nav-item {
-            font-size: 14px;
-        }
-
-        .navbar {
-            width: 100%;
-        }
-    </style>
-{% endblock %}
 {% block content %}
     <div id="top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -52,7 +41,7 @@
                         <a class="nav-link" href="#">客服</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pwadmin:statistic' %}">统计</a>
+                        <a class="nav-link" href="{% url 'pwadmin:statistic-wildcat' %}">统计</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">实时数据</a>
