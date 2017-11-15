@@ -49,8 +49,8 @@ class PaginationView extends React.Component {
                            onClick={store.previous.bind(store)}
                         ><i className="fa fa-angle-left" aria-hidden="true"></i></a>
                     </li>
-                    {store.currentItems.map(page =>
-                        <li className={page === store.Current ? "page-item active" : "page-item"}>
+                    {store.currentItems.map((page, index) =>
+                        <li key={index} className={page === store.Current ? "page-item active" : "page-item"}>
                             <a className="page-link" href="javascript:void(0)"
                                onClick={store.page.bind(store, page)}>{page}</a>
                         </li>
@@ -70,6 +70,5 @@ class PaginationView extends React.Component {
         </nav>
     }
 }
-
 
 export {FilterBaseView, PaginationView}

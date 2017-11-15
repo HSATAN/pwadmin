@@ -45,16 +45,25 @@ class FilterView extends React.Component {
 
 @observer
 class TableView extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-
     render() {
         const store = this.props.store;
-        console.log(store.data);
         return <div>
+            {!_.isEmpty(store.actions) ? <div className="form-inline">
+                <div className="col-lg-6 pl-0">
+                    <div className="input-group">
+                        <span className="input-group-addon">操作</span>
+                        <select className="form-control" value={store.action} onChange={store.UpdateAction.bind(store)}>
+                            {store.actions.map(obj => <option value={obj.value}>{obj.verbose_name}</option>)}
+                        </select>
+                        <span className="input-group-btn">
+                            <button className="btn btn-outline-dark"
+                                    onClick={store.ExecAction.bind(store)}
+                                    type="button">GO</button></span>
+                    </div>
+                </div>
+                <div className="col-lg-6 pl-0">选择了{store.CheckedCount}</div>
+            </div> : null}
+
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -80,7 +89,7 @@ class TableView extends React.Component {
                         return <tr key={index}>
                             <td><input type="checkbox"
                                        value={item.withdraw_id}
-                                       checked={store.selected.get(item.withdraw_id)}
+                                       checked={store.Selected.get(item.withdraw_id)}
                                        onChange={store.UpdateChecked.bind(store, item.withdraw_id)}/></td>
                             <th>{item.uid}</th>
                             <th>{item.uid}</th>
@@ -101,6 +110,8 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
+            {!_.isEmpty(store.data) ?
+                <PaginationView store={new PageStore(store.num_pages)}/> : null}
         </div>
     }
 }
@@ -144,6 +155,14 @@ class WaitAuditView extends React.Component {
         const store = this.props.store;
         const items = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.data : [];
         const page_info = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.page_info : {};
+        const num_pages = Math.ceil(page_info.row_count / page_info.page_size);
+        const actions = !_.isEmpty(store.data) && store.data.code.toString() === '0' && store.data.actions ?
+            store.data.actions :
+            [
+                {verbose_name: '--', value: ''},
+                {verbose_name: '通过', value: 'pass'},
+                {verbose_name: '失败', value: 'failed'},
+            ];
         return <div>
             <ol className="breadcrumb">
                 <li className="breadcrumb-item"><a href="#">Home</a></li>
@@ -153,8 +172,7 @@ class WaitAuditView extends React.Component {
             <div className="row">
                 <div className="col-10">
                     <SearchView store={store}/>
-                    <TableView store={new TableStore(items)}/>
-                    <PaginationView store={new PageStore(page_info.page_size, page_info.row_count)}/>
+                    <TableView store={new TableStore(items, actions, num_pages)}/>
                 </div>
                 <div className="col-2">
                     <FilterView store={store}/>

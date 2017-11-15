@@ -59,14 +59,13 @@ class PageStore {
 
     /**
      *
-     * @param size: 每页有多少项
-     * @param total: 总共有多少项
+
+     * @param num_pages: 总共有多少页
      * @param items: 分页的尺寸 << 1, 2, 3, 4 >> 即为4
      */
-    constructor(size, total, items = 10) {
+    constructor(num_pages, items = 10) {
         this.first_page = 0;
-        this.size = size;
-        this.total = total;
+        this.num_pages = num_pages;
         this.items = items;
     }
 
@@ -87,7 +86,7 @@ class PageStore {
 
     @computed
     get count() {
-        return Math.ceil(this.total / this.size);
+        return this.num_pages;
     }
 
 
