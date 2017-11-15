@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from django.http import JsonResponse
 from datetime import date, timedelta
 from contrib.views import LoginRequiredBaseView
 
@@ -32,3 +33,10 @@ class BaseQueryList(LoginRequiredBaseView):
 
         begin_day = end_day + timedelta(-_date)
         return begin_day.strftime(self.TIME_FORMAT), end_day.strftime(self.TIME_FORMAT)
+
+
+class BaseGroupsView(LoginRequiredBaseView):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        data = user.sdk.common.query_sneaky(**request.POST.dict())
+        return JsonResponse(data)

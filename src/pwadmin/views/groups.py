@@ -3,9 +3,11 @@
 
 """
 from __future__ import unicode_literals, absolute_import
-from contrib.views import BaseGroupsView
-from admin_interface.groups import Groups
 from contrib.views import BaseView
+from contrib.views import LoginRequiredBaseView
+from django.http import JsonResponse
+from admin_interface.groups import Groups
+from pwadmin.views.generic import BaseGroupsView
 
 
 class GroupManage(BaseGroupsView):
@@ -65,10 +67,34 @@ class SociatyLeaguerList(BaseGroupsView):
 
 
 class OperateLiveRooms(BaseView):
-    groups = Groups()
+    template = 'pwadmin/groups/sociaty_leaguer_list.html'
 
-    def post(self, request):
-        print request.POST.dict()
-        # self.groups.live_top()
-
-
+    def post_ajax(self, request, *args, **kwargs):
+        sdk = request.user.sdk
+        params = request.POST.dict()
+        operate_type = params.get('operate_type', None)
+        if operate_type is not None:
+            operate_type = params.pop('operate_type')
+        if operate_type == 'live_top':
+            data = sdk.groups.live_top(params)
+        elif operate_type == 'live_conceal':
+            data = sdk.groups.live_set_conceal(params)
+        elif operate_type == 'live_del_background':
+            data = sdk.groups.live_del_background_img(params)
+        elif operate_type == 'send_message':
+            data = sdk.groups.send_message(params)
+        elif operate_type == 'live_del_cover':
+            data = sdk.groups.live_del_cover(params)
+        elif operate_type == 'live_amend_permission':
+            data = sdk.groups.live_set_ratio(params)
+        elif operate_type == 'live_block':
+            data = sdk.groups.live_block(params)
+        elif operate_type == 'live_special':
+            data = sdk.groups.live_special_actor(params)
+        elif operate_type == 'live_poll':
+            data = sdk.groups.live_vote(params)
+        elif operate_type == 'live_del_topic':
+            data = sdk.groups.live_del_topic(params)
+        else:
+            pass
+        return JsonResponse(data)

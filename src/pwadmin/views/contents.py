@@ -2,12 +2,12 @@
 import json
 import time
 from copy import deepcopy
-from django.shortcuts import render, HttpResponse
 from django.views.generic import View
 from admin_interface.strings import PAGE_SIZE
 from admin_interface.common import BaseHandler
+from pwadmin.views.generic import BaseGroupsView
+from django.shortcuts import render, HttpResponse
 from admin_interface.strings import METHOD_GET, METHOD_POST
-from contrib.views import BaseGroupsView
 
 
 class LabelManage(BaseGroupsView):

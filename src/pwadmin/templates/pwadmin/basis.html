@@ -96,6 +96,9 @@
 {% endblock %}
 
 {% block extends_script %}
+    <script type="application/javascript">
+        var ACTION_URL = '{% url 'pwadmin:operates' %}';
+    </script>
     <script src="{% static 'js/basis.js' %}"></script>
     {% block method_extends %}{% endblock %}
 {% endblock %}

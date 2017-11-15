@@ -65,7 +65,7 @@ function fillPage(pageInfo) {
 //获取页码、上一页、下一页
 function get_pages(pageCount, pageRequest, pageShow) {
     // page_count总共多少页，pageRequest当前第几页, pageShow最多显示多少个
-    var midPages = Math.ceil(pageShow/2);
+    var midPages = Math.ceil(pageShow / 2);
     var pageFrom = 1;
     if (pageRequest <= midPages) {
         pageFrom = 1;
