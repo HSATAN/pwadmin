@@ -7,7 +7,6 @@ import {PaginationView, PaginationStore} from "./../pagination.jsx";
 import {FilterBaseStore, FilterBaseView} from './../common.jsx';
 
 
-
 @observer
 class TableView extends React.Component {
     constructor(props) {
@@ -115,14 +114,15 @@ class SearchView extends React.Component {
 
 @observer
 class FilterView extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.getType = this.getType.bind(this);
         this.getState = this.getState.bind(this);
     }
-    getType(){
+
+    getType() {
         return [
-            {value: "",  verbose_name: '全部'},
+            {value: "", verbose_name: '全部'},
             {value: "1", verbose_name: '注册账号'},
             {value: "2", verbose_name: '忘记密码'},
             {value: "3", verbose_name: '绑定手机'},
@@ -130,13 +130,14 @@ class FilterView extends React.Component {
         ]
     }
 
-    getState(){
+    getState() {
         return [
             {value: "", verbose_name: "全部"},
             {value: "0", verbose_name: "待验证"},
             {value: "2", verbose_name: "验证通过"}
         ]
     }
+
     render() {
         const store = this.props.store;
         return <div className="card">
@@ -162,11 +163,11 @@ class CaptchaView extends React.Component {
                 <li className="breadcrumb-item active">验证码查询</li>
             </ol>
             <div className="row">
-                <div className="col-9">
+                <div className="col-10">
                     <SearchView store={store}/>
                     <TableView store={store}/>
                 </div>
-                <div className="col-3">
+                <div className="col-2">
                     <FilterView store={store}/>
                 </div>
             </div>
