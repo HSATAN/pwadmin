@@ -38,5 +38,6 @@ class BaseQueryList(LoginRequiredBaseView):
 class BaseGroupsView(LoginRequiredBaseView):
     def post(self, request, *args, **kwargs):
         user = request.user
+        print 'data:', request.POST.dict()
         data = user.sdk.common.query_sneaky(**request.POST.dict())
         return JsonResponse(data)

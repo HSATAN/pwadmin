@@ -6,7 +6,78 @@
 {% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/live_search.css' %}" type="text/css"/>
 {% endblock %}
-{% block content_extra %}{% endblock %}
+{% block content_extra %}
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+    <div class="amend">
+        <div class="modify_data">
+            <div class="amend_front">
+                <div class="in amend_str">修改权限值系数</div>
+                <span class="space_out">×</span>
+            </div>
+            <hr class="amend_hr"/>
+            <div class="amend_mid">
+                <input type="text" placeholder="1" class="ratio">
+                <button class="amend_sub">提交修改</button>
+            </div>
+            <hr class="amend_hr"/>
+            <button class="amend_out">关闭</button>
+        </div>
+    </div>
+    <div class="amend_robot">
+        <div class="modify_data_robot">
+            <div class="amend_front_robot">
+                <div class="in amend_str_robot">修改机器人系数</div>
+                <span class="space_out_robot">×</span>
+            </div>
+            <hr class="amend_hr_robot"/>
+            <div class="amend_mid_robot">
+                <input type="text" placeholder="1" class="ratio_robot">
+                <button class="amend_sub_robot">提交修改</button>
+            </div>
+            <hr class="amend_hr_robot"/>
+            <button class="amend_out_robot">关闭</button>
+        </div>
+    </div>
+    <div class="amend_poll">
+        <div class="poll_data">
+            <div class="poll_front">
+                <div class="in amend_str">修改权限值系数</div>
+                <span class="space_out">×</span>
+            </div>
+            <hr class="amend_hr"/>
+            <div class="poll_mid">
+                当前标签：<input type="text" class="in poll_label" readonly><br/>
+                标签：<select id="label_id" class="in"></select><br/>
+                票数：<input type="text" class="in polls" placeholder="1">
+            </div>
+            <hr class="amend_hr"/>
+            <div class="right">
+                <button class="poll_sure">确定</button>
+                <button class="poll_out">关闭</button>
+            </div>
+        </div>
+    </div>
+    <div class="amend_label">
+        <div class="label_data">
+            <div class="label_front">
+                <div class="in label_str">修改内容类别</div>
+                <span class="amend_label_out right">×</span>
+            </div>
+            <hr class="label_hr"/>
+            <div class="label_mid">
+                主标签：<select class="label_main"></select>
+                子标签：<select class="in label_sub"></select>
+                <button class="label_sure">提交修改</button>
+            </div>
+            <hr class="label_hr"/>
+            <div class="right">
+                <button class="label_out">关闭</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 {% block data_search %}
     <input type="text" placeholder="请输入主播陪我号" class="in owner_uid">
     <input type="text" placeholder="请输入主播昵称" class="in owner_name">
@@ -28,7 +99,7 @@
     </div>
     <div class="in">
         排序字段：
-        <select name="sort" id="sort" class="in">
+        <select name="sort" id="order" class="in">
             <option value="weight">权重</option>
             <option value="create_time">开始时间</option>
             <option value="gift_value">礼物价值</option>
@@ -54,7 +125,7 @@
     <input type="text" placeholder="结束时间" class="end_time time">
     <div class="right in">
         <button class="search in">搜索</button>
-        <button class="clear in" onclick="clear_search()">清空</button>
+        <button class="clear in">清空</button>
     </div>
 {% endblock %}
 

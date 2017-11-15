@@ -1,23 +1,33 @@
-//加载页面，dom
-loadTableliveSpecial({});
-
 var pageRequest = 1;
-function loadTableliveSpecial(data) {
-    var dataSend = {
-        'query_method': 'GET',
-        'api_request': '/admin/live/cover/list',
-        'uid': userId,
-        'state': 0,
-        'page_size': 10,
-        'page_index': 0
-    };
+var content;
+var commonFields = {};
+var dataSource = {
+    'query_method': 'GET',
+    'api_request': '/admin/live/cover/list',
+    'uid': userId,
+    'state': 0,
+    'page_size': 10,
+    'page_index': 0
+};
+
+//加载页面，dom
+loadTableliveCover({});
+
+function loadTableliveCover(data) {
     for (var i in data) {
-        dataSend[i] = data[i];
+        if (data[i] !== '') {
+            dataSource[i] = data[i];
+        }
+        else {
+            if (dataSource.hasOwnProperty(i)) {
+                delete dataSource.i
+            }
+        }
     }
     var source = {
         'methodStr': 'POST',
         'url': '',
-        'data': dataSend
+        'data': dataSource
     };
     $.ajaxFunc(source, fillTablecoverVerify, errorHandle);
 }
@@ -34,6 +44,7 @@ function fillTablecoverVerify(data, status, xhr) {
     var pageStr = strGet.pageStr;
     $('.modalPage').empty();
     $('.modalPage').append(pageStr);
+    $('.page').on('click', pageSearch);
 }
 
 function getTablecoverVerify(data) {
@@ -80,38 +91,25 @@ function getTablecoverVerify(data) {
     return {'tableStr': tbody_str, 'totalStr': totalStr, 'pageStr': pageStr}
 }
 
-function clear_table() {
-    $("#data_table tbody").remove();
-    $(".total").remove();
-    $("#data_table").append('<tbody></tbody>');
-    $(".modalPage").empty();
-    $(".bottom").empty();
+//页码查询
+function pageSearch() {
+    pageRequest = parseInt($(this).attr('data-page'));
+    var data = {'page_index': pageRequest};
+    loadTablelabelManage(data);
 }
 
-function fill_state() {
-    var state_str = "";
-    var state_now = $('.right_content').attr('data-state');
-    if (!state_now) {
-        $('.right_content').attr('data-state', 0);
-        state_now = $('.right_content').attr('data-state');
-    }
-    if (state_now === 0 || state_now === '0') {
-        state_str += "<button data-id='0' onclick=\"state_search(0);\" class='status_select search_left'>" + '未处理' + "</button>"
-        state_str += "<button data-id='1' onclick=\"state_search(1);\" class='status_none'>" + '已处理' + "</button>"
-    }
-    else {
-        state_str += "<button data-id='0' onclick=\"state_search(0);\" class='status_none search_left'>" + '未处理' + "</button>"
-        state_str += "<button data-id='1' onclick=\"state_search(1);\" class='status_select'>" + '已处理' + "</button>"
-    }
-    return state_str;
+//"搜索"按钮
+function flashData() {
+    var tuid = $('.tuid').val();
+    var begin_time = $('.begin_time').val();
+    var end_time = $('.end_time').val();
+    var data_send = {
+        'tuid': tuid,
+        'begin_time': begin_time,
+        'end_time': end_time
+    };
+    loadTablelabelManage(data_send);
 }
-
-//"清除"按钮
-$('.clear').on('click', function () {
-    $('.tuid').empty();
-    $('.begin_time').empty();
-    $('.end_time').empty();
-});
 
 //状态查询按钮，"已处理"、"未处理"
 function state_search(state_flag) {
@@ -129,39 +127,16 @@ function state_search(state_flag) {
         data_status['end_time'] = end_time;
     }
     $('.right_content').attr('data-state', state_flag);
-    ShowMessage(data_status);
-}
-
-
-//"搜索"按钮
-function flashData() {
-    var data_deliver = {};
-    var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_deliver['tuid'] = tuid;
-    }
-    var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_deliver['begin_time'] = begin_time;
-    }
-    var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_deliver['end_time'] = end_time;
-    }
-    data_deliver['state'] = state_page;
-    ShowMessage(data_deliver);
+    loadTableliveSpecial(data_status);
 }
 
 //"通过"按钮，封面通过审核
 function deal(action, cover_id, tuid) {
-    console.log(action);
-    console.log(cover_id);
-    console.log(tuid);
+    commonFields['tuid'] = tuid;
     if (!confirm('确定吗?')) {
         return false;
     }
     else {
-        var content;
         if (action === 1) {
             content = '您提交的电台封面已通过审核';
         }
@@ -175,47 +150,33 @@ function deal(action, cover_id, tuid) {
             'state': action,
             'tuid': tuid
         };
-        sneaky(data);
-        console.log(data_response);
-        if (data_response.code === 0) {
-            var data_message = {
-                'query_method': 'POST',
-                'api_request': '/admin/message/send',
-                'tuid': tuid,
-                'content': content,
-                'normal': 1
-            };
-            sneaky(data_message);
-            console.log(data_response);
-            if (data_response.code === 0) {
-                alert('封面审核操作：操作成功，同时：已发送系统消息告知');
-                window.location.reload();
-            }
-        }
-        else {
-            alert('操作失败');
-        }
+        var source = {
+            'methodStr': 'POST',
+            'url': '',
+            'data': data
+        };
+        $.ajaxFunc(source, successCoverHandler, errorHandle);
+    }
+}
+function successCoverHandler(data, status, xhr) {
+    if (data.code === 0) {
+        var data_message = {
+            'tuid': commonFields['tuid'],
+            'normal': 1,
+            'content': content
+        };
+        $.ajaxSendMessage(data_message, successPasscover, errorHandle)
+    }
+}
+function successPasscover(data, status, xhr) {
+    if (data.code === 0) {
+        alert('封面审核操作：操作成功，同时：已发送系统消息告知');
+        window.location.reload();
+    }
+    else {
+        alert('error');
     }
 }
 
-//页码查询
-function servlet_page(page) {
-    var state_now = $('.right_content').attr('data-state');
-    var data_page = {'page_index': page};
-    var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_page['tuid'] = tuid;
-    }
-    var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_page['begin_time'] = begin_time;
-    }
-    var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_page['end_time'] = end_time;
-    }
-    data_page['state'] = state_now;
-    ShowMessage(data_page);
-}
 
 
