@@ -115,38 +115,21 @@ class TableView extends React.Component {
         }
         const objects = data.data.list;
         return <div>
-            <div>
-                <div className="actions">
-                    <label>Action:
-                        <select name="action" required="" defaultValue="">
-                            <option value="">---------</option>
-                            <option value="delete_selected">Delete selected pw managers</option>
-                        </select></label><input type="hidden" name="select_across" value="0"
-                                                className="select-across"/>
-                    <button type="submit" className="button" title="Run the selected action" name="index"
-                            value="0">
-                        Go
-                    </button>
-
-                    <span className="action-counter" data-actions-icnt="45"
-                          style={{display: "inline"}}>0 of 45 selected</span>
-                </div>
-            </div>
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>头像</th>
-                    <th>陪我号</th>
-                    <th>昵称</th>
-                    <th>登录类型</th>
-                    <th>口粮</th>
-                    <th>粮票</th>
-                    <th>喜欢</th>
-                    <th>被喜欢</th>
-                    <th>投喂</th>
-                    <th>收获</th>
-                    <th>注册时间</th>
-                    <th>登录时间</th>
+                    <th scope="col">头像</th>
+                    <th scope="col">陪我号</th>
+                    <th scope="col">昵称</th>
+                    <th scope="col">登录类型</th>
+                    <th scope="col">口粮</th>
+                    <th scope="col">粮票</th>
+                    <th scope="col">喜欢</th>
+                    <th scope="col">被喜欢</th>
+                    <th scope="col">投喂</th>
+                    <th scope="col">收获</th>
+                    <th scope="col">注册时间</th>
+                    <th scope="col">登录时间</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -156,7 +139,12 @@ class TableView extends React.Component {
                             <th><img src={"https://o6dq1o4az.qnssl.com/" + item.raw_images + "/thumbnail"}
                                      style={{width: 60 + 'px'}}/></th>
                             <th>{item.uid}</th>
-                            <th>{item.name}</th>
+                            <th className="d-inline-block text-truncate"
+                                style={{width: 10 + "rem"}}
+                                data-toggle="tooltip"
+                                data-placement="top" title={item.name}>
+                                {item.name}
+                            </th>
                             <th>{item.social_type}</th>
                             <th>{item.change}</th>
                             <th>{item.money}</th>

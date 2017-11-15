@@ -1,4 +1,6 @@
-<ul class="list-group">
-    <a href="{% url 'pwadmin:fund-wait-audit' %}" class="list-group-item {% if item == 'fund-wait-audit' %}active{% else %}list-group-item-action{% endif %}">待审核</a>
-    <a href="{% url 'pwadmin:fund-pay-failed' %}" class="list-group-item {% if item == 'fund-pay-failed' %}active{% else %}list-group-item-action{% endif %}">打款失败</a>
-</ul>
+<a href="{% url 'pwadmin:fund-wait-audit' %}"
+   class="nav-link {% if item == 'fund-wait-audit' %}active{% endif %}">待审核</a>
+
+<a href="{% url 'pwadmin:fund-pay-failed' %}"
+   class="nav-link {% if item == 'fund-pay-failed' %}active{% endif %}">打款失败</a>
+

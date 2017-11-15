@@ -1,18 +1,10 @@
 {% extends 'pwadmin/pwbase.html' %}
 {% load static %}
 {% block title %}
-    任务-陪我管理系统
+    用户-陪我管理系统
 {% endblock %}
 {% block left_content %}
-    <ul class="list-group">
-        <li href="javascript:void(0);" class="list-group-item">基础信息
-            <div class="list-group">
-                <a href="{% url 'pwadmin:accounts' %}" class="list-group-item list-group-item-action">注册用户</a>
-                <a href="#" class="list-group-item list-group-item-action">用户动态</a>
-            </div>
-        </li>
-        <a href="{% url 'pwadmin:account-reported' %}" class="list-group-item active">被举报用户</a>
-    </ul>
+    {% include 'pwadmin/accounts/left_tpl.html' with item='account-reported' %}
 {% endblock %}
 
 {% block right_content %}

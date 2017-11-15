@@ -63,6 +63,7 @@ class Account(BaseHandler):
 
         Args:
             tuid(int): 	用户uid.
+            query(str): uid or name or phone
             uids(str): 字符串分隔的多个uid
             page_index(int): 页数
             page_size(int): 每页记录数，默认10

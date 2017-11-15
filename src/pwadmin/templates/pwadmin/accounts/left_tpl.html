@@ -1,28 +1,40 @@
-<ul class="list-group">
-    <li href="javascript:void(0);" class="list-group-item">基础信息
-        <div class="list-group">
-            <a href="{% url 'pwadmin:accounts' %}" class="list-group-item {% if item == 'register' %}active{% else %}list-group-item-action{% endif %}">注册用户</a>
-            <a href="#" class="list-group-item list-group-item-action">用户动态</a>
-        </div>
-    </li>
-    <a href="{% url 'pwadmin:account-reported' %}" class="list-group-item list-group-item-action">被举报用户</a>
-    <li href="javascript:void(0);" class="list-group-item">账号管理
-        <div class="list-group">
-            <a href="{% url 'pwadmin:account-password' %}" class="list-group-item {% if item == 'reset_password' %}active{% else %}list-group-item-action{% endif %}">重置密码</a>
-            <a href="#" class="list-group-item {% if item == 'generate_account' %}active{% else %}list-group-item-action{% endif %}">生成账号</a>
-            <a href="#" class="list-group-item {% if item == 'change_kl' %}active{% else %}list-group-item-action{% endif %}">修改口粮</a>
-            <a href="#" class="list-group-item {% if item == 'change_lp' %}active{% else %}list-group-item-action{% endif %}">修改粮票</a>
-            <a href="#" class="list-group-item {% if item == 'reset_account' %}active{% else %}list-group-item-action{% endif %}">账号回收</a>
-        </div>
-    </li>
-    <a href="{% url 'pwadmin:account-messages' %}" class="list-group-item {% if item == 'messages' %}active{% else %}list-group-item-action{% endif %}">系统消息管理</a>
-    <li href="javascript:void(0);" class="list-group-item">用户数据查询
-        <div class="list-group">
-            <a href="{% url 'pwadmin:account-record' %}" class="list-group-item {% if item == 'account-record' %}active{% else %}list-group-item-action{% endif %}">通话记录查询</a>
-            <a href="{% url 'pwadmin:account-captcha' %}" class="list-group-item {% if item == 'account-captcha' %}active{% else %}list-group-item-action{% endif %}">验证码查询</a>
-            <a href="{% url 'pwadmin:account-payment' %}" class="list-group-item {% if item == 'account-payment' %}active{% else %}list-group-item-action{% endif %}">收支查询</a>
-            <a href="{% url 'pwadmin:account-score' %}" class="list-group-item {% if item == 'account-score' %}active{% else %}list-group-item-action{% endif %}">积分明细</a>
+<li class="nav-item">基础信息
 
-        </div>
-    </li>
-</ul>
+    <a href="{% url 'pwadmin:accounts' %}"
+       class="nav-link {% if item == 'register' %}active{% endif %}">注册用户</a>
+    <a href="#" class="nav-link">用户动态</a>
+
+</li>
+<li class="nav-item">
+    <a href="{% url 'pwadmin:account-reported' %}"
+       class="nav-link {% if item == 'account-reported' %}active{% endif %}">被举报用户</a>
+</li>
+<li class="nav-item">账号管理
+
+    <a href="{% url 'pwadmin:account-password' %}"
+       class="nav-link {% if item == 'reset_password' %}active{% endif %}">重置密码</a>
+    <a href="#"
+       class="nav-link {% if item == 'generate_account' %}active{% endif %}">生成账号</a>
+    <a href="#"
+       class="nav-link {% if item == 'change_kl' %}active{% endif %}">修改口粮</a>
+    <a href="#"
+       class="nav-link {% if item == 'change_lp' %}active{% endif %}">修改粮票</a>
+    <a href="#"
+       class="nav-link {% if item == 'reset_account' %}active{% endif %}">账号回收</a>
+
+</li>
+<li class="nav-item">
+    <a href="{% url 'pwadmin:account-messages' %}"
+       class="nav-link {% if item == 'messages' %}active{% endif %}">系统消息管理</a>
+</li>
+
+<li class="nav-item">用户数据查询
+    <a href="{% url 'pwadmin:account-record' %}"
+       class="nav-link {% if item == 'account-record' %}active{% endif %}">通话记录查询</a>
+    <a href="{% url 'pwadmin:account-captcha' %}"
+       class="nav-link {% if item == 'account-captcha' %}active{% endif %}">验证码查询</a>
+    <a href="{% url 'pwadmin:account-payment' %}"
+       class="nav-link {% if item == 'account-payment' %}active{% endif %}">收支查询</a>
+    <a href="{% url 'pwadmin:account-score' %}"
+       class="nav-link {% if item == 'account-score' %}active{% endif %}">积分明细</a>
+</li>
