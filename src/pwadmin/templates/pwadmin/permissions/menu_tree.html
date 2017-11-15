@@ -1,8 +1,14 @@
-{% extends 'pwadmin/permissions/base.html' %}
+{% extends 'pwadmin/pwbase.html' %}
 {% load static %}
 {% block title %}
     权限-陪我管理系统
 {% endblock %}
+
+
+{% block left_content %}
+    {% include 'pwadmin/permissions/left_tpl.html' with item='perm_menu_tree' %}
+{% endblock %}
+
 
 {% block right_content %}
     <div id="menu-tree">

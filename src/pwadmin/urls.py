@@ -28,9 +28,7 @@ urlpatterns = [
     url(r'^config/gift/$', config.Gift.as_view(), name='config-gift'),
     # 提现
     url(r'^fund/$', fund.FUND.as_view(), name='fund-wait-audit'),
-    url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
     # 统计
-    url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^statistic/wildcat/$', statistic.Wildcat.as_view(), name='statistic-wildcat'),
     # 群组.
     url(r'^groups/$', groups.IndexView.as_view(), name="groups"),
