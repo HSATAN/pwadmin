@@ -12,7 +12,6 @@ var dataSource = {
 
 //加载页面，dom
 loadTableliveCover({});
-
 function loadTableliveCover(data) {
     for (var i in data) {
         if (data[i] !== '') {
@@ -31,7 +30,6 @@ function loadTableliveCover(data) {
     };
     $.ajaxFunc(source, fillTablecoverVerify, errorHandle);
 }
-
 function fillTablecoverVerify(data, status, xhr) {
     var strGet = getTablecoverVerify(data);
     var tableStr = strGet.tableStr;
@@ -46,7 +44,6 @@ function fillTablecoverVerify(data, status, xhr) {
     $('.modalPage').append(pageStr);
     $('.page').on('click', pageSearch);
 }
-
 function getTablecoverVerify(data) {
     var totalCount = getTotal(data);
     var tbody_str = "";
@@ -112,22 +109,11 @@ function flashData() {
 }
 
 //状态查询按钮，"已处理"、"未处理"
-function state_search(state_flag) {
-    var data_status = {'state': state_flag};
-    var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_status['tuid'] = tuid;
-    }
-    var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_status['begin_time'] = begin_time;
-    }
-    var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_status['end_time'] = end_time;
-    }
-    $('.right_content').attr('data-state', state_flag);
-    loadTableliveSpecial(data_status);
+function search_deal(state) {
+    var data_send = {
+        'state': state
+    };
+    loadTableliveCover(data_send);
 }
 
 //"通过"按钮，封面通过审核
