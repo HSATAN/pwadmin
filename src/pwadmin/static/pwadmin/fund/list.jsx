@@ -5,6 +5,8 @@ import {observer} from 'mobx-react';
 import {BaseSearchStore, FilterBaseStore, PageStore} from './../query-store.jsx';
 import {FilterBaseView, PaginationView} from './../query-components.jsx';
 import {TableStore} from './../form-store.jsx';
+import {QueryStore} from '../../dj-react/store/query.jsx';
+import {QueryComponent} from '../../dj-react/component/query.jsx';
 
 
 @observer
@@ -47,8 +49,10 @@ class FilterView extends React.Component {
 class TableView extends React.Component {
     render() {
         const store = this.props.store;
+        const actions = this.props.actions;
+        const data = this.props.data;
         return <div>
-            {!_.isEmpty(store.actions) ? <div className="form-inline">
+            {!_.isEmpty(actions) ? <div className="form-inline">
                 <div className="col-lg-6 pl-0">
                     <div className="input-group">
                         <span className="input-group-addon">操作</span>
@@ -110,35 +114,8 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
-            {!_.isEmpty(store.data) ?
-                <PaginationView store={new PageStore(store.num_pages)}/> : null}
-        </div>
-    }
-}
 
-@observer
-class SearchView extends React.Component {
-    render() {
-        const store = this.props.store;
-        return <div className="form-group row">
-            <div className="col-sm-10">
-                <input type="text"
-                       className="form-control"
-                       id="like-min"
-                       name="like-min"
-                       onChange={store.UpdateField.bind(store, 'query')}
-                       placeholder="请输入陪我号/昵称"/>
-            </div>
-            <div className="col-sm-2">
-                <input type="submit"
-                       className="form-control"
-                       id="like-min"
-                       name="like-min"
-                       onClick={store.Query.bind(store)}
-                       value="搜索"/>
-            </div>
         </div>
-
     }
 }
 
@@ -146,17 +123,18 @@ class SearchView extends React.Component {
 @observer
 class WaitAuditView extends React.Component {
 
-    componentDidMount() {
+    componentWillMount() {
         const store = this.props.store;
-        store.Query();
+        store.get();
     }
 
     render() {
         const store = this.props.store;
-        const items = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.data : [];
-        const page_info = !_.isEmpty(store.data) && store.data.code.toString() === '0' ? store.data.page_info : {};
+        const response = store.response;
+        const items = !_.isEmpty(response.data) && response.data.code.toString() === '0' ? response.data.data : [];
+        const page_info = !_.isEmpty(response.data) && response.data.code.toString() === '0' ? response.data.page_info : {};
         const num_pages = Math.ceil(page_info.row_count / page_info.page_size);
-        const actions = !_.isEmpty(store.data) && store.data.code.toString() === '0' && store.data.actions ?
+        const actions = !_.isEmpty(response.data) && response.data.code.toString() === '0' && response.data.actions ?
             store.data.actions :
             [
                 {verbose_name: '--', value: ''},
@@ -170,13 +148,14 @@ class WaitAuditView extends React.Component {
                 <li className="breadcrumb-item active">待审核</li>
             </ol>
             <div className="row">
-                <div className="col-10">
-                    <SearchView store={store}/>
-                    <TableView store={new TableStore(items, actions, num_pages)}/>
+                <div className="col-lg-12 col-xl-10">
+                    <QueryComponent store={store} placeholder="陪我号/昵称"/>
+                    <TableView store={new TableStore(items, actions, store, 'withdraw_id')}/>
+                    {!_.isEmpty(items) ? <PaginationView store={new PageStore(num_pages)}/> : null}
                 </div>
-                <div className="col-2">
-                    <FilterView store={store}/>
-                </div>
+                <nav className="d-none d-xl-block col-xl-2 bg-light sidebar">
+                    {/*<FilterView store={store}/>*/}
+                </nav>
             </div>
         </div>
     }
@@ -185,7 +164,6 @@ class WaitAuditView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <WaitAuditView store={new BaseSearchStore(url)}/>
-    ,
+    <WaitAuditView store={new QueryStore(url, {"X-CSRFToken": csrfmiddlewaretoken})}/>,
     document.getElementById('root')
 );
