@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import {observable, computed, autorun, reaction, action} from "mobx";
 import {observer} from 'mobx-react';
 import {BaseSearchStore} from './../store-tpl.jsx';
-import {PaginationView, PaginationStore} from "./../pagination.jsx"
-
+import {PageStore} from './../query-store.jsx';
+import {PaginationView} from './../query-components.jsx';
 
 class ResetPasswordStore {
     @observable password = '';
@@ -95,17 +95,18 @@ class TableView extends React.Component {
     render() {
         const store = this.props.store;
         const data = store.result;
-        const code = data.code;
-        const total = data.total;
-        const page = data.page;
-        const items = data.data;
         if (_.isEmpty(data)) {
             return <div></div>
         }
-        if (code != '0') {
+        if (data.code != '0') {
             alert(data.msg);
             return <div></div>
         }
+
+        const page_info = data.data.page_info;
+        const num_pages = Math.ceil(page_info.row_count / page_info.page_size);
+        const items = data.data.list;
+
 
         return <div>
             <table className="table table-striped">
@@ -135,7 +136,7 @@ class TableView extends React.Component {
                 }
                 </tbody>
             </table>
-            <PaginationView store={new PaginationStore(total, 10, store, page)}/>
+            <PaginationView store={new PageStore(num_pages)}/>
         </div>
     }
 }
@@ -214,6 +215,6 @@ class ResetPasswordView extends React.Component {
 //
 // ========================================
 ReactDOM.render(
-    <ResetPasswordView store={new BaseSearchStore()}/>,
+    <ResetPasswordView store={new BaseSearchStore(url)}/>,
     document.getElementById('root')
 );

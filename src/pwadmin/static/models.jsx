@@ -1,5 +1,5 @@
 import React from 'react';
-import {observable, reaction, action} from "mobx";
+import {observable, reaction, action, computed} from "mobx";
 
 /**
  * 自动提交Store
@@ -163,5 +163,6 @@ class ModelStore extends BaseHTTPStore {
     }
 
 }
+
 
 export {ModelStore, BaseHTTPStore, BaseReactionStore}

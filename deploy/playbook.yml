@@ -3,7 +3,7 @@
   vars:
       repo_url: git@dev.fabibao.com:PeiwoServices/peiwo-admin.git
       proj_dir: /sites
-      proj_name: peiwoadmin-test
+      proj_name: peiwoadmin
       proj_path: "{{ proj_dir }}/{{ proj_name }}"
       venv_path: "{{proj_path}}/venv"
   tasks:

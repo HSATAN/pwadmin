@@ -20,31 +20,6 @@ class Accounts(BaseQueryList):
 
     def get_ajax(self, request, *args, **kwargs):
         """
-        """
-
-        _date = request.GET.get('time', '7') or '7'
-        begin_time, end_time = self.process_date(_date)
-
-        params = dict(
-            uid=request.GET.get('query', '') or None,
-            gender=request.GET.get('gender', '') or -1,
-            page_index=request.GET.get('page', '') or 1,
-            page_size=request.GET.get('size', '') or 25,
-            begin_time=begin_time,
-            end_time=end_time
-        )
-        data = request.user.sdk.account.query_user(params)
-        return JsonResponse(data=data)
-
-
-class AccountList(LoginRequiredBaseView):
-    """获取用户列表, 之所以不使用Accounts, 是因为使用了新的api.
-    之后api统一了在移除之.
-
-    """
-
-    def get_ajax(self, request, *args, **kwargs):
-        """
         openapi: "3.0.0"
         paths:
           /account/list/:
@@ -79,14 +54,20 @@ class AccountList(LoginRequiredBaseView):
                 '200':
                   content:
                     application/json:
-        """
-        query = request.GET.get('query')
-        size = request.GET.get('size', '10')
-        page = request.GET.get('page', '1')
-        order_by = request.GET.get('order_by', 'uid')
-        data = request.user.sdk.account.list(query, size=size, page=page,
-                                             order_by=order_by)
-        return JsonResponse(data)
+            """
+        _date = request.GET.get('time', '')
+        begin_time, end_time = self.process_date(_date)
+
+        params = dict(
+            query=request.GET.get('query', '') or None,
+            gender=request.GET.get('gender', '') or None,
+            page_index=request.GET.get('page', '') or 1,
+            page_size=request.GET.get('size', '') or 25,
+            begin_time=begin_time,
+            end_time=end_time
+        )
+        data = request.user.sdk.account.query_user(params)
+        return JsonResponse(data=data)
 
 
 class ReportedUser(BaseView):
