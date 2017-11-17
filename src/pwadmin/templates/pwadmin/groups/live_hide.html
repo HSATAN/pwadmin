@@ -1,60 +1,38 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
-
-{% block head_extends %}
-    <link rel="stylesheet" href="{% static 'css/live_hide.css' %}">
+{% block title %}
+    陪我管理系统-群组
 {% endblock %}
-
-{% block right_content %}
-    <div class="right_content">
-        <div class="data_search">
-            <input type="text" placeholder="请输入主播陪我号" class="in">
-            <input type="text" placeholder="请输入主播昵称" class="in">
-            <input type="text" placeholder="请输入直播ID" class="in">
-            标签分类：
-            <select name="classify" id="classify" class="in">
-            </select>
-            排序字段：
-            <select name="sort" id="sort" class="in">
-                <option value="weight">权重</option>
-                <option value="create_time">开始时间</option>
-                <option value="gift_value">礼物价值</option>
-                <option value="light_number">点亮次数</option>
-                <option value="actual_guest_number">真实用户</option>
-                <option value="actual_unique_guest_number">累计真实用户</option>
-            </select>
-            是否逆序：<input type="checkbox" name="desc">
-            主类别
-            <select name="main" id="main" class="in">
-            </select>
-            子类别：
-            <select name="child" id="child" class="in">
-            </select>
-            <div class="search_right in">
-                <button class="search in">搜索</button>
-                <button class="clear in">清空</button>
-            </div>
-        </div>
-        <table id="data_table">
-            <tr>
-                <th>主播陪我号</th>
-                <th>主播昵称</th>
-                <th>直播主题</th>
-                <th>主类别</th>
-                <th>子类别</th>
-                <th>投票标签</th>
-                <th>主播头像</th>
-                <th>封面图</th>
-                <th>背景图</th>
-                <th>收听人数/真实/累计</th>
-                <th>礼物个数/价值/最近</th>
-                <th>点亮次数/最近</th>
-                <th>开始时间</th>
-                <th>结束时间</th>
-                <th>状态</th>
-                <th>操作</th>
-            </tr>
-        </table>
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/live_hide.css' %}" type="text/css"/>
+{% endblock %}
+{% block content_extra %}{% endblock %}
+{% block data_search %}
+    <input type="text" placeholder="请输入主播陪我号" class="in">
+    <input type="text" placeholder="请输入主播昵称" class="in">
+    <input type="text" placeholder="请输入直播ID" class="in">
+    标签分类：
+    <select name="classify" id="classify" class="in">
+    </select>
+    排序字段：
+    <select name="sort" id="sort" class="in">
+        <option value="weight">权重</option>
+        <option value="create_time">开始时间</option>
+        <option value="gift_value">礼物价值</option>
+        <option value="light_number">点亮次数</option>
+        <option value="actual_guest_number">真实用户</option>
+        <option value="actual_unique_guest_number">累计真实用户</option>
+    </select>
+    是否逆序：<input type="checkbox" name="desc">
+    主类别
+    <select name="main" id="main" class="in">
+    </select>
+    子类别：
+    <select name="child" id="child" class="in">
+    </select>
+    <div class="search_right in">
+        <button class="search in">搜索</button>
+        <button class="clear in">清空</button>
     </div>
 {% endblock %}
 

@@ -1,9 +1,15 @@
 {% extends 'pwadmin/groups/group_base.html' %}
 {% load static %}
-
-{% block head_extends %}
-    <link rel="stylesheet" href="{% static 'css/sociaty_list.css' %}">
+{% block title %}
+    陪我管理系统-群组
 {% endblock %}
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'css/sociaty_list.css' %}" type="text/css"/>
+{% endblock %}
+{% block content_extra %}{% endblock %}
+{% block data_search %}
+{% endblock %}
+
 {% block script_extends %}
     <script src="{% static 'js/sociaty_list.js' %}"></script>
 {% endblock %}
