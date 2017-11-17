@@ -3,6 +3,47 @@ import {observer} from 'mobx-react';
 
 
 @observer
+class SearchBaseView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleChange(e) {
+        e.preventDefault();
+        const store = this.props.store;
+        store.update_or_create('query', e.target.value)
+
+    }
+
+    handleClick(e) {
+        e.preventDefault();
+        const store = this.props.store;
+        store.get()
+    }
+
+
+    render() {
+        const placeholder = this.props.placeholder;
+        return <form className="form-group row">
+            <div className="col-sm-10">
+                <input type="text"
+                       className="form-control"
+                       onChange={this.handleChange}
+                       placeholder={placeholder}/>
+            </div>
+            <div className="col-sm-2">
+                <input type="submit"
+                       className="form-control"
+                       onClick={this.handleClick}
+                       value="搜索"/>
+            </div>
+        </form>
+    }
+}
+
+@observer
 class FilterBaseView extends React.Component {
     /**
      *
@@ -28,7 +69,7 @@ class FilterBaseView extends React.Component {
                               key={index}
                               className={"nav-link " + (store.selected.toString() === i.value.toString() ? 'active' : null)}
                               style={style}
-                              onClick={store.Selected.bind(store, i.value)}
+                              onClick={store.selected.bind(store, i.value)}
                     >{i.verbose_name}</a>
                 })}
             </ul>
@@ -71,4 +112,4 @@ class PaginationView extends React.Component {
     }
 }
 
-export {FilterBaseView, PaginationView}
+export {FilterBaseView, PaginationView, SearchBaseView}
