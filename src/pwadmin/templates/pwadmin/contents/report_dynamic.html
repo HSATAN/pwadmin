@@ -8,118 +8,55 @@
     <link rel="stylesheet" href="{% static 'css/report_dynamic.css' %}" type="text/css"/>
 {% endblock %}
 
-{% block right_content %}
-    <div class="space"></div>
+{% block content_extra %}
     <div class="amend_pic">
         <img src="#" alt="" class="pic_big">
     </div>
-    <div class="right_content">
-        <div class="inline">
-            <input type="text" placeholder="请输入陪我号" value="{{ extends.tuid }}" class="search_top peiwo_id">
-            <input type="text" placeholder="开始时间" value="{{ extends.begin_time }}" class="search_top start">
-            <input type="text" placeholder="结束时间" value="{{ extends.end_time }}" class="search_top end">
-        </div>
-        <div class="inline search_right">
-            <div class="search_day">
-                <button type="button" class="operate" onclick="search_data()">查询</button>
-                <button type="button" class="operate_white" onclick="servlet_time(0)">今天</button>
-                <button type="button" class="operate_white" onclick="servlet_time(6)">7天</button>
-                <button type="button" class="operate_white" onclick="servlet_time(29)">30天</button>
-                <button type="button" class="operate_white" onclick="clear_info()">清空</button>
-            </div>
-        </div>
-        <div class="search_status">
-            {% if extends.state == 0 or extends.state == '0' %}
-                <button onclick="servlet_state(0)" class="status_select front">未处理</button>
-            {% else %}
-                <button onclick="servlet_state(0)" class="status_none front">未处理</button>
-            {% endif %}
-            {% if extends.state == 1 or extends.state == '1' %}
-                <button onclick="servlet_state(1)" class="status_select">已忽略</button>
-            {% else %}
-                <button onclick="servlet_state(1)" class="status_none">已忽略</button>
-            {% endif %}
-            {% if extends.state == 2 or extends.state == '2' %}
-                <button onclick="servlet_state(2)" class="status_select">已警告</button>
-            {% else %}
-                <button onclick="servlet_state(2)" class="status_none">已警告</button>
-            {% endif %}
-            {% if extends.state == 3 or extends.state == '3' %}
-                <button onclick="servlet_state(3)" class="status_select">已封禁</button>
-            {% else %}
-                <button onclick="servlet_state(3)" class="status_none">已封禁</button>
-            {% endif %}
-        </div>
-        <div class="control_switch">
-            <input type="checkbox" class="checkall">
-        </div>
-        <hr/>
-        <table id="data_table">
-            <tr>
-                <th class="data_id">陪我号</th>
-                <th class="data_nick">昵称</th>
-                <th class="data_pics">图片</th>
-                <th class="data_copywriting" id="data_copywriting">文案</th>
-                <th class="data_date">更新时间</th>
-                <th class="data_select">选中</th>
-            </tr>
-            {% for i in data.data %}
-                <tr>
-                    <td class="data_id">{{ i.user.uid }}</td>
-                    <td class="data_nick">{{ i.user.name }}</td>
-                    <td class="data_pics">
-                        <div class="pics">
-                            {% for j in i.extra.images %}
-                                <img class="pic" src="{{ j.thumbnail_url }}" data-src="{{ j.image_url }}" alt="None"
-                                     onclick="window.open('{{ j.image_url }}')">
-                            {% endfor %}
-                        </div>
-                    </td>
-                    <td class="data_copywriting" id="data_copywriting">{{ i.content }}</td>
-                    <td class="data_date"> {{ i.update_time }} </td>
-                    <td class="data_select">
-                        <input id="{{ i.id }}" name="id" class="{{ i.user.uid }}" type="checkbox">
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <div class="deal">
-            <button type="button" class="operate alert" onclick="deal(3)">警告</button>
-            <button type="button" class="operate ban" onclick="deal(2)">封禁</button>
-            <button type="button" class="operate ignore" onclick="deal(1)">忽略</button>
-        </div>
-        <div class="comment">
-            <button type="button" class="msg" onclick="send_message(5)">广告</button>
-            <button type="button" class="msg" onclick="send_message(7)">欺诈</button>
-            <button type="button" class="msg" onclick="send_message(6)">侵权</button>
-            <button type="button" class="msg" onclick="send_message(4)">色情</button>
-            <button type="button" class="msg" onclick="send_message(1)">导流</button>
-            <button type="button" class="msg" onclick="send_message(3)">恶意刷屏</button>
-            <button type="button" class="msg" onclick="send_message(2)">诋毁辱骂</button>
-        </div>
-        <div class="modalPage">
-            <button class="pageNum" onclick="servlet_page({{ extends.page_left }})">上一页</button>
-            {% for val in extends.total_list %}
-                {% if extends.page == val %}
-                    <button class="pageUnique" onclick="servlet_page({{ val }})">{{ val }}</button>
-                {% else %}
-                    <button class="pageNum" onclick="servlet_page({{ val }})">{{ val }}</button>
-                {% endif %}
-            {% empty %}
-                ...
-            {% endfor %}
-            <button class="pageNum" onclick="servlet_page({{ extends.page_right }})">下一页</button>
-            <span class="page_count">共{{ extends.page_count }}页</span>
+{% endblock %}
+
+{% block data_search %}
+    <div class="inline">
+        <input type="text" placeholder="请输入陪我号" class="search_top peiwo_id">
+        <input type="text" placeholder="开始时间" class="search_top start">
+        <input type="text" placeholder="结束时间" class="search_top end">
+    </div>
+    <div class="inline search_right">
+        <div class="search_day">
+            <button type="button" class="operate search_days" data-action="-1">查询</button>
+            <button type="button" class="operate_white search_days" data-action="0">今天</button>
+            <button type="button" class="operate_white search_days" data-action="6">7天</button>
+            <button type="button" class="operate_white search_days" data-action="29">30天</button>
+            <button type="button" class="operate_white search_days" data-action="-2">清空</button>
         </div>
     </div>
+    <div class="search_status">
+        <button class="status_select front mode" data-state="0">未处理</button>
+        <button class="status_none mode" data-state="1">已忽略</button>
+        <button class="status_none mode" data-state="2">已警告</button>
+        <button class="status_none mode" data-state="3">已封禁</button>
+    </div>
+    <div class="control_switch">
+        <input type="checkbox" class="checkall">
+    </div>
 {% endblock %}
+
+{% block after_table %}
+    <div class="deal">
+        <button type="button" class="operate alert option" data-option="3" onclick="deal(3)">警告</button>
+        <button type="button" class="operate ban option" data-option="2" onclick="deal(2)">封禁</button>
+        <button type="button" class="operate ignore option" data-option="1" onclick="deal(1)">忽略</button>
+    </div>
+    <div class="comment">
+        <button type="button" class="msg" onclick="send_message(5)">广告</button>
+        <button type="button" class="msg" onclick="send_message(7)">欺诈</button>
+        <button type="button" class="msg" onclick="send_message(6)">侵权</button>
+        <button type="button" class="msg" onclick="send_message(4)">色情</button>
+        <button type="button" class="msg" onclick="send_message(1)">导流</button>
+        <button type="button" class="msg" onclick="send_message(3)">恶意刷屏</button>
+        <button type="button" class="msg" onclick="send_message(2)">诋毁辱骂</button>
+    </div>
+{% endblock %}
+
 {% block script_extends %}
-    <script type="application/javascript">
-        var csrfmiddlewaretoken = '{{ csrf_token }}';
-        var begin_time_param = '{{ extends.begin_time }}';
-        var end_time_param = '{{ extends.end_time }}';
-        var state_param = '{{ extends.state }}';
-        var tuid_param = '{{ extends.tuid }}';
-    </script>
     <script src="{% static 'js/report_dynamic.js' %}"></script>
 {% endblock %}

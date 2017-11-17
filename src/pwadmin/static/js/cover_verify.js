@@ -68,11 +68,19 @@ function getTablecoverVerify(data) {
                         "onmousemove=\"show_pic('" + data[coverIndex]['cover_url'] + "');\" " +
                         "onmouseout=\"hide_pic();\" " +
                         "class='pic' alt=''>" + "</td>" +
-                        "<td>" + data[coverIndex]['create_time'] + "</td>" +
-                        "<td>" +
-                        "<button class='operate' onclick=\"deal(1, '" + data[coverIndex]['id'] + "', '" + data[coverIndex]['uid'] + "');\">" + '通过' + "</button>" +
-                        "<button class='operate' onclick=\"deal(2, '" + data[coverIndex]['id'] + "', '" + data[coverIndex]['uid'] + "');\">" + '拒绝' + "</button></td>" +
-                        "</tr>";
+                        "<td>" + data[coverIndex]['create_time'] + "</td><td>";
+                    if (data[coverIndex]['state'] === 0) {
+                        tbody_str +=
+                            "<button class='operate' onclick=\"deal(1, '" + data[coverIndex]['id'] + "', '" + data[coverIndex]['uid'] + "');\">" + '通过' + "</button>" +
+                            "<button class='operate' onclick=\"deal(2, '" + data[coverIndex]['id'] + "', '" + data[coverIndex]['uid'] + "');\">" + '拒绝' + "</button>";
+                    }
+                    else if (data[coverIndex]['state'] === 1) {
+                        tbody_str += '已通过';
+                    }
+                    else {
+                        tbody_str += '已拒绝';
+                    }
+                    tbody_str += "</td></tr>";
                 }
             }
         }
@@ -92,7 +100,7 @@ function getTablecoverVerify(data) {
 function pageSearch() {
     pageRequest = parseInt($(this).attr('data-page'));
     var data = {'page_index': pageRequest};
-    loadTablelabelManage(data);
+    loadTableliveCover(data);
 }
 
 //"搜索"按钮
@@ -105,16 +113,22 @@ function flashData() {
         'begin_time': begin_time,
         'end_time': end_time
     };
-    loadTablelabelManage(data_send);
+    loadTableliveCover(data_send);
 }
 
 //状态查询按钮，"已处理"、"未处理"
-function search_deal(state) {
+$('.search_state').on('click', function () {
+    var states = $('.search_state');
+    var thisMode = $(this);
+    states.removeClass('search_after');
+    states.addClass('search_before');
+    thisMode.removeClass('search_before');
+    thisMode.addClass('search_after');
     var data_send = {
-        'state': state
+        'state': $(this).attr('data-state')
     };
     loadTableliveCover(data_send);
-}
+});
 
 //"通过"按钮，封面通过审核
 function deal(action, cover_id, tuid) {

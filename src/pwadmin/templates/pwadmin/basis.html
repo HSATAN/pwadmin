@@ -48,7 +48,7 @@
                         <a class="nav-link" href="#">客服</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pwadmin:statistic' %}">统计</a>
+                        <a class="nav-link" href="{% url 'pwadmin:statistic-wildcat' %}">统计</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">实时数据</a>
@@ -89,6 +89,7 @@
                 <table id="data_table" class="data_table">
                     <tbody></tbody>
                 </table>
+                {% block after_table %}{% endblock %}
                 <div class="modalPage"></div>
             </div>
         </div>

@@ -1,3 +1,11 @@
+function getTotal(data) {
+    var count = 0;
+    if (data.hasOwnProperty('total')) {
+        count = data.total;
+    }
+    return count;
+}
+
 leftVaigation();
 
 var BaseUrl = window.location.href;

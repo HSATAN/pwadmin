@@ -15,8 +15,8 @@
         <button class="search in" onclick="flashData()">搜索</button>
         <button class="clear in">清空</button><br>
         <div class="bottom right">
-            <button onclick="search_deal(0)" class="search_before front in">未处理</button>
-            <button onclick="search_deal(1)" class="search_after in search_1">已处理</button>
+            <button data-state="0" class="search_after front search_state">未处理</button>
+            <button data-state="1" class="search_before search_state">已处理</button>
         </div>
     </div>
 {% endblock %}
