@@ -9,11 +9,11 @@ class TableStore {
     @observable checked = new Map(); // 复选框选择列表.
     @observable action = ''; // 操作.
 
-    constructor(items, actions, num_pages) {
-        this.data = items;
+    constructor(data, actions, store, id = 'id') {
+        this.data = data;
         this.actions = actions;
-        this.num_pages = num_pages;  //
-        items.map(obj => this.checked.set(obj.withdraw_id, false));
+        this.store = store;
+        data.map(obj => this.checked.set(obj[id], false));
     }
 
     @computed

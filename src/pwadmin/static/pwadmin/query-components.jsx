@@ -22,16 +22,16 @@ class FilterBaseView extends React.Component {
         const style = this.props.style;
         return <div>
             <h4 className="card-title">By {store.verbose_name}</h4>
-            <div className="list-group">
+            <ul className="nav nav-pills flex-column">
                 {store.values.map((i, index) => {
                     return <a href="#"
                               key={index}
-                              className={"list-group-item " + (store.selected.toString() === i.value.toString() ? 'active' : 'list-group-item-action')}
+                              className={"nav-link " + (store.selected.toString() === i.value.toString() ? 'active' : null)}
                               style={style}
                               onClick={store.Selected.bind(store, i.value)}
                     >{i.verbose_name}</a>
                 })}
-            </div>
+            </ul>
         </div>
     }
 }
