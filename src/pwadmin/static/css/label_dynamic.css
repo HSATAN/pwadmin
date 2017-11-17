@@ -30,6 +30,7 @@
 .search_status {
     margin-top: 10px;
     float: right;
+    border: 0;
 }
 
 .control_switch {

@@ -4,6 +4,7 @@ var commonFields = {
     'pageShow': 10 // 最多显示多少页
 };
 
+
 // 加载table数据
 loadTablelabelDynamic({});
 
