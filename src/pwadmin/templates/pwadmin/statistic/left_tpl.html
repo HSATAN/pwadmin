@@ -1,4 +1,4 @@
-<ul class="list-group">
-    <a href="{% url 'pwadmin:statistic' %}" class="list-group-item {% if item == 'statistic' %}active{% else %}list-group-item-action{% endif %}">默认页</a>
-    <a href="{% url 'pwadmin:statistic-wildcat' %}" class="list-group-item {% if item == 'statistic-wildcat' %}active{% else %}list-group-item-action{% endif %}">匿名聊正在匹配用户</a>
-</ul>
+<li class="nav-item">
+    <a href="{% url 'pwadmin:statistic-wildcat' %}"
+       class="nav-link {% if item == 'statistic-wildcat' %}active{% endif %}">匿名聊正在匹配用户</a>
+</li>

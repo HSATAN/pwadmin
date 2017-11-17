@@ -1,1 +1,7 @@
-.list li { list-style: none;}
+.amend_pic {
+    left: 6%;
+}
+
+button {
+    border-radius: 0;
+}

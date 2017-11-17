@@ -1,40 +1,20 @@
-{% extends 'pwadmin/pwbase.html' %}
+{% extends 'pwadmin/basis.html' %}
 {% load static %}
 
-{% block extends_head %}
-    <link type="text/css" href="{% static 'css/common.css' %}" rel="stylesheet"/>
-    <link rel="stylesheet" href="{% static 'css/content_base.css' %}" type="text/css"/>
+{% block style_extends %}
+    <link type="text/css" href="{% static 'css/content_base.css' %}" rel="stylesheet"/>
     {% block head_extends %}{% endblock %}
 {% endblock %}
+
 {% block left_content %}
-    <div class="amend_pic">
-        <img src="#" alt="" class="pic_big">
-    </div>
-    <div class="layer"></div>
-    <div class="left_menu">
-        <ul id="list-group" class="list-group">
-            <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
-            <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
-            <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
-            <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
-            <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
-        </ul>
-    </div>
+    <li><a href="{% url 'pwadmin:label_manage' %}" class="list-group-item">标签管理</a></li>
+    <li><a href="{% url 'pwadmin:label_dynamic' %}" class="list-group-item">标签动态</a></li>
+    <li><a href="{% url 'pwadmin:submit_dynamic' %}" class="list-group-item">投稿动态</a></li>
+    <li><a href="{% url 'pwadmin:report_dynamic' %}" class="list-group-item">被举报动态</a></li>
+    <li><a href="{% url 'pwadmin:white_list' %}" class="list-group-item">动态白名单</a></li>
 {% endblock %}
-{% block right_content %}
-    <div class="right_content">
-        <div class="data_search">
-            {% block data_search %}{% endblock %}
-        </div>
-        <span class="total"></span>
-        <table id="data_table" class="data_table">
-            <tbody></tbody>
-        </table>
-        <div class="modalPage"></div>
-    </div>
-{% endblock %}
-{% block extends_script %}
-    <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-    <script src="{% static 'js/content_base.js' %}"></script>
+
+{% block method_extends %}
+    <script type="text/javascript" src="{% static 'js/content_base.js' %}"></script>
     {% block script_extends %}{% endblock %}
 {% endblock %}

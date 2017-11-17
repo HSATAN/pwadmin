@@ -3,7 +3,7 @@ import {observer} from 'mobx-react';
 
 
 @observer
-class SearchBaseView extends React.Component {
+class SearchComponent extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
@@ -13,14 +13,14 @@ class SearchBaseView extends React.Component {
     handleChange(e) {
         e.preventDefault();
         const store = this.props.store;
-        store.update_or_create('query', e.target.value)
+        store.query(e.target.value);
 
     }
 
     handleClick(e) {
         e.preventDefault();
         const store = this.props.store;
-        store.get()
+        store.search()
     }
 
 
@@ -43,24 +43,36 @@ class SearchBaseView extends React.Component {
     }
 }
 
+
+/**
+ * props ->
+ *
+ *   {
+ *     verbose_name: '收获',
+ *     field_name: 'harvest',
+ *     selected: '',
+ *     values: [
+ *         {value: '', verbose_name: '无限制'},
+ *         {value: 'specified', verbose_name: '指定'},
+ *     ]
+ *   }
+ *
+ */
 @observer
-class FilterBaseView extends React.Component {
-    /**
-     *
-     * @param props -> {
-                verbose_name: '收获',
-                field_name: 'harvest',
-                selected: '',
-                values: [
-                    {value: '', verbose_name: '无限制'},
-                    {value: 'specified', verbose_name: '指定'},
-                ]
-            }
-     */
+class FilterComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.hdClick = this.hdClick.bind(this)
+    }
+
+    hdClick(v, e) {
+        e.preventDefault();
+        const store = this.props.store;
+        store.update(v);
+    }
 
     render() {
         const store = this.props.store;
-        const style = this.props.style;
         return <div>
             <h4 className="card-title">By {store.verbose_name}</h4>
             <ul className="nav nav-pills flex-column">
@@ -68,8 +80,7 @@ class FilterBaseView extends React.Component {
                     return <a href="#"
                               key={index}
                               className={"nav-link " + (store.selected.toString() === i.value.toString() ? 'active' : null)}
-                              style={style}
-                              onClick={store.selected.bind(store, i.value)}
+                              onClick={this.hdClick.bind(this, i.value)}
                     >{i.verbose_name}</a>
                 })}
             </ul>
@@ -78,7 +89,7 @@ class FilterBaseView extends React.Component {
 }
 
 @observer
-class PaginationView extends React.Component {
+class PageComponent extends React.Component {
     render() {
         const store = this.props.store;
         return <nav className="form-inline" aria-label="Page navigation example">
@@ -91,7 +102,7 @@ class PaginationView extends React.Component {
                         ><i className="fa fa-angle-left" aria-hidden="true"></i></a>
                     </li>
                     {store.currentItems.map((page, index) =>
-                        <li key={index} className={page === store.Current ? "page-item active" : "page-item"}>
+                        <li key={index} className={page === store.current ? "page-item active" : "page-item"}>
                             <a className="page-link" href="javascript:void(0)"
                                onClick={store.page.bind(store, page)}>{page}</a>
                         </li>
@@ -112,4 +123,4 @@ class PaginationView extends React.Component {
     }
 }
 
-export {FilterBaseView, PaginationView, SearchBaseView}
+export {SearchComponent, FilterComponent, PageComponent}

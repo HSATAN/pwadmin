@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from .views import (
     pwmanager, index, task, accounts, statistic, permissions, contents, config,
     fund, groups
-
 )
 
 urlpatterns = [
@@ -28,14 +27,8 @@ urlpatterns = [
     url(r'^config/gift/$', config.Gift.as_view(), name='config-gift'),
     # 提现
     url(r'^fund/$', fund.FUND.as_view(), name='fund-wait-audit'),
-    url(r'^fund/$', fund.FUND.as_view(), name='fund-pay-failed'),
     # 统计
-    url(r'^statistic/$', statistic.Statistic.as_view(), name='statistic'),
     url(r'^statistic/wildcat/$', statistic.Wildcat.as_view(), name='statistic-wildcat'),
-    # 群组.
-    url(r'^groups/$', groups.IndexView.as_view(), name="groups"),
-    url(r'^groups/live/$', groups.LiveView.as_view(), name="groups-live"),
-    # 权限.
     url(r'^permissions/$', permissions.MenuList.as_view(), name='perm_menu'),
     url(r'^permissions/manager/$', permissions.ManagerList.as_view(), name='perm_manager'),
     url(r'^permissions/groups/$', permissions.GroupList.as_view(), name='perm_group'),
@@ -59,4 +52,5 @@ urlpatterns = [
     url(r'^label_rank_list/$', groups.LabelRankList.as_view(), name='label_rank_list'),
     url(r'^sociaty_list/$', groups.SociatyList.as_view(), name='sociaty_list'),
     url(r'^sociaty_leaguer_list/$', groups.SociatyLeaguerList.as_view(), name='sociaty_leaguer_list'),
+    url(r'^operates/$', groups.OperateLiveRooms.as_view(), name='operates'),
 ]

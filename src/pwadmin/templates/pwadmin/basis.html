@@ -1,0 +1,42 @@
+{% extends 'pwadmin/pwbase.html' %}
+{% load static %}
+
+{% block extends_head %}
+    <link rel="stylesheet" href="{% static 'css/basis.css' %}"/>
+    {% block style_extends %}{% endblock %}
+{% endblock %}
+
+{% block left_nav %}
+
+    <div class="row">
+        <div class="col-2">
+            <div class="left_menu">
+                <ul id="list-group" class="list-group">
+                    {% block left_content %}{% endblock %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="right_content">
+                {% block content_extra %}{% endblock %}
+                <div class="data_search">
+                    {% block data_search %}{% endblock %}
+                </div>
+                <span class="total"></span>
+                <table id="data_table" class="data_table">
+                    <tbody></tbody>
+                </table>
+                {% block after_table %}{% endblock %}
+                <div class="modalPage"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extends_script %}
+    <script type="application/javascript">
+        var ACTION_URL = '{% url 'pwadmin:operates' %}';
+    </script>
+    <script src="{% static 'js/basis.js' %}"></script>
+    {% block method_extends %}{% endblock %}
+{% endblock %}
