@@ -39,7 +39,6 @@ function loadTableliveSpecial(data) {
     };
     $.ajaxFunc(source, fillTableLives, errorHandle);
 }
-
 // 搜索
 $('.search').on('click', function () {
     var owner_uid = $('.owner_uid').val(); // 主播陪我号
@@ -74,6 +73,13 @@ $('.search').on('click', function () {
         'begin_time': begin_time,
         'end_time': end_time
     };
+    if (data_send.hasOwnProperty('main_label_id')) {
+        if (data_send['main_label_id'] === '') {
+            if (data_send.hasOwnProperty('sub_label_id')) {
+                delete data_send.sub_label_id
+            }
+        }
+    }
     loadTableliveSpecial(data_send);
 });
 // 页面搜索
@@ -82,39 +88,5 @@ function pageSearch() {
     var data = {'page_index': pageRequest};
     loadTableliveSpecial(data);
 }
-
-
-// 搜索按钮
-// $('.search').on('click', function () {
-//     var desc = 0;
-//     if ($('.desc').is(':checked')) {
-//         desc = 1;
-//     }
-//     var params = {
-//         'owner_uid': $('.owner_uid').val(),
-//         'owner_name': $('.owner_name').val(),
-//         'gift_value': $('.gift_value').val(),
-//         'live_id': $('.live_id').val(),
-//         'state': $('#type').val(),
-//         'label_id': $('#label_type').val(),
-//         'order': $('#sort').val(),
-//         'desc': desc,
-//         'main_label_id': $('#main_label').val(),
-//         'sub_label_id': $('#sub_label').val(),
-//         'begin_time': $('.begin_time').val(),
-//         'end_time': $('.end_time').val(),
-//     };
-//     var data_find = {
-//         'desc': desc,
-//         'page_size': 10,
-//         'page_index': 1
-//     };
-//     for (var index in params) {
-//         if (params[index] && (params[index] !== '')) {
-//             data_find[index] = params[index];
-//         }
-//     }
-//     loadTable(data_find);
-// });
 
 
