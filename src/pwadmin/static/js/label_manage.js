@@ -1,6 +1,6 @@
 leftVaigation();
 
-var pageShow = 1;
+var pageRequest = 1;
 var pageSize = 10;
 var source = {
     'methodStr': 'POST',
@@ -31,7 +31,6 @@ function editLabelmanage(source) {
 
 // 修改数据功能
 function successEditlabelManage(data, status, xhr) {
-    console.log(data);
     $('.amend').css('display', 'none');
     if (data.code === 0) {
         loadTablelabelManage(source);
@@ -89,50 +88,20 @@ function getTablelabelManageStr(data) {
         }
     }
     var totalStr = "查询结束。总记录数:" + totalCount;
-    var pageStr = fillPage({'total': totalCount, 'pageSize': pageSize});
+    var pageInfo = {
+        'total': totalCount,
+        'pageSize': 10,
+        'pageShow': 10,
+        'pageRequest': pageRequest
+    };
+    var pageStr = fillPage(pageInfo);
     return {'tableStr': str_label, 'totalStr': totalStr, 'pageStr': pageStr};
-}
-
-// 拼页码string
-function fillPage(pageInfo) {
-    var total = pageInfo.total; // 总共多少条数据
-    var pageSize = pageInfo.pageSize; // 每页显示多少条数据
-    var pageCount = Math.ceil(total / pageSize); // 总共有多少页
-
-    var pageGets = get_pages(pageCount, pageShow, 10); // 获取页码数组，pageIndex当前是第几页，从1开始
-    var pages = pageGets.pages;
-    var pageLeft = pageGets.pageLeft;
-    var pageRight = pageGets.pageRight;
-    var pageStr = "";
-    if (pages.length > 0) {
-        pageStr += "<button class='pageNum page' data-page='" + pageLeft + "'>" + "上一页" + "</button>";
-        for (var indexPage = 0; indexPage < pages.length; indexPage++) {
-            var pageNow = pages[indexPage];
-            if (pageNow === pageShow) {
-                pageStr += "<button class='pageUnique page' data-page='" + pageNow + "'>" + pageNow + "</button>";
-            }
-            else {
-                pageStr += "<button class='pageNum page' data-page='" + pageNow + "'>" + pageNow + "</button>";
-            }
-        }
-        pageStr += "<button class='pageNum page' data-page='" + pageRight + "'>" + "下一页" + "</button>";
-    }
-    return pageStr;
-    // for (var pageIndex = pages[0][0]; pageIndex < pages[0][0] + pages[0].length; pageIndex++) {
-    //     if (pageIndex === page_index) {
-    //         page_str += "<button class='pageUnique' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-    //     }
-    //     else {
-    //         page_str += "<button class='pageNum' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-    //     }
-    // }
-    // page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[2] + "');\">" + '下一页' + "</button>";
 }
 
 // 页码查询
 pageSearch = function () {
-    pageShow = parseInt($(this).attr('data-page'));
-    source['data']['begin_index'] = (pageShow - 1) * pageSize;
+    pageRequest = parseInt($(this).attr('data-page'));
+    source['data']['begin_index'] = (pageRequest - 1) * pageSize;
     loadTablelabelManage(source);
 };
 // 修改事件
@@ -193,11 +162,10 @@ $('.span_add').on('click', function () {
         'data': {
             'query_method': 'POST',
             'api_request': '/admin/feed/topic',
-            'creator_id': userId,
+            'creator_id': 1,
             'content': $('.right_sign').val(),  //标题
             'subtitle': $('#msgcontent').val(),     //内容
-            'uid': userId,
-            'tid': 0
+            'uid': userId
         }
     };
     editLabelmanage(sourceInsert);
@@ -215,4 +183,3 @@ $('.span_clear').on('click', function () {
     $('.right_sign').val("");
     $('#msgcontent').val("");
 });
-

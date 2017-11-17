@@ -2,3 +2,8 @@
     background-color: #02a1c9;
     color: white;
 }
+
+#data_table td {
+    vertical-align: top;
+    font-size: 14px;
+}

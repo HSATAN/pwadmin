@@ -186,8 +186,17 @@ button:disabled {
     border: 1px solid #ccc;
 }
 
+
 .text_center {
     text-align: center;
+}
+
+.button_del {
+    padding: 4px 15px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    color: black;
+    font-size: inherit;
 }
 
 .deal {

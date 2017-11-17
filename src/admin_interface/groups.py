@@ -13,13 +13,14 @@ class Groups(BaseHandler):
     LIVE_CONCEAL_URL = '/admin/live/conceal2'
     LIVE_DEL_BACKGROUND_URL = '/admin/live/del_background2'
     LIVE_VOTE_URL = '/admin/live/vote2'
-    LIVE_DEL_COVER_URL = '/admin/live/cover2'
+    LIVE_DEL_COVER_URL = '/admin/live/cover'
     LIVE_SET_RATIO_URL = '/admin/live/set_ratio'
     LIVE_BLOCK_URL = '/admin/live/block2'
     LIVE_QUERY_INVALID_URL = '/admin/live/query_invalid2'
     LIVE_SPECIAL_ACTOR_URL = '/admin/account/special_actor'
     LIVE_UPDATE_LABEL = '/admin/live/update_live_label'
     LIVE_DELETE_TOPIC = '/admin/live/update_live_topic'
+    MESSAGE_SEND = '/admin/message/send'
 
     def live_top(self, params):
         """ 直播置顶
@@ -76,7 +77,7 @@ class Groups(BaseHandler):
         Returns:
 
         """
-        return self.request(self.LIVE_VOTE_URL, 'post', params=params).json()
+        return self.request(self.LIVE_VOTE_URL, 'post', data=params).json()
 
     def live_del_cover(self, params):
         """直播间删除封面图
@@ -169,4 +170,19 @@ class Groups(BaseHandler):
 
         """
         return self.request(self.LIVE_DELETE_TOPIC, 'post', params=params).json()
+
+    def send_message(self, params):
+        """
+        发送消息
+        Args:
+            params:
+                - uid: 管理员id
+                - tuid: 直播的用户id
+                - normal: 消息类型
+                - content: 消息内容
+
+        Returns:
+
+        """
+        return self.request(self.MESSAGE_SEND, 'post', params=params).json()
 

@@ -1,45 +1,51 @@
+var pageRequest = 1;
+var content;
+var commonFields = {};
+var dataSource = {
+    'query_method': 'GET',
+    'api_request': '/admin/live/cover/list',
+    'uid': userId,
+    'state': 0,
+    'page_size': 10,
+    'page_index': 0
+};
+
 //加载页面，dom
-ShowMessage({});
-
-function ShowMessage(datas) {
-    var data = {
-        'query_method': 'GET',
-        'api_request': '/admin/live/cover/list',
-        'state': 0,
-        'page_size': 10,
-        'page_index': 0,
-        'csrfmiddlewaretoken': csrfmiddlewaretoken
-    };
-    for (var one in datas) {
-        data[one] = datas[one];
-    }
-    $.ajax({
-        type: 'POST',
-        url: '',
-        data: data,
-        dataType: 'json',
-        success: function (data) {
-            var tbody_str = fill_data(data);
-            if (data.code === 0) {
-                clear_table();
-                var count = data.data.page_info.row_count;
-                $('<span class="total">查询结束，总记录' + count + '</span>').insertBefore($('#data_table'));
-                var page_info = data.data.page_info;
-                var page_str = fill_pages(page_info);
-                $('.modalPage').append(page_str);
-                var state_str = fill_state();
-                $('.bottom').append(state_str);
-            }
-            else {
-                $("#data_table tbody").remove();
-                $("#data_table").append('<tbody></tbody>');
-            }
-            $('#data_table tbody').append(tbody_str);
+loadTableliveCover({});
+function loadTableliveCover(data) {
+    for (var i in data) {
+        if (data[i] !== '') {
+            dataSource[i] = data[i];
         }
-    });
+        else {
+            if (dataSource.hasOwnProperty(i)) {
+                delete dataSource.i
+            }
+        }
+    }
+    var source = {
+        'methodStr': 'POST',
+        'url': '',
+        'data': dataSource
+    };
+    $.ajaxFunc(source, fillTablecoverVerify, errorHandle);
 }
-
-function fill_data(data) {
+function fillTablecoverVerify(data, status, xhr) {
+    var strGet = getTablecoverVerify(data);
+    var tableStr = strGet.tableStr;
+    $('#data_table tbody').remove();
+    $('#data_table').append("<tbody></tbody>");
+    $('#data_table tbody').append(tableStr);
+    var totalStr = strGet.totalStr;
+    $('.total').empty();
+    $('.total').append(totalStr);
+    var pageStr = strGet.pageStr;
+    $('.modalPage').empty();
+    $('.modalPage').append(pageStr);
+    $('.page').on('click', pageSearch);
+}
+function getTablecoverVerify(data) {
+    var totalCount = getTotal(data);
     var tbody_str = "";
     tbody_str += "<tr>" +
         "<th>主播陪我号</th>" +
@@ -71,110 +77,52 @@ function fill_data(data) {
             }
         }
     }
-    return tbody_str
+    var totalStr = "查询结束。总记录数:" + totalCount;
+    var pageInfo = {
+        'total': totalCount,
+        'pageSize': 10,
+        'pageShow': 10,
+        'pageRequest': pageRequest
+    };
+    var pageStr = fillPage(pageInfo);
+    return {'tableStr': tbody_str, 'totalStr': totalStr, 'pageStr': pageStr}
 }
 
-//pages
-function fill_pages(page_info) {
-    var page_count = page_info.page_count;
-    var page_index = page_info.page_index;
-    var pages = get_pages(page_count, page_index);
-    var page_str = "";
-    page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[1] + "');\">" + '上一页' + "</button>";
-    for (var pageIndex = pages[0][0]; pageIndex < pages[0][0] + pages[0].length; pageIndex++) {
-        if (pageIndex === page_index) {
-            page_str += "<button class='pageUnique' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-        }
-        else {
-            page_str += "<button class='pageNum' onclick=\"servlet_page('" + pageIndex + "');\">" + pageIndex + "</button>";
-        }
-    }
-    page_str += "<button class='pageNum' onclick=\"servlet_page('" + pages[2] + "');\">" + '下一页' + "</button>";
-    return page_str;
+//页码查询
+function pageSearch() {
+    pageRequest = parseInt($(this).attr('data-page'));
+    var data = {'page_index': pageRequest};
+    loadTablelabelManage(data);
 }
-
-function clear_table() {
-    $("#data_table tbody").remove();
-    $(".total").remove();
-    $("#data_table").append('<tbody></tbody>');
-    $(".modalPage").empty();
-    $(".bottom").empty();
-}
-
-function fill_state() {
-    var state_str = "";
-    var state_now = $('.right_content').attr('data-state');
-    if (!state_now) {
-        $('.right_content').attr('data-state', 0);
-        state_now = $('.right_content').attr('data-state');
-    }
-    if (state_now === 0 || state_now === '0') {
-        state_str += "<button data-id='0' onclick=\"state_search(0);\" class='status_select search_left'>" + '未处理' + "</button>"
-        state_str += "<button data-id='1' onclick=\"state_search(1);\" class='status_none'>" + '已处理' + "</button>"
-    }
-    else {
-        state_str += "<button data-id='0' onclick=\"state_search(0);\" class='status_none search_left'>" + '未处理' + "</button>"
-        state_str += "<button data-id='1' onclick=\"state_search(1);\" class='status_select'>" + '已处理' + "</button>"
-    }
-    return state_str;
-}
-
-//"清除"按钮
-$('.clear').on('click', function () {
-    $('.tuid').empty();
-    $('.begin_time').empty();
-    $('.end_time').empty();
-});
-
-//状态查询按钮，"已处理"、"未处理"
-function state_search(state_flag) {
-    var data_status = {'state': state_flag};
-    var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_status['tuid'] = tuid;
-    }
-    var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_status['begin_time'] = begin_time;
-    }
-    var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_status['end_time'] = end_time;
-    }
-    $('.right_content').attr('data-state', state_flag);
-    ShowMessage(data_status);
-}
-
 
 //"搜索"按钮
 function flashData() {
-    var data_deliver = {};
     var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_deliver['tuid'] = tuid;
-    }
     var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_deliver['begin_time'] = begin_time;
-    }
     var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_deliver['end_time'] = end_time;
-    }
-    data_deliver['state'] = state_page;
-    ShowMessage(data_deliver);
+    var data_send = {
+        'tuid': tuid,
+        'begin_time': begin_time,
+        'end_time': end_time
+    };
+    loadTablelabelManage(data_send);
+}
+
+//状态查询按钮，"已处理"、"未处理"
+function search_deal(state) {
+    var data_send = {
+        'state': state
+    };
+    loadTableliveCover(data_send);
 }
 
 //"通过"按钮，封面通过审核
 function deal(action, cover_id, tuid) {
-    console.log(action);
-    console.log(cover_id);
-    console.log(tuid);
+    commonFields['tuid'] = tuid;
     if (!confirm('确定吗?')) {
         return false;
     }
     else {
-        var content;
         if (action === 1) {
             content = '您提交的电台封面已通过审核';
         }
@@ -188,47 +136,33 @@ function deal(action, cover_id, tuid) {
             'state': action,
             'tuid': tuid
         };
-        sneaky(data);
-        console.log(data_response);
-        if (data_response.code === 0) {
-            var data_message = {
-                'query_method': 'POST',
-                'api_request': '/admin/message/send',
-                'tuid': tuid,
-                'content': content,
-                'normal': 1
-            };
-            sneaky(data_message);
-            console.log(data_response);
-            if (data_response.code === 0) {
-                alert('封面审核操作：操作成功，同时：已发送系统消息告知');
-                window.location.reload();
-            }
-        }
-        else {
-            alert('操作失败');
-        }
+        var source = {
+            'methodStr': 'POST',
+            'url': '',
+            'data': data
+        };
+        $.ajaxFunc(source, successCoverHandler, errorHandle);
+    }
+}
+function successCoverHandler(data, status, xhr) {
+    if (data.code === 0) {
+        var data_message = {
+            'tuid': commonFields['tuid'],
+            'normal': 1,
+            'content': content
+        };
+        $.ajaxSendMessage(data_message, successPasscover, errorHandle)
+    }
+}
+function successPasscover(data, status, xhr) {
+    if (data.code === 0) {
+        alert('封面审核操作：操作成功，同时：已发送系统消息告知');
+        window.location.reload();
+    }
+    else {
+        alert('error');
     }
 }
 
-//页码查询
-function servlet_page(page) {
-    var state_now = $('.right_content').attr('data-state');
-    var data_page = {'page_index': page};
-    var tuid = $('.tuid').val();
-    if (tuid.length > 0) {
-        data_page['tuid'] = tuid;
-    }
-    var begin_time = $('.begin_time').val();
-    if (begin_time.length > 0) {
-        data_page['begin_time'] = begin_time;
-    }
-    var end_time = $('.end_time').val();
-    if (end_time.length > 0) {
-        data_page['end_time'] = end_time;
-    }
-    data_page['state'] = state_now;
-    ShowMessage(data_page);
-}
 
 
