@@ -8,31 +8,33 @@
     <link rel="stylesheet" href="{% static 'css/whiteList.css' %}" type="text/css"/>
 {% endblock %}
 
-{% block right_content %}
+{% block data_search %}
     <div class="search">
-        <input type="number" placeholder="请输入陪我号" class="peiwo_id input">
+        <input type="number" placeholder="请输入陪我号" class="peiwo_id input search_front">
         <button type="button" class="button_add" id="button_add">添加</button>
     </div>
-    <table class="data_tab">
-        <tr>
-            <th class="text_center">陪我号</th>
-            <th class="text_center">昵称</th>
-            <th class="text_center">操作</th>
-        </tr>
-        {% for i in data.data %}
-            <tr>
-                <td class="td_uid text_center">{{ i.uid }}</td>
-                <td class="td_name text_center">{{ i.name }}</td>
-                <td class="td_del text_center">
-                    <button type="button" class="button_del" onclick="edit({{ i.uid }})">删除</button>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
 {% endblock %}
+
 {% block script_extends %}
-    <script type="application/javascript">
-        var csrfmiddlewaretoken = '{{ csrf_token }}'
-    </script>
     <script src="{% static 'js/whiteList.js' %}"></script>
 {% endblock %}
+
+
+{#{% block right_content %}#}
+{#    <table class="data_tab">#}
+{#        <tr>#}
+{#            <th class="text_center">陪我号</th>#}
+{#            <th class="text_center">昵称</th>#}
+{#            <th class="text_center">操作</th>#}
+{#        </tr>#}
+{#        {% for i in data.data %}#}
+{#            <tr>#}
+{#                <td class="td_uid text_center">{{ i.uid }}</td>#}
+{#                <td class="td_name text_center">{{ i.name }}</td>#}
+{#                <td class="td_del text_center">#}
+{#                    <button type="button" class="button_del" onclick="edit({{ i.uid }})">删除</button>#}
+{#                </td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#{% endblock %}#}

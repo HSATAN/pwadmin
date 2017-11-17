@@ -160,22 +160,6 @@ function getTableliveOnline(data) {
     return {'tableStr': str_main, 'totalStr': totalStr, 'pageStr': pageStr};
 }
 
-
-// 发消息common方法
-$.ajaxSendMessage = function (data, successHandle, errorHandle) {
-    var sourceMessage = {
-        'methodStr': 'POST',
-        'url': ACTION_URL,
-        'data': {
-            'uid': userId,
-            'tuid': data.tuid,
-            'normal': data.normal,
-            'content': data.content,
-            'operate_type': 'send_message'
-        }
-    };
-    $.ajaxFunc(sourceMessage, successHandle, errorHandle)
-};
 // 置顶；操作成功的大致处理方法；消除弹框
 function live_top(liveId) {
     var source = {

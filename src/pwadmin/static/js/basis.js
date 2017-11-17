@@ -158,3 +158,19 @@ function dateToString(now) {
 $('.clear').on('click', function () {
     $('.data_search input').val('');
 });
+
+// 发消息common方法
+$.ajaxSendMessage = function (data, successHandle, errorHandle) {
+    var sourceMessage = {
+        'methodStr': 'POST',
+        'url': ACTION_URL,
+        'data': {
+            'uid': userId,
+            'tuid': data.tuid,
+            'normal': data.normal,
+            'content': data.content,
+            'operate_type': 'send_message'
+        }
+    };
+    $.ajaxFunc(sourceMessage, successHandle, errorHandle)
+};
