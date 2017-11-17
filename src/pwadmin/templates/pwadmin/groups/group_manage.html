@@ -6,7 +6,11 @@
 {% block head_extends %}
     <link rel="stylesheet" href="{% static 'css/group_manage.css' %}" type="text/css"/>
 {% endblock %}
-{% block content_extra %}{% endblock %}
+{% block content_extra %}
+    <div class="amend_pic">
+        <img src="#" alt="" class="pic_big">
+    </div>
+{% endblock %}
 {% block data_search %}
     <input type="text" placeholder="请输入群组名" class="in">
     <input type="text" placeholder="请输入群组陪我号" class="in">

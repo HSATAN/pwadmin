@@ -173,6 +173,7 @@ function live_top(liveId) {
     };
     $.ajaxFunc(source, successLiveactions, errorHandle);
 }
+
 function successLiveactions(data, status, xhr) {
     hide_fixes();
     if (data.code === 0) {
@@ -182,6 +183,7 @@ function successLiveactions(data, status, xhr) {
         alert('fail');
     }
 }
+
 function hide_fixes() {
     $('.amend').css('display', 'none');
     $('.amend_robot').css('display', 'none');
@@ -217,6 +219,7 @@ function live_poll(tuid, label_name) {
     $('.poll_label').val(label_name);
     loadLabelclassificationnew();
 }
+
 function loadLabelclassificationnew() {
     var dataSend = {
         'query_method': 'GET',
@@ -233,6 +236,7 @@ function loadLabelclassificationnew() {
     };
     $.ajaxFunc(source, fillLabelclassificationnew, errorHandle);
 }
+
 function fillLabelclassificationnew(data, status, xhr) {
     var first_id = null;
     var str_label = '';
@@ -266,6 +270,7 @@ function fillLabelclassificationnew(data, status, xhr) {
         }
     }
 }
+
 $('.poll_sure').on('click', function () {
     var vote = $('.polls').val();
     if (!vote) {
@@ -313,6 +318,7 @@ function live_del_background(tuid, liveId) {
         $.ajaxFunc(source, successLivedelBackground, errorHandle);
     }
 }
+
 function successLivedelBackground(data, status, xhr) {
     var data_message = {
         'tuid': commonFields['tuid'],
@@ -326,6 +332,7 @@ function successLivedelBackground(data, status, xhr) {
         alert('error');
     }
 }
+
 function successDelBackground(data, status, xhr) {
     if (data.code === 0) {
         alert('背景图操作：删除成功，同时：已发送系统消息告知');
@@ -356,6 +363,7 @@ function live_del_cover(tuid, liveId) {
         $.ajaxFunc(source, successLivedelCover, errorHandle);
     }
 }
+
 function successLivedelCover(data, status, xhr) {
     var data_message = {
         'tuid': commonFields['tuid'],
@@ -369,6 +377,7 @@ function successLivedelCover(data, status, xhr) {
         alert(data.msg);
     }
 }
+
 function successDelCover(data, status, xhr) {
     if (data.code === 0) {
         alert('封面图操作：删除成功，同时：已发送系统消息告知');
@@ -386,6 +395,7 @@ function live_permission(tuid, liveId, weight_ratio) {
     commonFields['weight_ratio'] = weight_ratio;
     $('.ratio').val(weight_ratio);
 }
+
 $('.amend_out').on('click', function () {
     $('.amend').css('display', 'none');
 });
@@ -403,6 +413,7 @@ $('.amend_sub').on('click', function () {
     };
     $.ajaxFunc(source, successLiveamendPermission, errorHandle);
 });
+
 function successLiveamendPermission(data, status, xhr) {
     if (data.code === 0) {
         alert('success');
@@ -420,6 +431,7 @@ function live_robots(tuid, liveId, robot_ratio) {
     commonFields['tuid'] = tuid;
     $('.ratio_robot').val(robot_ratio);
 }
+
 $('.space_out_robot').on('click', function () {
     $('.amend_robot').css('display', 'none');
 });
@@ -440,6 +452,7 @@ $('.amend_sub_robot').on('click', function () {
     };
     $.ajaxFunc(source, successLiveamendRobots, errorHandle);
 });
+
 function successLiveamendRobots(data, status, xhr) {
     if (data.code === 0) {
         alert('success');
@@ -471,6 +484,7 @@ function live_block(tuid, liveId) {
         $.ajaxFunc(source, successLiveblock, errorHandle);
     }
 }
+
 function successLiveblock(data, status, xhr) {
     if (data.code === 0) {
         alert('success');
@@ -508,6 +522,7 @@ function live_special(tuid, liveId, is_special) {
         $.ajaxFunc(source, successLivespecial, errorHandle);
     }
 }
+
 function successLivespecial(data, status, xhr) {
     if (data.code === 0) {
         alert('success');
@@ -525,6 +540,7 @@ function live_edit_topic(tuid, liveId) {
     $('.amend_label').css('display', 'block');
     loadCategoriesNew({});
 }
+
 function loadCategoriesNew(data) {
     var dataSend = {
         'query_method': 'GET',
@@ -541,6 +557,7 @@ function loadCategoriesNew(data) {
     };
     $.ajaxFunc(source, fillCategoryNew, errorHandle);
 }
+
 function fillCategoryNew(data, status, xhr) {
     var strMaincategory = "<option value>" + "全部" + "</option>";
     var majors = data.data;
@@ -558,6 +575,7 @@ function fillCategoryNew(data, status, xhr) {
         }
     });
 }
+
 function fill_subs_new(subs) {
     var sub_str = "";
     for (var indexSub = 0; indexSub < subs.length; indexSub++) {
@@ -566,6 +584,7 @@ function fill_subs_new(subs) {
     $(".label_sub").empty();
     $(".label_sub").append(sub_str);
 }
+
 function successLiveeditCategory(data, status, xhr) {
     $('.amend_label').css('display', 'none');
     loadTableliveOnline({});
@@ -576,6 +595,7 @@ function successLiveeditCategory(data, status, xhr) {
         alert(data.msg);
     }
 }
+
 $('.label_sure').on('click', function () {
     var source = {
         'methodStr': 'POST',
@@ -617,6 +637,7 @@ function live_del_topic(tuid, liveId) {
         $.ajaxFunc(source, successLivedelTopic, errorHandle);
     }
 }
+
 function successLivedelTopic(data, status, xhr) {
     var data_message = {
         'tuid': commonFields['tuid'],
@@ -630,6 +651,7 @@ function successLivedelTopic(data, status, xhr) {
         alert(data.msg);
     }
 }
+
 function successDelTopic(data, status, xhr) {
     if (data.code === 0) {
         alert('直播主题操作：删除成功，同时：已发送系统消息告知');
@@ -654,12 +676,19 @@ function getStateDesc(state) {
 // 获取总数据条数
 function getTotal(data) {
     var count = 0;
-    if (data.hasOwnProperty('data')) {
-        data = data.data;
-        if (data.hasOwnProperty('page_info')) {
-            var page_info = data.page_info;
-            if (page_info.hasOwnProperty('row_count')) {
-                count = page_info.row_count;
+    if (data.hasOwnProperty('page_info')) {
+        var page_info = data.page_info;
+        if (page_info.hasOwnProperty('row_count')) {
+            count = page_info.row_count;
+        }
+    } else {
+        if (data.hasOwnProperty('data')) {
+            data = data.data;
+            if (data.hasOwnProperty('page_info')) {
+                var page_info = data.page_info;
+                if (page_info.hasOwnProperty('row_count')) {
+                    count = page_info.row_count;
+                }
             }
         }
     }
