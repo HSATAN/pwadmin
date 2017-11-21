@@ -57,6 +57,12 @@
       - name: Update deploy file command
         replace:
           path: "{{proj_path}}/deploy/supervisord.conf"
+          regexp: 'directory=LOGPATH'
+          replace: "directory={{proj_path}}"
+
+      - name: Update deploy file command
+        replace:
+          path: "{{proj_path}}/deploy/supervisord.conf"
           regexp: 'DJANGO_SETTINGS_MODULE=SETTINGS'
           replace: "DJANGO_SETTINGS_MODULE={{settings}}"
 
