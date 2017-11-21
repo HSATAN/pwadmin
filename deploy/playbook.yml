@@ -60,7 +60,7 @@
       - name: start gunicorn
         command: "chdir={{proj_path}} {{venv_path}}/bin/supervisord -c deploy/supervisord.conf"
         when:
-          - gstate.stdout == 'unix:///tmp/supervisor.sock no such file'
+          - gstate.stdout == 'unix:///tmp/supervisor.peiwo.admin.sock no such file'
 
       - name: restart gunicorn
         command: "chdir={{proj_path}} {{venv_path}}/bin/supervisorctl -c deploy/supervisord.conf restart gunicorn"
