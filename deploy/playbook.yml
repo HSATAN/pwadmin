@@ -6,6 +6,7 @@
       proj_name: peiwoadmin
       proj_path: "{{ proj_dir }}/{{ proj_name }}"
       venv_path: "{{proj_path}}/venv"
+      settings: peiwoadmin.settings.production
   tasks:
       - stat:
           path: "{{proj_path}}"
@@ -33,13 +34,13 @@
         command: "{{venv_path}}/bin/pip install -r {{proj_path}}/requirements.txt"
 
       - name: collect static files
-        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py collectstatic --noinput --settings=peiwoadmin.settings.production_test
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py collectstatic --noinput --settings={{settings}}
 
       - name: Database migrations.
-        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py makemigrations --noinput --settings=peiwoadmin.settings.production_test
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py makemigrations --noinput --settings={{settings}}
 
       - name: Database migrate.
-        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py migrate --noinput --settings=peiwoadmin.settings.production_test
+        command: chdir={{proj_path}}/src {{venv_path}}/bin/python manage.py migrate --noinput --settings={{settings}}
 
       - name: Update deploy file directory.
         replace:
@@ -52,6 +53,14 @@
           path: "{{proj_path}}/deploy/supervisord.conf"
           regexp: 'command=PATH'
           replace: "command={{venv_path}}"
+
+      - name: Update deploy file command
+        replace:
+          path: "{{proj_path}}/deploy/supervisord.conf"
+          regexp: 'DJANGO_SETTINGS_MODULE=SETTINGS'
+          replace: "DJANGO_SETTINGS_MODULE={{settings}}"
+
+
 
       - name: show gunicorn status
         command: "chdir={{proj_path}} {{venv_path}}/bin/supervisorctl -c deploy/supervisord.conf status"
