@@ -72,5 +72,4 @@ class PwManager(models.Model):
         return True
 
     class Meta:
-        managed = False
         db_table = 'pw_manager'
