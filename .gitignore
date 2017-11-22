@@ -19,3 +19,6 @@ src/peiwoadmin/static_root
 src/tmp
 env
 playbook.retry
+**/peiwoadmin/secret.py
+package-lock.json
+**/db.sqlite3

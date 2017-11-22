@@ -1,3 +1,8 @@
 ---
 ansible_user: deploy
 ansible_ssh_private_key_file: id_rsa_admin
+vars:
+  settings: peiwoadmin.settings.production
+
+
+
