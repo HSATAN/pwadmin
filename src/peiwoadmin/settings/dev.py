@@ -13,7 +13,7 @@ INTERNAL_IPS = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
-    'test': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'peiwo',
         'USER': 'peiwo',
