@@ -127,8 +127,6 @@ MEDIA_ROOT = os.path.join(CONF_DIR, 'media_root')
 
 STATIC_URL = '/static/'
 
-DATABASE_ROUTERS = ['peiwoadmin.routers.PeiwoRouter', ]
-
 AUTHENTICATION_BACKENDS = [
     'contrib.auth.backends.SneakyBackend',
     'django.contrib.auth.backends.ModelBackend',
