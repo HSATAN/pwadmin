@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 from .base import *
 
-INSTALLED_APPS += [
-]
-
-MIDDLEWARE += [
-]
-
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
@@ -19,6 +13,7 @@ DATABASES = {
         'USER': 'peiwo',
         "PASSWORD": '123456',
         "HOST": '172.16.10.134',
+
     },
 }
 
@@ -34,3 +29,4 @@ CACHES = {
 }
 
 API_HOST = 'http://172.16.10.134:9090'
+# API_HOST = 'http://10.10.100.58:9090'
