@@ -7,7 +7,6 @@ ALLOWED_HOSTS = ['newadmin.raybo.com']
 SECRET_KEY = secret.SECRET_KEY
 
 DATABASES = {
-    'default': secret.DB_DEFAULT,
     'test': secret.DB_TEST,
 }
 
